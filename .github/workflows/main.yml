@@ -1,0 +1,12 @@
+on: [push]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: OQuaRE-metrics-test
+    steps:
+      # To use this repository's private action
+      # You need to check out the repo
+      - uses: actions/checkout@v2
+      - name: Basic testing
+        uses: ./ # Uses an action in the root directory
