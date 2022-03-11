@@ -21,6 +21,7 @@ runs:
       shell: bash
     - name: Call oquare library
       run: java -jar libs/oquare-versions.jar --ontology "https://sparontologies.github.io/cito/current/cito.xml" --reasoner "ELK" --outputFile test.xml
+      shell: bash
     - name: Archive previous results
       run: |
         touch OQuaRE/results/temp_file \
