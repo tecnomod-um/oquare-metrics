@@ -1,0 +1,29 @@
+name: 'OQuaRE metrics calculation module'
+description: 'Calculates the metrics of ontology files in the given folder based on the metrics set by the OQuaRE framework'
+inputs:
+  ontology-folder:
+    description: 'Folder which contains .owl files'
+    required: true
+    default: './ontologies'
+
+runs: 
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v2
+    - name: Setup folders
+      run: mkdir -p OQuaRE && mkdir -p OQuaRE/results && mkdir -p OQuaRE/archives && \
+          mkdir -p OQuaRE/temp_results && mkdir OQuaRE/temp_results/metrics
+      shell: bash
+    - name: Call oquare library
+      run: ( cd OQuaRE/temp_results/metrics && find ~/${{ inputs.ontology-folder }} -name "*.owl" -exec cat {} \; ) >> test_file 
+      shell: bash
+    - name: Archive previous results
+      run: touch OQuaRE/results/temp_file && \
+        mv -v OQuaRE/results/* OQuaRE/archives/ && \
+        rm -f OQuaRE/archives/temp_file
+      shell: bash
+    - name: Move results to results folder and tag it with a date
+      run: mv OQuaRE/temp_results OQuaRE/results/"$(date +%d-%m-%Y_%H-%M-%S)"
+      shell: bash
+    - name: Commit and push
+      uses: EndBug/add-and-commit@v8
