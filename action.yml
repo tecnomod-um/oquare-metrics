@@ -20,12 +20,7 @@ runs:
         && mkdir -p OQuaRE/temp_results && mkdir OQuaRE/temp_results/metrics
       shell: bash
     - name: Call oquare library
-      run: |
-        ( cd OQuaRE/temp_results/metrics \
-        && find ${{ github.workspace }}/${{ inputs.ontology-folder }} \
-        -name "*.owl" -exec \
-        java -cp ${{ github.workspace}}/libs/lib/* -jar ${{ github.workspace }}/libs/oquare-versions.jar \
-        --ontology {} --reasoner "ELK" --outputFile test.xml \; )
+      run: java -cp libs/lib/* -jar libs/oquare-versions.jar --ontology "https://sparontologies.github.io/cito/current/cito.xml" --reasoner "ELK" --outputFile test.xml
       shell: bash
     - name: Archive previous results
       run: |
