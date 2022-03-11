@@ -10,6 +10,10 @@ runs:
   using: 'composite'
   steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+      distribution: 'temurin'
+      java-version: '8'
     - name: Setup folders
       run: |
         mkdir -p OQuaRE && mkdir -p OQuaRE/results && mkdir -p OQuaRE/archives \
@@ -19,7 +23,8 @@ runs:
       run: |
         ( cd OQuaRE/temp_results/metrics \
         && find ${{ github.workspace }}/${{ inputs.ontology-folder }} \
-        -name "*.owl" -exec cat {} \; >> test_file )
+        -name "*.owl" -exec \
+        java -cp "lib/*" -jar oquare-versions.jar --ontology {} --reasoner "ELK" --outputFile test.xml \; )
       shell: bash
     - name: Archive previous results
       run: |
