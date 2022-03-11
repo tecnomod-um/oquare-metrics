@@ -14,7 +14,7 @@ runs:
       run: mkdir -p OQuaRE && mkdir -p OQuaRE/results && mkdir -p OQuaRE/archives && mkdir -p OQuaRE/temp_results && mkdir OQuaRE/temp_results/metrics
       shell: bash
     - name: Call oquare library
-      run: ( cd OQuaRE/temp_results/metrics && find ${{ github.path }}${{ inputs.ontology-folder }} -name "*.owl" -exec cat {} \; >> test_file ) && cat OQuaRE/temp_results/metrics/test_file
+      run: ( cd OQuaRE/temp_results/metrics && find ${{ github.workspace }}/${{ inputs.ontology-folder }} -name "*.owl" -exec cat {} \; >> test_file ) && cat OQuaRE/temp_results/metrics/test_file
       shell: bash
     - name: Archive previous results
       run: touch OQuaRE/results/temp_file && mv -v OQuaRE/results/* OQuaRE/archives/ && rm -f OQuaRE/archives/temp_file
