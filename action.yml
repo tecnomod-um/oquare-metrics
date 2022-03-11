@@ -24,7 +24,8 @@ runs:
         ( cd OQuaRE/temp_results/metrics \
         && find ${{ github.workspace }}/${{ inputs.ontology-folder }} \
         -name "*.owl" -exec \
-        java -cp "lib/*" -jar oquare-versions.jar --ontology {} --reasoner "ELK" --outputFile test.xml \; )
+        java -cp ${{ github.workspace}}/libs/lib/* -jar ${{ github.workspace }}/libs/oquare-versions.jar \
+        --ontology {} --reasoner "ELK" --outputFile test.xml \; )
       shell: bash
     - name: Archive previous results
       run: |
