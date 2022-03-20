@@ -33,7 +33,6 @@ runs:
           *.owl
       
     - name: Setup folders
-      
       run: |
         echo ${{ toJSON(steps.changed-files.outputs) }} \
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
