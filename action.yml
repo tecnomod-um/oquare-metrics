@@ -53,4 +53,5 @@ runs:
       run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
       shell: bash
     - name: Commit and push
+      if: steps.changed-files.outputs.any_changed == 'true'
       uses: EndBug/add-and-commit@v8
