@@ -35,7 +35,7 @@ runs:
     - name: Setup folders
       
       run: |
-        echo ${{ steps.changed-files.outputs.all_changed_files }} \
+        echo ${{ toJSON(steps.changed-files.outputs) }} \
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
