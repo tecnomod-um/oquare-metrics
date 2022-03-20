@@ -28,9 +28,8 @@ runs:
       id: changed-files
       uses: tj-actions/changed-files@v18
       with:
-        path: ${{ inputs.ontology-folder }}
         files: |
-          *.owl
+          ${{ inputs.ontology-folder }}/*.owl
       
     - name: Setup folders
       run: |
