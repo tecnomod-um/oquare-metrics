@@ -21,17 +21,26 @@ runs:
       with:
         distribution: 'temurin'
         java-version: '8'
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v18
+      with:
+        path: ${{ inputs.ontology-folder }}
+        files: |
+          *.owl
     - name: Setup folders
       run: |
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
     - name: Call oquare library
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        find ./${{ inputs.ontology-folder }} -type f -maxdepth 1 -name "*.owl" \
-        | while read file; do outputFile=$(basename "$file" .owl); mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
-        outputFile="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
-        java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
+        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do \
+          outputFile=$(basename "$file" .owl); \
+          mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
+          outputFile="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
+          java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
         done
       shell: bash
     - name: Archive previous results
