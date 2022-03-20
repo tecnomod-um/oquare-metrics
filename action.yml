@@ -21,6 +21,7 @@ runs:
       with:
         distribution: 'temurin'
         java-version: '8'
+      
     - name: Get changed files
       id: changed-files
       uses: tj-actions/changed-files@v18
@@ -28,12 +29,14 @@ runs:
         path: ${{ inputs.ontology-folder }}
         files: |
           *.owl
+      
     - name: Setup folders
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
+
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
@@ -44,6 +47,7 @@ runs:
           java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
         done
       shell: bash
+
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
