@@ -33,14 +33,15 @@ runs:
           *.owl
       
     - name: Setup folders
-      if: steps.changed-files.outputs.any_changed == 'true'
+      
       run: |
+        echo ${{ steps.changed-files.outputs.only_changed }} \
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
 
     - name: Call oquare library
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.only_changed == 'true'
       run: |
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do \
           outputFile=$(basename "$file" .owl); \
@@ -51,14 +52,14 @@ runs:
       shell: bash
 
     - name: Archive previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.only_changed == 'true'
       run: |
         touch ${{ inputs.contents-folder }}/results/temp_file \
         && mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ \
         && rm -f ${{ inputs.contents-folder }}/archives/temp_file
       shell: bash
     - name: Move results to results folder and tag it with a date
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.only_changed == 'true'
       run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
       shell: bash
     - name: Commit and push
