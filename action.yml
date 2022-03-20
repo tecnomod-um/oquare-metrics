@@ -23,24 +23,24 @@ runs:
         java-version: '8'
     - name: Setup folders
       run: |
-        mkdir -p {{ inputs.contents-folder}} && mkdir -p {{ inputs.contents-folder}}/results && mkdir -p {{ inputs.contents-folder}}/archives \
-        && mkdir -p {{ inputs.contents-folder}}/temp_results && mkdir {{ inputs.contents-folder}}/temp_results/metrics
+        mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
+        && mkdir -p ${{ inputs.contents-folder }}/temp_results && mkdir ${{ inputs.contents-folder }}/temp_results/metrics
       shell: bash
     - name: Call oquare library
       run: |
-        find ./${{ inputs.ontology-folder}} -type f -maxdepth 1 -name "*.owl" \
-        | while read file; do outputFile=$(basename "$file" .owl); outputFile="{{ inputs.contents-folder}}/temp_results/metrics/${outputFile}.xml"; \
+        find ./${{ inputs.ontology-folder }} -type f -maxdepth 1 -name "*.owl" \
+        | while read file; do outputFile=$(basename "$file" .owl); outputFile="${{ inputs.contents-folder }}/temp_results/metrics/${outputFile}.xml"; \
         java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
         done
       shell: bash
     - name: Archive previous results
       run: |
-        touch {{ inputs.contents-folder}}/results/temp_file \
-        && mv -v {{ inputs.contents-folder}}/results/* {{ inputs.contents-folder}}/archives/ \
-        && rm -f {{ inputs.contents-folder}}/archives/temp_file
+        touch ${{ inputs.contents-folder }}/results/temp_file \
+        && mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ \
+        && rm -f ${{ inputs.contents-folder }}/archives/temp_file
       shell: bash
     - name: Move results to results folder and tag it with a date
-      run: mv {{ inputs.contents-folder}}/temp_results {{ inputs.contents-folder}}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
+      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
       shell: bash
     - name: Commit and push
       uses: EndBug/add-and-commit@v8
