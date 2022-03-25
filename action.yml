@@ -36,6 +36,18 @@ runs:
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
+    
+    - name: Find and copy previous results
+      run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
+      shell: bash
+
+    - name: If file renamed, delete nonmatching folders on temporal folder
+      if: steps.changed-files.outputs.renamed_files
+      run: |
+        comm -13 <(ls -1 ${{ inputs.ontology-folder }} | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results) | \
+        while read file; do \
+          rm -r ${{ inputs.contents-folder}}/temp_results/${file};
+        done
 
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
