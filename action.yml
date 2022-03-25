@@ -48,6 +48,7 @@ runs:
         while read file; do \
           rm -r ${{ inputs.contents-folder}}/temp_results/${file};
         done
+      shell: bash
 
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
