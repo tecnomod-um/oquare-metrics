@@ -38,6 +38,7 @@ runs:
       shell: bash
     
     - name: Find and copy previous results
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
       shell: bash
 
