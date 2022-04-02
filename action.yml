@@ -58,6 +58,7 @@ runs:
           outputFile=$(basename "$file" .owl); \
           mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
           outputFile="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
+          rm "$outputFile"; \
           java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
         done
       shell: bash
