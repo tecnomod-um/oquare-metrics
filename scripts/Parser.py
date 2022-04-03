@@ -1,16 +1,18 @@
-import string
 import xml.etree.ElementTree as ET
 
 class MetricsParser:
-    def __init__(self, metrics_file: string):
+    def __init__(self, metrics_file: str):
         self.tree = ET.parse(metrics_file)
         self.root = self.tree.getroot()
+        self.oquare_value = self.__parse_oquare_value()
+        self.scaled_metrics = self.__parse_scaled_metrics()
+        self.category_metircs = self.__parse_category_metrics()
 
-    def parse_oquare_value(self) -> float:
-        oquare_value = self.root.find('oquareModel').attrib.get('oquareValue')
+    def __parse_oquare_value(self) -> float:
+        oquare_value = float(self.root.find('oquareModel').attrib.get('oquareValue'))
         return oquare_value
     
-    def parse_scaled_metrics(self):
+    def __parse_scaled_metrics(self):
         scaled_metrics = self.root.findall('./oquareMetricsScaled/')
         metrics_dict = {}
         for metric in scaled_metrics:
@@ -18,7 +20,7 @@ class MetricsParser:
         
         return metrics_dict
 
-    def parse_category_metrics(self):
+    def __parse_category_metrics(self):
         oquare_model = self.root.findall('oquareModel/')
         oquare_model_dict = {}
         for metric in oquare_model:
@@ -40,19 +42,23 @@ class MetricsParser:
             # Put each category inside the oquare_model_dict
             oquare_model_dict[metric_name] = oquare_category
 
+        # {
+        #   category_name: {
+        #       value: number
+        #       subcategories: {
+        #           subcat_1: value
+        #           ...
+        #       } 
+        #   } 
+        # 
+        # }
         return oquare_model_dict
-        
+    
+    def get_oquare_value(self):
+        return self.oquare_value
 
-if __name__ == '__main__':
-    parser = MetricsParser('../OQuaRE/results/20-03-2022_15-49-21/ontologyCEPH2/metrics/ontologyCEPH2.xml')
-    value = parser.parse_oquare_value()
-    scaled = parser.parse_scaled_metrics()
-    category_metrics = parser.parse_category_metrics()
+    def get_scaled_metrics(self):
+        return self.scaled_metrics
 
-    for category in category_metrics:
-        data = category_metrics.get(category)
-        value = data.get('value')
-        subcategories = data.get('subcategories')
-
-        for subcategory in subcategories:
-            print(subcategories.get(subcategory))
+    def get_category_metrics(self):
+        return self.category_metircs
