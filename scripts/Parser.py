@@ -27,7 +27,7 @@ class MetricsParser:
             metric_name, metric_value = next(iter(metric.attrib.items()))
 
             oquare_category = {}
-            oquare_category['value'] = metric_value
+            oquare_category['value'] = float(metric_value)
             
             oquare_sub_categories = {}
             
