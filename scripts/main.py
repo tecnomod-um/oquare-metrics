@@ -32,40 +32,29 @@ if __name__ == '__main__':
             plot_models = True
         elif opt in ("-c", "--categories"):
             plot_categories = True
-    
-    if plot_models and plot_categories:
-        print(help_msg)
-        sys.exit(2)
-    
-    if plot_models:
-        basepath = inputPath + '/temp_results/'
-        oquare_model_values = {}
-        with os.scandir(basepath) as entries:
-            for entry in entries:
-                parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
-                oquare_model_values[entry.name] = parsed_metrics.get_oquare_value()
-        
-        graphPlotter = oquareGraphs()
-        graphPlotter.plot_oquare_values(oquare_model_values, outputPath)
-        sys.exit(0)
-    
-    if plot_categories:
-        basepath = inputPath + '/temp_results/'
-        graphPlotter = oquareGraphs()
-        with os.scandir(basepath) as entries:
-            for entry in entries:
-                oquare_category_values = {}
-                parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
-                categories = parsed_metrics.get_category_metrics()
 
+    basepath = inputPath + '/temp_results/'
+    oquare_model_values = {}
+    graphPlotter = oquareGraphs()
+    with os.scandir(basepath) as entries:
+        for entry in entries:
+            oquare_category_values = {}
+            parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
+            categories = parsed_metrics.get_category_metrics()
+
+            if plot_categories:
                 for category, values in categories.items():
                     oquare_category_values[category] = values.get('value')
                 
-                print(oquare_category_values)
                 graphPlotter.plot_oquare_categories(oquare_category_values, entry.name)
+            
+            oquare_model_values[entry.name] = parsed_metrics.get_oquare_value()
+    
+    if plot_models:
+        graphPlotter.plot_oquare_values(oquare_model_values)
+
+
                 
-                
-        sys.exit(0)
 
 
     # Tras la ejecución de oquare, tengo todos los ficheros .xml almacenados en ./temp_results/{nombre_ontologia}/metrics/
