@@ -6,7 +6,7 @@ class MetricsParser:
         self.root = self.tree.getroot()
         self.oquare_value = self.__parse_oquare_value()
         self.scaled_metrics = self.__parse_scaled_metrics()
-        self.category_metircs = self.__parse_category_metrics()
+        self.category_metrics = self.__parse_category_metrics()
 
     def __parse_oquare_value(self) -> float:
         oquare_value = float(self.root.find('oquareModel').attrib.get('oquareValue'))
@@ -61,4 +61,4 @@ class MetricsParser:
         return self.scaled_metrics
 
     def get_category_metrics(self):
-        return self.category_metircs
+        return self.category_metrics
