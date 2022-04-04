@@ -90,5 +90,20 @@ if __name__ == '__main__':
                             # Extraigo el oquare_value de esa ontología para ese archivado y la añado a la lista de esa ontologia
                             parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
                             oquare_model_values_global.get(ontology.name).append(parsed_metrics.get_oquare_value())
-                
+
+        # Saco el oquare_value de las ontologias previas a esta ejecución (almacenadas en results)
+        results_path = inputPath + '/results/'
+        results_entry = os.listdir(results_path)[0]
+        with os.scandir(results_path + results_entry) as entries:
+            for entry in entries:
+                if entry.is_dir():
+                    parsed_metrics = MetricsParser(entry.path + '/metrics/' + entry.name + '.xml')
+                    oquare_model_values_global.get(entry.name).append(parsed_metrics.get_oquare_value())  
+
+        # Añado el oquare_value que se ha calculado en esta ejecucion
+        for ontology in oquare_model_values:
+            oquare_model_values_global.get(ontology).append(oquare_model_values.get(ontology))
+
+        # Plot and save
         print(oquare_model_values_global)
+
