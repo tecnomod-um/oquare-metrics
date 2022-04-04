@@ -28,6 +28,7 @@ runs:
         python-version: '3.9'
         cache: 'pip'
     - run: pip install -r requirements.txt
+      shell: bash
 
     - name: Get changed files
       id: changed-files
@@ -71,7 +72,8 @@ runs:
     - name: 'Evaluate and plot metrics'
       if: steps.changed-files.outputs.any_changed == 'true'
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -c -m
-
+      shell: bash
+      
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
