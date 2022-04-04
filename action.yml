@@ -63,15 +63,16 @@ runs:
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do \
           outputFile=$(basename "$file" .owl); \
           mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
-          outputFile="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
-          rm "$outputFile"; \
-          java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFile"; \
+          outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
+          rm "$outputFilePath"; \
+          java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
+          python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile" \
         done
       shell: bash
     
-    - name: 'Evaluate and plot metrics'
+    - name: 'Evaluate and plot oquare model value'
       if: steps.changed-files.outputs.any_changed == 'true'
-      run: python scripts/main.py -i ${{ inputs.contents-folder }} -c -m
+      run: python scripts/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
       
     - name: Archive previous results
