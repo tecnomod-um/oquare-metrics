@@ -15,7 +15,7 @@ if __name__ == '__main__':
     help_msg = "Uso: {0} -i <folderPath> -o <outputPath> -m || -c || -g".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:o:mc", ["help", "input=", "output=", "model", "categories", "global"])
+        opts, args = getopt.getopt(argv[1:], "hi:o:mcg", ["help", "input=", "output=", "model", "categories", "global"])
     except:
         print(help_msg)
         sys.exit(2)
@@ -32,6 +32,8 @@ if __name__ == '__main__':
             plot_models = True
         elif opt in ("-c", "--categories"):
             plot_categories = True
+        elif opt in ("-g", "--global"):
+            plot_global = True
 
     basepath = inputPath + '/temp_results/'
     oquare_model_values = {}
@@ -53,23 +55,40 @@ if __name__ == '__main__':
     if plot_models:
         graphPlotter.plot_oquare_values(oquare_model_values)
 
+    if plot_global:
+        archive_path = inputPath + '/archives/'
+        oquare_model_values_global = {}
+        entries = os.listdir(archive_path)
 
+        # Si hay menos de 18 resultados archivados, los extraigo todos
+
+        if len(entries) < 18:
+            # Por cada archivado extraigo las carpetas de ontologias
+            for entry in entries:
+                with os.scandir(archive_path + entry + '/') as ontologies:
+                    for ontology in ontologies:
+                        # Si es carpeta (puede haber imagenes de resultados previos)
+                        if ontology.is_dir():
+                            # Si la entrada no existe para esa ontologia, la añado
+                            if not oquare_model_values_global.get(ontology.name):
+                                oquare_model_values_global[ontology.name] = list()
+                            
+                            # Extraigo el oquare_value de esa ontología para ese archivado y la añado a la lista de esa ontologia
+                            parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
+                            oquare_model_values_global.get(ontology.name).append(parsed_metrics.get_oquare_value())
+        else:
+            for i in range(len(entries)-18, len(entries)):
+                entry = entries[i]
+                with os.scandir(archive_path + entry + '/') as ontologies:
+                    for ontology in ontologies:
+                        # Si es carpeta (puede haber imagenes de resultados previos)
+                        if ontology.is_dir():
+                            # Si la entrada no existe para esa ontologia, la añado
+                            if not oquare_model_values_global.get(ontology.name):
+                                oquare_model_values_global[ontology.name] = list()
+                            
+                            # Extraigo el oquare_value de esa ontología para ese archivado y la añado a la lista de esa ontologia
+                            parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
+                            oquare_model_values_global.get(ontology.name).append(parsed_metrics.get_oquare_value())
                 
-
-
-    # Tras la ejecución de oquare, tengo todos los ficheros .xml almacenados en ./temp_results/{nombre_ontologia}/metrics/
-    # Por lo tanto en temp_results tengo una carpeta por ontologia --> Recorro carpeta temp_results
-    # Por cada carpeta de temp_results, navego a ./temp_results/{carpeta}/metrics/{carpeta}.xml y hago un MetricsParser 
-    # Una vez obtenido todos los MetricsParser, llamo a oquareGraphs con el array de MetricsParser
-    # Por último, oquareGraphs se encarga de hacer un plot de cada uno de los oquareValues. Necesario guardar el nombre de la ontología en algun sitio.
-
-
-    # En cada ejecución de OQuaRE, cuando termina de ejecutarse es cuando puedo hacer una gráfica de los resultados de las categorias.
-    # O se puede ejecutar todo al final y simplemente indicar una serie de flags para saber que gráficas se dibujan.
-
-    # Para las categorias, por cada "entry" de entries en el bucle dentro de plot_model, se obtendrian el dict con las categorias y se saca value.
-    # Con eso se hace el plotting.
-
-    # Por ultimo si se quiere hacer una grafica global que tenga en cuenta el historico, se ha de recorrer la carpeta archives.
-    # Se puede utilizar los ultimos 19 archivados + el reciente para obtener los datos. Una sola gráfica de líneas. Cada línea representa una ontología
-    # Los valores que se utilizan son los de oquareModel (get_oquare_value)
+        print(oquare_model_values_global)
