@@ -66,7 +66,7 @@ runs:
           outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
           rm "$outputFilePath"; \
           java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
-          python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile" \
+          python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
         done
       shell: bash
     
