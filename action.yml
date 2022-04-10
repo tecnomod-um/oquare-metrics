@@ -69,6 +69,8 @@ runs:
           done
 
           python scripts/main.py -i ${{ inputs.contents-folder }} -m
+
+          mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
         fi
       shell: bash
 
@@ -92,10 +94,7 @@ runs:
       
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
-      run: |
-        touch ${{ inputs.contents-folder }}/results/temp_file \
-        && mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ \
-        && rm -f ${{ inputs.contents-folder }}/archives/temp_file
+      run: mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ 
       shell: bash
     - name: Move results to results folder and tag it with a date
       if: steps.changed-files.outputs.any_changed == 'true'
