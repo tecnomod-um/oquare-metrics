@@ -7,13 +7,13 @@ mkdir -p ${CONTENTS_FOLDER}/archives
 mkdir -p ${CONTENTS_FOLDER}/temp_results
 
 # Find and copy previous results
-if [${ANY_CHANGED} == 'true'] 
+if ["${ANY_CHANGED}" == 'true'] 
 then
     cp -r $(find ${CONTENTS_FOLDER}/results/* -maxdepth 0)/* ${CONTENTS_FOLDER}/temp_results
 fi
 
 # If any ontology file was renamed, delete nonmatching folders from temp_folder
-if [${RENAMED_FILES}] 
+if [${#${RENAMED_FILES}[@]}] 
 then
     comm -13 <(ls -1 ${ONTOLOGY_FOLDER} | sed s/.owl//g) <( ls -1 ${CONTENTS_FOLDER}/temp_results) | while read file 
     do 
@@ -22,7 +22,7 @@ then
 fi
 
 # Call oquare library
-if [${ANY_CHANGED} == 'true'] 
+if ["${ANY_CHANGED}" == 'true'] 
 then
     for file in ${ALL_CHANGED_FILES} 
     do
