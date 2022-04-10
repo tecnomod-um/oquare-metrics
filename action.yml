@@ -46,7 +46,7 @@ runs:
         REASONER: ${{ inputs.reasoner }}
         ANY_CHANGED: ${{ steps.changed-files.outputs.any_changed }}
         RENAMED_FILES: ${{ steps.changed-files.outputs.renamed_files }}
-        ALL_CHANGED_FILES: ${{ stesp.changed-files.outputs.all_changed_files }}
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       
     - name: Commit and push
       uses: EndBug/add-and-commit@v8
