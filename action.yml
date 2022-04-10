@@ -37,55 +37,17 @@ runs:
         files: |
           ${{ inputs.ontology-folder }}/*.owl
       
-    - name: Setup folders
-      run: |
-        mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
-        && mkdir -p ${{ inputs.contents-folder }}/temp_results
+    - name: Run script
+      run: ./om-script.sh
       shell: bash
-    
-    - name: Find and copy previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
-      shell: bash
-
-    - name: If file renamed, delete nonmatching folders on temporal folder
-      if: steps.changed-files.outputs.renamed_files
-      run: |
-        comm -13 <(ls -1 ${{ inputs.ontology-folder }} | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results) | \
-        while read file; do \
-          rm -r ${{ inputs.contents-folder}}/temp_results/${file};
-        done
-      shell: bash
-
-    - name: Call oquare library
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do \
-          outputFile=$(basename "$file" .owl); \
-          mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
-          outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
-          rm "$outputFilePath"; \
-          java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
-          python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
-        done
-      shell: bash
-    
-    - name: 'Evaluate and plot oquare model value'
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: python scripts/main.py -i ${{ inputs.contents-folder }} -m
-      shell: bash
+      env:
+        CONTENTS_FOLDER: ${{ inputs.contents-folder }}
+        ONTOLOGY_FOLDER: ${{ inputs.ontology-folder }}
+        REASONER: ${{ inputs.reasoner }}
+        ANY_CHANGED: ${{ steps.changed-files.outputs.any_changed }}
+        RENAMED_FILES: ${{ steps.changed-files.outputs.renamed_files }}
+        ALL_CHANGED_FILES: ${{ stesp.changed-files.outputs.all_changed_files }}
       
-    - name: Archive previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: |
-        touch ${{ inputs.contents-folder }}/results/temp_file \
-        && mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ \
-        && rm -f ${{ inputs.contents-folder }}/archives/temp_file
-      shell: bash
-    - name: Move results to results folder and tag it with a date
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
-      shell: bash
     - name: Commit and push
       uses: EndBug/add-and-commit@v8
 
