@@ -36,7 +36,11 @@ runs:
       with:
         files: |
           ${{ inputs.ontology-folder }}/*.owl
-      
+
+    - name: Exec perms to script    
+      run: chmod +x om-script.sh
+      shell: bash
+
     - name: Run script
       run: ./om-script.sh
       shell: bash
