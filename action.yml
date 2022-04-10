@@ -57,6 +57,21 @@ runs:
         done
       shell: bash
 
+    - name: Checks if its the first run (results empty folder)
+      run: |
+        if [-z "$(ls -A ${{ inputs.contents-folder }}/results)" ]; then \
+          find ./${{ inputs.ontology-folder }} -type f -maxdepth 1 -name "*.owl" | while read file; do \
+            outputFile=$(basename "$file" .owl); 
+            mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
+            outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
+            java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
+            python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+          done
+
+          python scripts/main.py -i ${{ inputs.contents-folder }} -m
+        fi
+      shell: bash
+
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
