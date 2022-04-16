@@ -101,6 +101,11 @@ runs:
       if: steps.changed-files.outputs.any_changed == 'true'
       run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
       shell: bash
+
+    - name: 'Evaluate and plot historic'
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: python scripts/main.py -i ${{ inputs.contents-folder }} -g
+      shell: bash
       
     - name: Commit and push
       uses: EndBug/add-and-commit@v8
