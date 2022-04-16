@@ -96,10 +96,12 @@ runs:
       if: steps.changed-files.outputs.any_changed == 'true'
       run: mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ 
       shell: bash
+
     - name: Move results to results folder and tag it with a date
       if: steps.changed-files.outputs.any_changed == 'true'
-      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
+      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
       shell: bash
+      
     - name: Commit and push
       uses: EndBug/add-and-commit@v8
 
