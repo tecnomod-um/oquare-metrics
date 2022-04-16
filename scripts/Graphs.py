@@ -1,38 +1,56 @@
+from tkinter import font
 import matplotlib.pyplot as plt
+import matplotx
 
 class oquareGraphs:
 
     def plot_oquare_values(self, data: dict, outputPath: str = 'OQuaRE'):
-        plt.figure()
+        #plt.figure()
         names = list(data.keys())
         values = list(data.values())
+        xpos = range(len(values))
 
-        ax = plt.gca()
-        ax.set_ylim([0, 5])
-
-        plt.bar(names, values, width=0.1)
-        plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png")
+        with plt.style.context(matplotx.styles.ayu["light"]):
+            plt.ylim([0, 5])
+            plt.bar(xpos, values)
+            plt.xticks(xpos, names, fontsize=10)
+            matplotx.show_bar_values("{:.2f}")
+            plt.title('OQuaRE model values')
+            plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png")
     
     def plot_oquare_categories(self, data: dict, fileName: str, outputPath: str = 'OQuaRE'):
 
-        plt.figure(figsize=(15.5, 5))
         names = list(data.keys())
         values = list(data.values())
-        ax = plt.gca()
-        ax.set_title('OQuaRE model category values')
-        ax.set_ylim([0, 5])
+        xpos = range(len(values))
 
-        ax.tick_params(
-            axis='x',
-            which='both',
-            bottom=False,
-            labelbottom=False
-        )
-        ax.grid()
-        
-        plt.plot(range(len(names)), values, '-ko', mfc='red')
-        
-        for i in range(len(names)):
-            ax.annotate('%s' % names[i], xy=(i - 0.25, values[i] + 0.2), textcoords='data')
+        with plt.style.context(matplotx.styles.ayu["light"]):
+            plt.ylim([0, 5])
+            plt.bar(xpos, values)
+            plt.xticks(xpos, names, fontsize=10, rotation=45)
+            matplotx.show_bar_values("{:.2f}")
+            plt.title('OQuaRE category values')
+            plt.savefig(outputPath + '/temp_results/' + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
 
-        plt.savefig(outputPath + '/temp_results/' + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
+    def plot_historic(self, data: dict, dates: list[str], outputPath: str = 'OQuaRE'):
+
+        line_labels = list(data.keys())
+        values = list(data.values())
+        xpos = range(len(dates))
+        
+        print(dates)
+        
+        with plt.style.context(matplotx.styles.ayu["light"]):
+            plt.rc('font', size=10)
+
+            for label in line_labels:
+                values = data.get(label).values()
+                dates = data.get(label).keys()
+                plt.plot(dates, values, label=label)
+
+            plt.ylim([0, 5])
+            plt.xticks(fontsize=10, rotation=45)
+            plt.yticks(fontsize=10)
+            plt.title("OQuaRE historic values")
+            matplotx.line_labels()
+            plt.savefig(outputPath + '/temp_results/OQuaRE_model_values_global.png', format="png", bbox_inches='tight')

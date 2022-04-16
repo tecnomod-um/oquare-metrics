@@ -69,53 +69,56 @@ if __name__ == '__main__':
 
         if plot_global:
             archive_path = inputPath + '/archives/'
-            oquare_model_values_global = {}
+            oquare_model_values_historic = {}
             entries = os.listdir(archive_path)
+            dates = []
 
-            # Si hay menos de 18 resultados archivados, los extraigo todos
+            # Si hay menos de 19 resultados archivados, los extraigo todos
 
-            if len(entries) < 18:
+            if len(entries) < 19:
                 # Por cada archivado extraigo las carpetas de ontologias
+                dates = entries
                 for entry in entries:
                     with os.scandir(archive_path + entry + '/') as ontologies:
                         for ontology in ontologies:
                             # Si es carpeta (puede haber imagenes de resultados previos)
                             if ontology.is_dir():
                                 # Si la entrada no existe para esa ontologia, la añado
-                                if not oquare_model_values_global.get(ontology.name):
-                                    oquare_model_values_global[ontology.name] = list()
+                                if not oquare_model_values_historic.get(ontology.name):
+                                    oquare_model_values_historic[ontology.name] = {}
                                 
                                 # Extraigo el oquare_value de esa ontología para ese archivado y la añado a la lista de esa ontologia
                                 parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
-                                oquare_model_values_global.get(ontology.name).append(parsed_metrics.parse_oquare_value())
+                                oquare_model_values_historic.get(ontology.name)[entry] = parsed_metrics.parse_oquare_value()
             else:
-                for i in range(len(entries)-18, len(entries)):
+                for i in range(len(entries)-19, len(entries)):
                     entry = entries[i]
+                    dates.append(entry)
                     with os.scandir(archive_path + entry + '/') as ontologies:
                         for ontology in ontologies:
                             # Si es carpeta (puede haber imagenes de resultados previos)
                             if ontology.is_dir():
                                 # Si la entrada no existe para esa ontologia, la añado
-                                if not oquare_model_values_global.get(ontology.name):
-                                    oquare_model_values_global[ontology.name] = list()
+                                if not oquare_model_values_historic.get(ontology.name):
+                                    oquare_model_values_historic[ontology.name] = {}
                                 
                                 # Extraigo el oquare_value de esa ontología para ese archivado y la añado a la lista de esa ontologia
                                 parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
-                                oquare_model_values_global.get(ontology.name).append(parsed_metrics.parse_oquare_value())
+                                oquare_model_values_historic.get(ontology.name)[entry] = parsed_metrics.parse_oquare_value()
 
-            # Saco el oquare_value de las ontologias previas a esta ejecución (almacenadas en results)
+            # Extraigo oquare_value de la ejecución actual (ya en results con fecha asignada)
             results_path = inputPath + '/results/'
             results_entry = os.listdir(results_path)[0]
-            with os.scandir(results_path + results_entry) as entries:
-                for entry in entries:
-                    if entry.is_dir():
-                        parsed_metrics = MetricsParser(entry.path + '/metrics/' + entry.name + '.xml')
-                        oquare_model_values_global.get(entry.name).append(parsed_metrics.parse_oquare_value())  
+            dates.append(results_entry)
+            with os.scandir(results_path + results_entry) as ontologies:
+                for ontology in ontologies:
+                    if ontology.is_dir():
+                        if not oquare_model_values_historic.get(ontology.name):
+                                    oquare_model_values_historic[ontology.name] = {}
 
-            # Añado el oquare_value que se ha calculado en esta ejecucion
-            for ontology in oquare_model_values:
-                oquare_model_values_global.get(ontology).append(oquare_model_values.get(ontology))
+                        parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
+                        oquare_model_values_historic.get(ontology.name)[results_entry] = parsed_metrics.parse_oquare_value()  
 
             # Plot and save
-            print(oquare_model_values_global)
+            graphPlotter.plot_historic(oquare_model_values_historic, dates)
 
