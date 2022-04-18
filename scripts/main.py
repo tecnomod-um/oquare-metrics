@@ -120,5 +120,5 @@ if __name__ == '__main__':
                         oquare_model_values_historic.get(ontology.name)[results_entry] = parsed_metrics.parse_oquare_value()  
 
             # Plot and save
-            graphPlotter.plot_historic(oquare_model_values_historic, dates)
+            graphPlotter.plot_historic(oquare_model_values_historic, results_entry)
 
