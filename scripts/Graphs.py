@@ -32,11 +32,10 @@ class oquareGraphs:
             plt.title('OQuaRE category values')
             plt.savefig(outputPath + '/temp_results/' + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
 
-    def plot_historic(self, data: dict, dates: list[str], outputPath: str = 'OQuaRE'):
+    def plot_historic(self, data: dict, date: str, outputPath: str = 'OQuaRE'):
 
         line_labels = list(data.keys())
         values = list(data.values())
-        xpos = range(len(dates))
         
         print(dates)
         
@@ -53,4 +52,4 @@ class oquareGraphs:
             plt.yticks(fontsize=10)
             plt.title("OQuaRE historic values")
             matplotx.line_labels()
-            plt.savefig(outputPath + '/temp_results/OQuaRE_model_values_global.png', format="png", bbox_inches='tight')
+            plt.savefig(outputPath + '/results/' + date + 'OQuaRE_model_values_global.png', format="png", bbox_inches='tight')
