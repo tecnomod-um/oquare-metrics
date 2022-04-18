@@ -12,6 +12,16 @@ inputs:
     description: 'Reasoner used by OQuaRE'
     required: true
     default: 'ELK'
+  category-plots:
+    description: 'Tells the module if you want category values plots'
+    default: true
+  model-plot:
+    description: 'Indicates if you want oquare model value plots'
+    default: true
+  archive-plot:
+    description: 'Indicates if you want oquare model value plot across the latest 20 versions'
+    default: false
+
 
 runs: 
   using: 'composite'
@@ -65,7 +75,10 @@ runs:
             mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
             outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
             java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
-            python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+            
+            if [ ${{ inputs.category-plots }} ]; then \
+              python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+            fi\
           done
 
           python scripts/main.py -i ${{ inputs.contents-folder }} -m
@@ -88,12 +101,14 @@ runs:
           outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
           rm -f "$outputFilePath"; \
           java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
-          python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+          if [ ${{ inputs.category-plots }} ]; then \
+            python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+          fi\
         done
       shell: bash
     
     - name: 'Evaluate and plot oquare model value'
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: inputs.model-plot && steps.changed-files.outputs.any_changed == 'true'
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
       
@@ -108,7 +123,7 @@ runs:
       shell: bash
 
     - name: 'Evaluate and plot historic'
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: inputs.archive-plot && steps.changed-files.outputs.any_changed == 'true'
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
       
