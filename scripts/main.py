@@ -71,7 +71,6 @@ if __name__ == '__main__':
             archive_path = inputPath + '/archives/'
             oquare_model_values_historic = {}
             entries = sorted(os.listdir(archive_path))
-            print(entries)
             dates = []
 
             # Si hay menos de 19 resultados archivados, los extraigo todos
@@ -121,6 +120,5 @@ if __name__ == '__main__':
                         oquare_model_values_historic.get(ontology.name)[results_entry] = parsed_metrics.parse_oquare_value()  
 
             # Plot and save
-            print(dates)
             graphPlotter.plot_historic(oquare_model_values_historic, results_entry)
 

@@ -71,6 +71,11 @@ runs:
           python scripts/main.py -i ${{ inputs.contents-folder }} -m
 
           mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add ${{ inputs.contents-folder }}/
+          git commit -m "Ontology metrics calculated - OQuaRE"
+          git push
         fi
       shell: bash
 
@@ -107,8 +112,9 @@ runs:
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
       
-
+      
     - name: Commit and push
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
