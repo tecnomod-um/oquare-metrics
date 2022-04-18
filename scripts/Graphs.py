@@ -37,8 +37,6 @@ class oquareGraphs:
         line_labels = list(data.keys())
         values = list(data.values())
         
-        print(dates)
-        
         with plt.style.context(matplotx.styles.ayu["light"]):
             plt.rc('font', size=10)
 
