@@ -38,8 +38,6 @@ class oquareGraphs:
         values = list(data.values())
         out = outputPath + '/results/' + date
 
-        print(date)
-
         with plt.style.context(matplotx.styles.ayu["light"]):
             plt.rc('font', size=10)
 
