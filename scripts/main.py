@@ -71,6 +71,7 @@ if __name__ == '__main__':
             archive_path = inputPath + '/archives/'
             oquare_model_values_historic = {}
             entries = sorted(os.listdir(archive_path))
+            print(entries)
             dates = []
 
             # Si hay menos de 19 resultados archivados, los extraigo todos
