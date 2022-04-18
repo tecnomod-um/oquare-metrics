@@ -61,8 +61,8 @@ runs:
     - name: Removes previous run plots 
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        rm -f OQuaRE_model_values_global.png
-        rm -f OQuaRE_model_values.png
+        rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values_global.png
+        rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values.png
       shell: bash
 
     - name: If file renamed, delete nonmatching folders on temporal folder
