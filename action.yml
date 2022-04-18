@@ -57,6 +57,13 @@ runs:
       if: steps.changed-files.outputs.any_changed == 'true'
       run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
       shell: bash
+      
+    - name: Removes previous run plots 
+      if: steps.changed-files.outputs.any_changed = 'true'
+      run: |
+        rm -f OQuaRE_model_values_global.png
+        rm -f OQuaRE_model_values.png
+      shell: bash
 
     - name: If file renamed, delete nonmatching folders on temporal folder
       if: steps.changed-files.outputs.renamed_files
