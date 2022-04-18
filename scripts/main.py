@@ -58,14 +58,14 @@ if __name__ == '__main__':
     else:
         oquare_model_values = {}
         
-        with os.scandir(basepath) as entries:
-            for entry in entries:
-                if entry.is_dir():
-                    parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
-                    oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
-        
         if plot_models:
-            graphPlotter.plot_oquare_values(oquare_model_values)
+            with os.scandir(basepath) as entries:
+                for entry in entries:
+                    if entry.is_dir():
+                        parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
+                        oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
+            
+                graphPlotter.plot_oquare_values(oquare_model_values)
 
         if plot_global:
             archive_path = inputPath + '/archives/'
