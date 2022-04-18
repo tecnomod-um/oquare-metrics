@@ -20,7 +20,7 @@ inputs:
     default: 'true'
   archive-plot:
     description: 'Indicates if you want oquare model value plot across the latest 20 versions'
-    default: 'true'
+    default: 'false'
 
 
 runs: 
