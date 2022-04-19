@@ -63,6 +63,7 @@ runs:
       run: |
         rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values_global.png
         rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values.png
+        rm -f ${{ inputs.contents-folder }}/temp_results/README.md
       shell: bash
 
     - name: If file renamed, delete nonmatching folders on temporal folder
