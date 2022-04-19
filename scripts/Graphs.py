@@ -4,7 +4,7 @@ import matplotx
 
 class oquareGraphs:
 
-    def plot_oquare_values(self, data: dict, outputPath: str = 'OQuaRE'):
+    def plot_oquare_values(self, data: dict, outputPath: str):
         #plt.figure()
         names = list(data.keys())
         values = list(data.values())
@@ -18,7 +18,7 @@ class oquareGraphs:
             plt.title('OQuaRE model values')
             plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png")
     
-    def plot_oquare_categories(self, data: dict, fileName: str, outputPath: str = 'OQuaRE'):
+    def plot_oquare_categories(self, data: dict, fileName: str, outputPath: str):
 
         names = list(data.keys())
         values = list(data.values())
@@ -32,7 +32,7 @@ class oquareGraphs:
             plt.title('OQuaRE category values')
             plt.savefig(outputPath + '/temp_results/' + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
 
-    def plot_historic(self, data: dict, date: str, outputPath: str = 'OQuaRE'):
+    def plot_historic(self, data: dict, date: str, outputPath: str):
 
         line_labels = list(data.keys())
         values = list(data.values())

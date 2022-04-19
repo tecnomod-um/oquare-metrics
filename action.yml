@@ -9,11 +9,11 @@ inputs:
     description: 'Folder which will contain results and archives'
     default: 'OQuaRE'
   reasoner:
-    description: 'Reasoner used by OQuaRE'
+    description: 'Reasoner used by OQuaRE framework'
     required: true
     default: 'ELK'
   category-plots:
-    description: 'Tells the module if you want category values plots'
+    description: 'Indicates if you want category values plots'
     default: 'true'
   model-plot:
     description: 'Indicates if you want oquare model value plots'

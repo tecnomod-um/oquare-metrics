@@ -52,7 +52,7 @@ if __name__ == '__main__':
         for category, values in categories.items():
             oquare_category_values[category] = values.get('value')
         
-        graphPlotter.plot_oquare_categories(oquare_category_values, file)
+        graphPlotter.plot_oquare_categories(oquare_category_values, file, outputPath)
         sys.exit(0)
 
     else:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
                         parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
                         oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
             
-                graphPlotter.plot_oquare_values(oquare_model_values)
+                graphPlotter.plot_oquare_values(oquare_model_values, outputPath)
 
         if plot_global:
             archive_path = inputPath + '/archives/'
@@ -120,5 +120,5 @@ if __name__ == '__main__':
                         oquare_model_values_historic.get(ontology.name)[results_entry] = parsed_metrics.parse_oquare_value()  
 
             # Plot and save
-            graphPlotter.plot_historic(oquare_model_values_historic, results_entry)
+            graphPlotter.plot_historic(oquare_model_values_historic, results_entry, outputPath)
 
