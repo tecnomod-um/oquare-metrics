@@ -50,4 +50,4 @@ class oquareGraphs:
             plt.yticks(fontsize=10)
             plt.title("OQuaRE historic values")
             matplotx.line_labels()
-            plt.savefig(outputPath + '/results/' + date + '/OQuaRE_model_values_global.png', format="png", bbox_inches='tight')
+            plt.savefig(outputPath + '/results/' + date + '/OQuaRE_historic_model_value.png', format="png", bbox_inches='tight')

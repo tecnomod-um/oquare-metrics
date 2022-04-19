@@ -3,6 +3,7 @@ import os
 import getopt
 from Parser import MetricsParser
 from Graphs import oquareGraphs
+from ReadMeGen import readmeGen
 
 if __name__ == '__main__':
 
@@ -37,6 +38,7 @@ if __name__ == '__main__':
 
     basepath = inputPath + '/temp_results/'
     graphPlotter = oquareGraphs()
+    readmeGenerator = readmeGen()
 
     if plot_categories:
         if not file or plot_global or plot_models:
@@ -50,6 +52,7 @@ if __name__ == '__main__':
             oquare_category_values[category] = values.get('value')
         
         graphPlotter.plot_oquare_categories(oquare_category_values, file, inputPath)
+        readmeGenerator.append_category(file, inputPath)
         sys.exit(0)
 
     else:
@@ -63,6 +66,7 @@ if __name__ == '__main__':
                         oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
             
                 graphPlotter.plot_oquare_values(oquare_model_values, inputPath)
+                readmeGenerator.append_oquare_value()
 
         if plot_global:
             archive_path = inputPath + '/archives/'
@@ -118,4 +122,5 @@ if __name__ == '__main__':
 
             # Plot and save
             graphPlotter.plot_historic(oquare_model_values_historic, results_entry, inputPath)
+            readmeGenerator.append_oquare_historic(inputPath, results_entry)
 

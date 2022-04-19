@@ -12,8 +12,6 @@
 ]>
 
 
-
-
 <rdf:RDF xmlns="&obo;agro-edit.owl#"
      xml:base="&obo;agro-edit.owl"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
