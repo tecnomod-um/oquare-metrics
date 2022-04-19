@@ -108,6 +108,7 @@ runs:
           mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
           outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
           rm -f "$outputFilePath"; \
+          rm -f "{{ inputs.contents-folder}}/temp_results/${outputFile}/${outputFile}category_values.png"
           java -jar libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
           if [ ${{ inputs.category-plots }} = "true" ]; then \
             python scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
