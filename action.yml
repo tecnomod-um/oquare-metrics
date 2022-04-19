@@ -54,16 +54,24 @@ runs:
       shell: bash
     
     - name: Find and copy previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_modified == 'true'
       run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
       shell: bash
 
     - name: Removes previous run plots 
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_modified == 'true'
       run: |
         rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values_global.png
         rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values.png
         rm -f ${{ inputs.contents-folder }}/temp_results/README.md
+      shell: bash
+
+    - name: If file deleted, remove its folder from results
+      if: steps.changed-files.outputs.any_deleted == 'true'
+      run: |
+        for file in ${{ steps.changed-files.outputs.deleted_files }}; do \
+          rm -f ${{ inputs.contents-folder }}/temp_results/${file};
+        done
       shell: bash
 
     - name: If file renamed, delete nonmatching folders on temporal folder
@@ -117,7 +125,7 @@ runs:
       shell: bash
     
     - name: 'Evaluate and plot oquare model value'
-      if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_changed == 'true'
+      if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
       
@@ -132,13 +140,13 @@ runs:
       shell: bash
 
     - name: 'Evaluate and plot historic'
-      if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_changed == 'true'
+      if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
       run: python scripts/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
       
       
     - name: Commit and push
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_modified == 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
