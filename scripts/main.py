@@ -66,7 +66,7 @@ if __name__ == '__main__':
                         oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
             
                 graphPlotter.plot_oquare_values(oquare_model_values, inputPath)
-                readmeGenerator.append_oquare_value()
+                readmeGenerator.append_oquare_value(inputPath)
 
         if plot_global:
             archive_path = inputPath + '/archives/'
