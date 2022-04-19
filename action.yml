@@ -131,7 +131,7 @@ runs:
       shell: bash
       
     - name: Archive previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_modified == 'true'
       run: mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/ 
       shell: bash
 
