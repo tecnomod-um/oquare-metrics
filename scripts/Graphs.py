@@ -46,7 +46,7 @@ class oquareGraphs:
                 plt.plot(dates, values, label=label)
 
             plt.ylim([0, 5])
-            plt.xticks(fontsize=10, rotation=45)
+            plt.xticks(fontsize=8, rotation=45)
             plt.yticks(fontsize=10)
             plt.title("OQuaRE historic values")
             matplotx.line_labels()
