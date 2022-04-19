@@ -7,16 +7,15 @@ from Graphs import oquareGraphs
 if __name__ == '__main__':
 
     argv = sys.argv
-    outputPath = ""
     inputPath = ""
     plot_models = False
     plot_categories = False
     plot_global = False
     file = ''
-    help_msg = "Uso: {0} -i <folderPath> -o <outputPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
+    help_msg = "Uso: {0} -i <folderPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:o:f:mcg", ["help", "input=", "output=", "file=", "model", "categories", "global"])
+        opts, args = getopt.getopt(argv[1:], "hi:o:f:mcg", ["help", "input=", "file=", "model", "categories", "global"])
     except:
         print(help_msg)
         sys.exit(2)
@@ -27,8 +26,6 @@ if __name__ == '__main__':
             sys.exit(2)
         elif opt in ("-i", "--input"):
             inputPath = arg
-        elif opt in ("-o", "--output"):
-            outputPath = arg
         elif opt in ("-m", "--model"):
             plot_models = True
         elif opt in ("-c", "--categories"):
@@ -52,7 +49,7 @@ if __name__ == '__main__':
         for category, values in categories.items():
             oquare_category_values[category] = values.get('value')
         
-        graphPlotter.plot_oquare_categories(oquare_category_values, file, outputPath)
+        graphPlotter.plot_oquare_categories(oquare_category_values, file, inputPath)
         sys.exit(0)
 
     else:
@@ -65,7 +62,7 @@ if __name__ == '__main__':
                         parsed_metrics = MetricsParser(basepath + entry.name + '/metrics/' + entry.name + ".xml")
                         oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
             
-                graphPlotter.plot_oquare_values(oquare_model_values, outputPath)
+                graphPlotter.plot_oquare_values(oquare_model_values, inputPath)
 
         if plot_global:
             archive_path = inputPath + '/archives/'
@@ -120,5 +117,5 @@ if __name__ == '__main__':
                         oquare_model_values_historic.get(ontology.name)[results_entry] = parsed_metrics.parse_oquare_value()  
 
             # Plot and save
-            graphPlotter.plot_historic(oquare_model_values_historic, results_entry, outputPath)
+            graphPlotter.plot_historic(oquare_model_values_historic, results_entry, inputPath)
 
