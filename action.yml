@@ -29,7 +29,7 @@ runs:
     - uses: actions/checkout@v2
       with:
           fetch-depth: 2
-    - run: pip install -r matplotlib matplotx[all]
+    - run: pip install matplotlib matplotx[all]
       shell: bash
 
     - name: Get changed files
