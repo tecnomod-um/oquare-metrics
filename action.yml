@@ -47,7 +47,9 @@ runs:
     
     - name: Find and copy previous results
       if: steps.changed-files.outputs.any_modified == 'true'
-      run: cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
+      run: |
+        [[ -e ${{ inputs.contents-folder }} ]] && \
+        cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
       shell: bash
 
     - name: Removes previous run plots 
