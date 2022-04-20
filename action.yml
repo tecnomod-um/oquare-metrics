@@ -39,19 +39,21 @@ runs:
         files: |
           ${{ inputs.ontology-folder }}/*.owl
 
-    - name: Find and copy previous results
-      if: steps.changed-files.outputs.any_modified == 'true'
-      run: |
-        [[ -e ${{ inputs.contents-folder }}/results ]] && \
-        cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
-      shell: bash
-      
     - name: Setup folders
       run: |
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
       shell: bash
     
+    - name: Find and copy previous results
+      if: steps.changed-files.outputs.any_modified == 'true'
+      run: |
+        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
+        then 
+          cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
+        fi
+      shell: bash
+
     - name: Removes previous run plots 
       if: steps.changed-files.outputs.any_modified == 'true'
       run: |
