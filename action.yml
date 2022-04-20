@@ -83,14 +83,14 @@ runs:
             outputFile=$(basename "$file" .owl); 
             mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
             outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
-            java -jar ${{ github.action_path }}/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
+            java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
             
             if [ ${{ inputs.category-plots }} = "true" ]; then \
-              python ${{ github.action_path }}/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+              python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
             fi
           done
 
-          python ${{ github.action_path }}/scripts/main.py -i ${{ inputs.contents-folder }} -m
+          python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
 
           mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
           git config user.name github-actions
@@ -110,16 +110,16 @@ runs:
           outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
           rm -f "$outputFilePath"; \
           rm -f "${{ inputs.contents-folder}}/temp_results/${outputFile}/README.md"
-          java -jar ${{ github.action_path }}/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
+          java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
           if [ ${{ inputs.category-plots }} = "true" ]; then \
-            python ${{ github.action_path }}/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
+            python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
           fi
         done
       shell: bash
     
     - name: 'Evaluate and plot oquare model value'
       if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python ${{ github.action_path }}/scripts/main.py -i ${{ inputs.contents-folder }} -m
+      run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
       
     - name: Archive previous results
@@ -134,7 +134,7 @@ runs:
 
     - name: 'Evaluate and plot historic'
       if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python ${{ github.action_path }}/scripts/main.py -i ${{ inputs.contents-folder }} -g
+      run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
       
       
