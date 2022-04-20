@@ -63,7 +63,7 @@ runs:
       run: |
         for file in ${{ steps.changed-files.outputs.deleted_files }}; do \
           deletedFile=$(basename "$file" .owl); 
-          rm -r ${{ inputs.contents-folder }}/temp_results/${deletedFile};
+          rm -rf ${{ inputs.contents-folder }}/temp_results/${deletedFile};
         done
       shell: bash
 
