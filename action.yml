@@ -134,6 +134,7 @@ runs:
               python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"
             fi
           done
+        fi
       shell: bash
     
     - name: 'Evaluate and plot oquare model value'
