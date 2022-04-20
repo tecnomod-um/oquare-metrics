@@ -94,7 +94,9 @@ runs:
             fi
           done
 
-          python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
+          if [ ${{ inputs.model-plot }} = "true"]; then \
+            python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
+          fi
 
           mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%d-%m-%Y_%H-%M-%S)"
           git config user.name github-actions
@@ -102,6 +104,8 @@ runs:
           git add ${{ inputs.contents-folder }}/
           git commit -m "Ontology metrics calculated - OQuaRE"
           git push
+
+          exit
         fi
       shell: bash
 
