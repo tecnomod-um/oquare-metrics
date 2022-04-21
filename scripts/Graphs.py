@@ -15,7 +15,7 @@ class oquareGraphs:
             plt.xticks(xpos, names, fontsize=8, rotation=90)
             matplotx.show_bar_values("{:.2f}")
             ax = plt.gca()
-            ax.text(size=10, color='black')
+            ax.autoscale(True, 'x', True)
             plt.title('OQuaRE model values')
             plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png", bbox_inches='tight')
     
