@@ -22,7 +22,6 @@ inputs:
     description: 'Indicates if you want oquare model value plot across the latest 20 versions'
     default: 'false'
 
-
 runs: 
   using: 'composite'
   steps:
