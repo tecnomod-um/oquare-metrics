@@ -80,9 +80,12 @@ runs:
     - name: If file renamed, delete nonmatching folders on temporal folder
       if: steps.changed-files.outputs.renamed_files
       run: |
-        comm -13 <(ls -1 ${{ inputs.ontology-folder }} | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results) | \
-        while read file; do \
-          rm -r ${{ inputs.contents-folder}}/temp_results/${file};
+        for ontology_source in ${{ inputs.ontology_folders }}
+        do
+          comm -13 <(ls -1 ${ ontology_source } | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results/${ ontology_source }) | \
+          while read file; do \
+            rm -r ${{ inputs.contents-folder}}/temp_results/${ ontology_source }/${file};
+          done
         done
       shell: bash
 
