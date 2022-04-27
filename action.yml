@@ -44,9 +44,9 @@ runs:
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
 
-        for ontology_folder in ${{ inputs.ontology_folders }}
+        for ontology_source in ${{ inputs.ontology_folders }}
         do
-          mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_folder
+          mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source
         done
       shell: bash
     
@@ -92,16 +92,22 @@ runs:
     - name: Checks if its the first run (results empty folder)
       if: steps.changed-files.outputs.any_modified == 'false'
       run: |
-        if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]; then \
-          find ./${{ inputs.ontology-folder }} -type f -maxdepth 1 -name "*.owl" | while read file; do \
-            outputFile=$(basename "$file" .owl); 
-            mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics; \
-            outputFilePath="${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics/${outputFile}.xml"; \
-            java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"; \
-            
-            if [ ${{ inputs.category-plots }} = "true" ]; then \
-              python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -c -f "$outputFile"; \
-            fi
+        if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]
+        then
+          for ontology_source in ${{ inputs.ontology-folders }}
+          do
+            find ./${{ ontology_source }} -type f -maxdepth 1 -name "*.owl" | while read file
+            do
+              outputFile=$(basename "$file" .owl) 
+              mkdir -p ${{ inputs.contents-folder }}/temp_results/${outputFile}/metrics
+              outputFilePath="${{ inputs.contents-folder }}/temp_results/${ontology_source}/${outputFile}/metrics/${outputFile}.xml"
+              java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
+              
+              if [ ${{ inputs.category-plots }} = "true" ]
+              then
+                python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -o "$ontology_source" -c -f "$outputFile" 
+              fi
+            done
           done
 
           if [ ${{ inputs.model-plot }} = "true"]; then \
