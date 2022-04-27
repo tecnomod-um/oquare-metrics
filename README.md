@@ -1,12 +1,12 @@
 # oquare-metrics
 
-Tool to automatically obtain and save metrics from ontology files based of OQuaRE framework for ontology quality evaluation, generating visual reports which showcase the quality of each ontology and saving them within the repository itself
+A module to automatically obtain and save metrics from ontology files based of OQuaRE framework for ontology quality evaluation, generating visual reports which showcase the quality of each ontology and saving them within the repository itself
 
 ## OQuaRE
 
-TODO
+OQuaRE is a framework developed by Astrid Duque Ramos which defines an ontology evaluation system based on ISO/IEC 25000:2005 (SQuaRE), which is presented as an ontology quality evaluation adapted to software quality standard SQuaRE which allows trazability within requirements and metrics of an ontology, with the goal of measuring in an objetive and reproducible way its characteristics as well as bringin assitance to users and developers in taking informed decisions
 
-<http://sele.inf.um.es/ontology-metrics/index.html>
+This module makes use of said framework to bring its capabilities to ontology repositories hosted in GitHub, so that users may evaluate ontologies making use of an stadardized system.
 
 ## Features
 
