@@ -43,6 +43,11 @@ runs:
       run: |
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
+
+        for ontology_folder in ${{ inputs.ontology_folders }}
+        do
+          mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_folder
+        done
       shell: bash
     
     - name: Find and copy previous results
