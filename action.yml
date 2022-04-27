@@ -1,8 +1,8 @@
 name: 'OQuaRE metrics calculation module'
 description: 'Calculates the metrics of ontology files in the given folder based on the metrics set by the OQuaRE framework'
 inputs:
-  ontology-folder:
-    description: 'Folder which contains .owl files'
+  ontology-folders:
+    description: 'Folders which contains .owl files'
     required: true
     default: 'ontologies'
   contents-folder:
@@ -35,8 +35,9 @@ runs:
       id: changed-files
       uses: tj-actions/changed-files@v18
       with:
+        files_separator: ' '
         files: |
-          ${{ inputs.ontology-folder }}/*.owl
+          ${{ join(inputs.ontology-folders, '/*.owl ') }}
 
     - name: Setup folders
       run: |
