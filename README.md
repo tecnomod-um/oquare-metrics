@@ -67,7 +67,7 @@ jobs:
 
 ```yaml
           
-    # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production
+    # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production and src/ontologies/imports
     # And we want to store the metrics on src/ontologies/metrics
     - name: Ontology folder configuration
     uses: Emdien/oquare-metrics@v0.0.16 
