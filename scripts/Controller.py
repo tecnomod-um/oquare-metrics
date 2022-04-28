@@ -18,7 +18,7 @@ class Controller:
 
         with os.scandir(basepath + entry) as sources:
             for source in sources:
-                with os.scandir(basepath + entry + '/' + source) as ontologies:
+                with os.scandir(basepath + entry + '/' + source.name) as ontologies:
                     for ontology in ontologies:
                         if ontology.is_dir():
                             if not value_dict.get(ontology.name):
@@ -44,7 +44,7 @@ class Controller:
 
         with os.scandir(basepath) as sources:
             for source in sources:
-                with os.scandir(basepath + '/' + source) as entries:
+                with os.scandir(basepath + '/' + source.name) as entries:
                     for entry in entries:
                         if entry.is_dir():
                             parsed_metrics = MetricsParser(entry.path + '/metrics/' + entry.name + ".xml")
