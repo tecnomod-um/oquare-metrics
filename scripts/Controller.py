@@ -13,37 +13,47 @@ class Controller:
         self.readmeGenerator = readmeGen()
 
     def __scan_entry(self, basepath: str, entry: str, value_dict: dict) -> None:
-        with os.scandir(basepath + entry) as ontologies:
-            for ontology in ontologies:
-                if ontology.is_dir():
-                    if not value_dict.get(ontology.name):
-                        value_dict[ontology.name] = {}
 
-                    parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
-                    value_dict.get(ontology.name)[entry] = parsed_metrics.parse_oquare_value()
+        # oquare/results/entry/source/ontology/metrics/ontology.xml
 
-    def handle_categories(self, basepath: str, file: str, inputPath: str) -> None:
+        with os.scandir(basepath + entry) as sources:
+            for source in sources:
+                with os.scandir(basepath + entry + '/' + source) as ontologies:
+                    for ontology in ontologies:
+                        if ontology.is_dir():
+                            if not value_dict.get(ontology.name):
+                                value_dict[ontology.name] = {}
+
+                            parsed_metrics = MetricsParser(ontology.path + '/metrics/' + ontology.name + '.xml')
+                            value_dict.get(ontology.name)[entry] = parsed_metrics.parse_oquare_value()
+
+    def handle_categories(self, basePath: str, file: str, inputPath: str) -> None:
         oquare_category_values = {}
-        parsed_metrics = MetricsParser(basepath + file + '/metrics/' + file + '.xml')
+        parsed_metrics = MetricsParser(basePath + file + '/metrics/' + file + '.xml')
         categories = parsed_metrics.parse_category_metrics()
         for category, values in categories.items():
             oquare_category_values[category] = values.get('value')
         
-        self.graphPlotter.plot_oquare_categories(oquare_category_values, file, inputPath)
-        self.readmeGenerator.append_category(file, inputPath)
+        self.graphPlotter.plot_oquare_categories(oquare_category_values, file, basePath)
+        self.readmeGenerator.append_category(file, basePath)
 
     def handle_oquare_model(self, basepath: str, inputPath: str) -> None:
         oquare_model_values = {}
-        with os.scandir(basepath) as entries:
-            for entry in entries:
-                if entry.is_dir():
-                    parsed_metrics = MetricsParser(entry.path + '/metrics/' + entry.name + ".xml")
-                    oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
+
+        # inputPath/temp_results/source/entry/metrics/file.xml
+
+        with os.scandir(basepath) as sources:
+            for source in sources:
+                with os.scandir(basepath + '/' + source) as entries:
+                    for entry in entries:
+                        if entry.is_dir():
+                            parsed_metrics = MetricsParser(entry.path + '/metrics/' + entry.name + ".xml")
+                            oquare_model_values[entry.name] = parsed_metrics.parse_oquare_value()
         
         self.graphPlotter.plot_oquare_values(oquare_model_values, inputPath)
         self.readmeGenerator.append_oquare_value(inputPath)
 
-    def handle_historic(self, basepath: str, inputPath: str) -> None:
+    def handle_historic(self, inputPath: str) -> None:
         archive_path = inputPath + '/archives/'
         results_path = inputPath + '/results/'
         oquare_model_values_historic = {}

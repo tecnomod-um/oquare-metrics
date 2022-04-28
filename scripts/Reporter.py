@@ -3,7 +3,7 @@
 class readmeGen:
 
     def append_category(self, fileName: str, path: str):
-        readme_file = open(path + '/temp_results/'+ fileName + '/' + 'README.md', 'a')
+        readme_file = open(path + fileName + '/' + 'README.md', 'a')
         readme_file.write('# OQuaRE category values\n')
         readme_file.write('Each category has a value on a scale of 1 to 5, indicating how good the ontology is for each category\n\n')
         readme_file.write('![category values plot](' + fileName + 'category_values.png)\n')

@@ -17,7 +17,7 @@ class oquareGraphs:
             plt.title('OQuaRE model values')
             plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png", bbox_inches='tight')
     
-    def plot_oquare_categories(self, data: dict, fileName: str, outputPath: str):
+    def plot_oquare_categories(self, data: dict, fileName: str, basePath: str):
 
         names = list(data.keys())
         values = list(data.values())
@@ -29,7 +29,7 @@ class oquareGraphs:
             plt.xticks(xpos, names, fontsize=10, rotation=45)
             matplotx.show_bar_values("{:.2f}")
             plt.title('OQuaRE category values')
-            plt.savefig(outputPath + '/temp_results/' + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
+            plt.savefig(basePath + fileName + '/' + fileName + "category_values.png", format="png", bbox_inches='tight')
 
     def plot_historic(self, data: dict, date: str, outputPath: str):
 
