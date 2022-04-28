@@ -16,7 +16,7 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Set of different reports, showcasing different aspects of the quality of each ontology
 * Archive of metrics generated from previous versions of ontologies contained within the repository.
 * Visual representation of how modifications done to an ontology affect the quality of that ontology.
-* Restrict folders to scan for ontologies on a repository
+* Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
 
 ## Usage
@@ -56,7 +56,7 @@ jobs:
 
 | Input           | Type   | Required | Default      | Description                                                                                      |
 |-----------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------|
-| ontology-folder | string | true     | 'ontologies' | Sets the folder to search ontologies within the repository                                      |
+| ontology-folders | string | true     | 'ontologies' | Sets the folders to search ontologies within the repository. Space separated values, no trailing slash needed                                      |
 | contents-folder | string | true     | 'OQuaRE'     | Sets the folder on which the module will save all generated content                              |
 | reasoner        | string | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                                         |
 | category-plots  | string (ELK/HERMIT) | false    | 'true'       | Indicates the module to generate category values plots                                           |
@@ -72,7 +72,7 @@ jobs:
     - name: Ontology folder configuration
     uses: Emdien/oquare-metrics@v0.0.16 
     with:
-        ontology-folder: src/ontologies/production
+        ontology-folders: src/ontologies/production src/ontologies/imports
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
@@ -97,7 +97,6 @@ TODO
 
 ## Known Limitations
 
-> * Currently there is no way to set multiple ontology source folders to search ontologies on the repository. This feature is currently being worked on
 > * Currently there is no way to exclude certain files with .owl extension from the module file search.
 > * The module currently requires of previous, first hand setup of Java and Python. This is done so there is no compatibility issues with some Docker images
 
