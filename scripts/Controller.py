@@ -13,11 +13,8 @@ class Controller:
         self.readmeGenerator = readmeGen()
 
     def __scan_entry(self, basepath: str, entry: str, value_dict: dict) -> None:
-
-        # oquare/results/entry/source/ontology/metrics/ontology.xml
-
         
-        for filepath in glob.iglob(basepath + entry + '**/*.xml', recursive=True):
+        for filepath in glob.iglob(basepath + entry + '/**/*.xml', recursive=True):
             ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
             if not value_dict.get(ontology_name):
                 value_dict[ontology_name] = {}
