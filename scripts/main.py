@@ -2,8 +2,6 @@ import sys
 import os
 import getopt
 from Parser import MetricsParser
-from Graphs import oquareGraphs
-from ReadMeGen import readmeGen
 from Controller import Controller
 
 if __name__ == '__main__':
@@ -14,10 +12,13 @@ if __name__ == '__main__':
     plot_categories = False
     plot_historic = False
     file = ''
+    ontology_source = ''
     help_msg = "Uso: {0} -i <folderPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
+
     controller = Controller()
+
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:o:f:mcg", ["help", "input=", "file=", "model", "categories", "global"])
+        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcg", ["help", "input=","source=", "file=", "model", "categories", "global"])
     except:
         print(help_msg)
         sys.exit(2)
@@ -28,7 +29,7 @@ if __name__ == '__main__':
             sys.exit(2)
         elif opt in ("-i", "--input"):
             inputPath = arg
-        elif opt in ("-m", "--model"):
+        elif opt in ("-m", "--model"):  
             plot_models = True
         elif opt in ("-c", "--categories"):
             plot_categories = True
@@ -36,16 +37,17 @@ if __name__ == '__main__':
             plot_historic = True
         elif opt in ("-f", "--file"):
             file = arg
+        elif opt in ("-s", "--source"):
+            ontology_source = arg
 
     basepath = inputPath + '/temp_results/'
-    graphPlotter = oquareGraphs()
-    readmeGenerator = readmeGen()
 
     if plot_categories:
         if not file or plot_historic or plot_models:
             print(help_msg)
             sys.exit(2)
         
+        basepath += ontology_source + '/'
         controller.handle_categories(basepath, file, inputPath)
 
     else:        
@@ -53,5 +55,5 @@ if __name__ == '__main__':
             controller.handle_oquare_model(basepath, inputPath)
 
         if plot_historic:
-            controller.handle_historic(basepath, inputPath)
+            controller.handle_historic(inputPath)
 
