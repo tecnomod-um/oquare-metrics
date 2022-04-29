@@ -106,7 +106,8 @@ runs:
           do
             find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
             do
-              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
+              outputFile=$(basename "$file")
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $outputFile)]
               then
                 outputFile=$(basename "$file" .owl) 
                 mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
@@ -143,7 +144,8 @@ runs:
           do
             find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
             do
-              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
+              outputFile=$(basename "$file")
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $outputFile)]
               then
                 outputFile=$(basename "$file" .owl) 
                 mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics

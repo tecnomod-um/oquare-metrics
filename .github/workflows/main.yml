@@ -22,4 +22,4 @@ jobs:
         with:
           archive-plot: 'true'
           ontology-folders: ontologies test/ontology/imports
-          ignore-files: test/ontology/imports/go_inferences_null.owl
+          ignore-files: go_inferences_null.owl
