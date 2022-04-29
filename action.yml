@@ -39,10 +39,10 @@ runs:
       uses: tj-actions/changed-files@v18
       with:
         files_separator: ' '
-        files-ignore-separator: ' '
+        files_ignore_separator: ' '
         files: |
           ${{ join(inputs.ontology-folders, '/*.owl ') }}
-        files-ignore: |
+        files_ignore: |
           ${{ inputs.ignore-files }}
 
     - name: Setup folders
