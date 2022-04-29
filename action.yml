@@ -122,7 +122,7 @@ runs:
             done
           done
 
-          if [ ${{ inputs.model-plot }} = "true"]; then \
+          if [ ${{ inputs.model-plot }} = "true" ]; then \
             python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
           fi
 
