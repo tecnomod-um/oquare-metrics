@@ -18,6 +18,7 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Visual representation of how modifications done to an ontology affect the quality of that ontology.
 * Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
+* Possibility to ignore certain files that might not want to be parsed
 
 ## Usage
 > NOTE: :warning:
@@ -58,10 +59,11 @@ jobs:
 |-----------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------|
 | ontology-folders | string | true     | 'ontologies' | Sets the folders to search ontologies within the repository. Space separated values, no trailing slash needed                                      |
 | contents-folder | string | true     | 'OQuaRE'     | Sets the folder on which the module will save all generated content                              |
+| ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files                           |
 | reasoner        | string | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                                         |
 | category-plots  | string (ELK/HERMIT) | false    | 'true'       | Indicates the module to generate category values plots                                           |
 | model-plot      | string | false    | 'true'       | Indicates the module to generate OQuaRE model value plot                                         |
-| archive-plot    | string | false    | 'false'      | Indicates the module to generate OQuaRE model value plot across the latest 20 version of metrics |
+| archive-plot    | string | false    | 'false'      | Indicates the module to generate OQuaRE model value plot across the latest 20 versions of metrics |
 
 ## Examples
 
@@ -76,18 +78,26 @@ jobs:
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
-    - name: Ontology folder configuration
+    - name: Ontology reasoner configuration
     uses: Emdien/oquare-metrics@v0.0.16 
     with:
         reasoner: HERMIT
 
     # Only generate model and archive plots, but not categories
-    - name: Ontology folder configuration
+    - name: Ontology plots configurtion
     uses: Emdien/oquare-metrics@v0.0.16 
     with:
         category-plots: 'false'
         model-plot: 'true'
         archive-plot: 'true'
+
+    # Ignore src/ontologies/imports/null_ontology.owl since its empty
+    - name: Ontology file ignore configuration
+    uses: Emdien/oquare-metrics@v0.0.16 
+    with:
+        ontology-folders: src/ontologies/imports
+        ignore-files: src/ontologies/imports/null_ontology.owl
+    
   
 ```
 
@@ -97,7 +107,6 @@ TODO
 
 ## Known Limitations
 
-> * Currently there is no way to exclude certain files with .owl extension from the module file search.
 > * The module currently requires of previous, first hand setup of Java and Python. This is done so there is no compatibility issues with some Docker images
 
 ## Bug Report
