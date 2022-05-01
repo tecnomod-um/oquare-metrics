@@ -12,6 +12,9 @@ inputs:
     description: 'Reasoner used by OQuaRE framework'
     required: true
     default: 'ELK'
+  ignore-files:
+    description: 'Files to ignore when calculating metrics'
+    default: ''
   category-plots:
     description: 'Indicates if you want category values plots'
     default: 'true'
@@ -36,8 +39,11 @@ runs:
       uses: tj-actions/changed-files@v18
       with:
         files_separator: ' '
+        files_ignore_separator: ' '
         files: |
           ${{ join(inputs.ontology-folders, '/*.owl ') }}
+        files_ignore: |
+          ${{ inputs.ignore-files }}
 
     - name: Setup folders
       run: |
@@ -70,7 +76,8 @@ runs:
     - name: If file deleted, remove its folder from results
       if: steps.changed-files.outputs.any_deleted == 'true'
       run: |
-        for file in ${{ steps.changed-files.outputs.deleted_files }}; do \
+        for file in ${{ steps.changed-files.outputs.deleted_files }}
+        do
           dir=$(dirname "$file")
           deletedFile=$(basename "$file" .owl); 
           rm -rf ${{ inputs.contents-folder }}/temp_results/$dir/$deletedFile;
@@ -83,8 +90,9 @@ runs:
         for ontology_source in ${{ inputs.ontology_folders }}
         do
           comm -13 <(ls -1 ${ ontology_source } | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results/$ontology_source) | \
-          while read file; do \
-            rm -r ${{ inputs.contents-folder}}/temp_results/$ontology_source/$file;
+          while read file
+          do
+            rm -rf ${{ inputs.contents-folder}}/temp_results/$ontology_source/$file;
           done
         done
       shell: bash
@@ -96,21 +104,25 @@ runs:
         then
           for ontology_source in ${{ inputs.ontology-folders }}
           do
-            find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
+            find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
-              outputFile=$(basename "$file" .owl) 
-              mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
-              outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
-              java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
-              
-              if [ ${{ inputs.category-plots }} = "true" ]
+              outputFile=$(basename "$file")
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
               then
-                python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                outputFile=$(basename "$file" .owl) 
+                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
+                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
+                java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
+                
+                if [ ${{ inputs.category-plots }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                fi
               fi
             done
           done
 
-          if [ ${{ inputs.model-plot }} = "true"]; then \
+          if [ ${{ inputs.model-plot }} = "true" ]; then \
             python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
           fi
 
@@ -130,16 +142,19 @@ runs:
         then
           for ontology_source in ${{ inputs.ontology-folders }}
           do
-            find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
+            find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
-              outputFile=$(basename "$file" .owl) 
-              mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
-              outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
-              java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
-              
-              if [ ${{ inputs.category-plots }} = "true" ]
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
               then
-                python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                outputFile=$(basename "$file" .owl) 
+                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
+                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
+                java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
+                
+                if [ ${{ inputs.category-plots }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                fi
               fi
             done
           done

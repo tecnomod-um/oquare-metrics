@@ -13,7 +13,7 @@ class oquareGraphs:
             plt.ylim([0, 5])
             plt.bar(xpos, values)
             plt.xticks(xpos, names, fontsize=8, rotation=90)
-            # matplotx.show_bar_values("{:.1f}")
+            plt.gca().grid(True, which='major', axis='y', color='#888888', linestyle='--')
             plt.title('OQuaRE model values')
             plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png", bbox_inches='tight')
     
