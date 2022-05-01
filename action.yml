@@ -104,7 +104,7 @@ runs:
         then
           for ontology_source in ${{ inputs.ontology-folders }}
           do
-            find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
+            find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
               outputFile=$(basename "$file")
               if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
@@ -142,9 +142,8 @@ runs:
         then
           for ontology_source in ${{ inputs.ontology-folders }}
           do
-            find ./$ontology_source -type f -maxdepth 1 -name "*.owl" | while read file
+            find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
-              outputFile=$(basename "$file")
               if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
               then
                 outputFile=$(basename "$file" .owl) 
