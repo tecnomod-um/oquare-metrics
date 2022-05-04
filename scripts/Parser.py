@@ -31,7 +31,7 @@ class MetricsParser:
             # Get subcategories
             subcategories = self.root.findall('oquareModel/' + metric.tag + '/')
             for subcategory in subcategories:
-                oquare_sub_categories[subcategory.tag] = subcategory.text
+                oquare_sub_categories[subcategory.tag] = float(subcategory.text)
 
             # Put subcategories under the main category
             oquare_category['subcategories'] = oquare_sub_categories
@@ -39,14 +39,4 @@ class MetricsParser:
             # Put each category inside the oquare_model_dict
             oquare_model_dict[metric_name] = oquare_category
 
-        # {
-        #   category_name: {
-        #       value: number
-        #       subcategories: {
-        #           subcat_1: value
-        #           ...
-        #       } 
-        #   } 
-        # 
-        # }
         return oquare_model_dict

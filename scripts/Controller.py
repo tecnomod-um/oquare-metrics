@@ -1,6 +1,7 @@
 
 import glob
 import os
+from pprint import pprint
 from Plotter import oquareGraphs
 from Parser import MetricsParser
 from Reporter import readmeGen
@@ -31,6 +32,7 @@ class Controller:
             oquare_category_values[category] = values.get('value')
         
         self.graphPlotter.plot_oquare_categories(oquare_category_values, file, basePath)
+        self.graphPlotter.plot_oquare_subcategories(categories, file, basePath)
         self.readmeGenerator.append_category(file, basePath)
 
     def handle_oquare_model(self, basepath: str, inputPath: str) -> None:
@@ -67,3 +69,74 @@ class Controller:
 
         self.graphPlotter.plot_historic(oquare_model_values_historic, current_date, inputPath)
         self.readmeGenerator.append_oquare_historic(inputPath, current_date)
+    
+
+    def handle_category_evolution(self, file: str, input_path: str) -> None:
+
+        archive_path = input_path + '\\archives\\'
+        results_path = input_path + '\\results\\'
+        category_evolution = {}
+        current_date = os.listdir(results_path)[0]
+
+        archive_list = sorted(glob.glob(archive_path + '*/**/' + file + '/metrics/' + file + '.xml', recursive=True))[-19:]
+        for path in archive_list:
+            entry = path.rsplit(archive_path, 1)[1]
+            date = entry.rsplit('\\')[0]
+
+            parsed_metrics = MetricsParser(path)
+            categories = parsed_metrics.parse_category_metrics()
+
+            for category, values in categories.items():
+                if not category_evolution.get(category):
+                    category_evolution[category] = {}
+                
+                category_evolution.get(category)[date] = values.get('value')
+        
+        filepath = glob.glob(results_path + '*/**/' + file + '/metrics/' + file + '.xml', recursive=True)[0]
+        dir = os.path.dirname(os.path.dirname(filepath))
+        parsed_metrics = MetricsParser(filepath)
+        categories = parsed_metrics.parse_category_metrics()
+
+        for category, values in categories.items():
+            category_evolution.get(category)[current_date] = values.get('value')
+        
+        #pprint(category_evolution)
+        self.graphPlotter.plot_oquare_category_evolution(category_evolution, current_date, dir)
+            
+
+
+    def handle_category_evolution_old(self, basePath: str, file: str, inputPath: str) -> None:
+        
+        # REMAKE
+        
+        archive_path = inputPath + '/archives/'
+        results_path = inputPath + '/results/'
+        category_evolution = {}
+        entries = sorted(os.listdir(archive_path))
+        current_date = os.listdir(results_path)[0]
+        dates = []
+
+        if len(entries) < 19:
+            dates = entries
+            for entry in entries:
+                self.__scan_entry(archive_path, entry, category_evolution)
+        else:
+            for i in range(len(entries)-19, len(entries)):
+                entry = entries[i]
+                dates.append(entry)
+                self.__scan_entry(archive_path, entry, category_evolution)
+        
+        
+        dates.append(current_date)
+        for filepath in glob.iglob(results_path + entry + '/**/*.xml', recursive=True):
+            
+            ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
+            if not category_evolution.get(ontology_name):
+                category_evolution[ontology_name] = {}
+            
+            category_evolution.get(ontology_name)['dir'] = os.path.pardir(filepath)
+            parsed_metrics = MetricsParser(filepath)
+            category_evolution.get(ontology_name)[current_date] = parsed_metrics.parse_category_metrics()
+
+        for ontology in category_evolution.keys():
+            self.graphPlotter.plot_oquare_category_evolution(ontology)

@@ -7,10 +7,11 @@ from Controller import Controller
 if __name__ == '__main__':
 
     argv = sys.argv
-    inputPath = ""
+    input_path = ""
     plot_models = False
     plot_categories = False
     plot_historic = False
+    plot_categories_evolution = False
     file = ''
     ontology_source = ''
     help_msg = "Uso: {0} -i <folderPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
@@ -18,7 +19,7 @@ if __name__ == '__main__':
     controller = Controller()
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcg", ["help", "input=","source=", "file=", "model", "categories", "global"])
+        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcge", ["help", "input=","source=", "file=", "model", "categories", "global", "cat_evolution"])
     except:
         print(help_msg)
         sys.exit(2)
@@ -28,7 +29,7 @@ if __name__ == '__main__':
             print(help_msg)
             sys.exit(2)
         elif opt in ("-i", "--input"):
-            inputPath = arg
+            input_path = arg
         elif opt in ("-m", "--model"):  
             plot_models = True
         elif opt in ("-c", "--categories"):
@@ -39,21 +40,25 @@ if __name__ == '__main__':
             file = arg
         elif opt in ("-s", "--source"):
             ontology_source = arg
+        elif opt in ("-e", "--cat_evolution"):
+            plot_categories_evolution = True
 
-    basepath = inputPath + '/temp_results/'
+    temp_path = input_path + '/temp_results/'
 
     if plot_categories:
         if not file or plot_historic or plot_models:
             print(help_msg)
             sys.exit(2)
         
-        basepath += ontology_source + '/'
-        controller.handle_categories(basepath, file, inputPath)
+        temp_path += ontology_source + '/'
+        controller.handle_categories(temp_path, file, input_path)
 
+    elif plot_categories_evolution:
+        controller.handle_category_evolution(file, input_path)
     else:        
         if plot_models:
-            controller.handle_oquare_model(basepath, inputPath)
+            controller.handle_oquare_model(temp_path, input_path)
 
         if plot_historic:
-            controller.handle_historic(inputPath)
+            controller.handle_historic(input_path)
 
