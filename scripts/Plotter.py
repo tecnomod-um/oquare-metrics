@@ -77,22 +77,18 @@ class oquareGraphs:
     
     def plot_oquare_category_evolution(self, data: dict, current_date: str, dir: str) -> None:
 
-        
-        
-        # ontology dict structure
-        {
-                'categoria1':{
-                    '01/01/01': 133,
-                    '02/02/02': 23
-                },
-                'categoria2:': {
-                    '....'
-                }
-        }
-
-
-
-
-        return
+        line_labels = list(data.keys())
+        with plt.style.context(matplotx.styles.ayu["light"]):
             
+            for label in line_labels:
+                values = data.get(label).values()
+                dates = data.get(label).keys()
+                plt.plot(dates, values, label=label)
+        
+        plt.ylim([0, 5])
+        plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
+        plt.yticks(fontsize=10)
+        plt.title('Categories evolution over time')
+        matplotx.line_labels()
+        plt.savefig(dir + '\\categories_evolution.png', format='png', bbox_inches='tight')
 
