@@ -24,6 +24,9 @@ inputs:
   archive-plot:
     description: 'Indicates if you want oquare model value plot across the latest 20 versions'
     default: 'false'
+  categories-evolution-plot:
+    description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
+    default: 'true'
 
 runs: 
   using: 'composite'
@@ -176,7 +179,7 @@ runs:
         fi
       shell: bash
     
-    - name: 'Evaluate and plot oquare model value'
+    - name: 'Plot oquare model value'
       if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
       run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
@@ -195,7 +198,17 @@ runs:
       run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
       shell: bash
 
-    - name: 'Evaluate and plot historic'
+    - name: 'Plot categories evolution of modified ontologies'
+      if: inputs.categories_evolution_plot == 'true' && steps.changed_files.outputs.any_changed == 'true'
+      run: |
+        for file in ${{ steps.changed-files.outputs.all_changed_files }}
+        do
+          outputFile=$(basename "$file" .owl)
+          python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder}} -e -f $outputFile
+        done
+      shell: bash
+
+    - name: 'Plot historic'
       if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
       run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
