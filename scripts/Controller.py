@@ -23,25 +23,26 @@ class Controller:
             parsed_metrics = MetricsParser(filepath)
             value_dict.get(ontology_name)[entry] = parsed_metrics.parse_oquare_value()
 
-    def handle_categories(self, basePath: str, file: str, inputPath: str) -> None:
+    def handle_categories(self, base_path: str, file: str, input_path: str) -> None:
         oquare_category_values = {}
 
         try:
-            parsed_metrics = MetricsParser(basePath + file + '/metrics/' + file + '.xml')
+            parsed_metrics = MetricsParser(base_path + file + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
             for category, values in categories.items():
                 oquare_category_values[category] = values.get('value')
             
-            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, basePath)
-            self.graphPlotter.plot_oquare_subcategories(categories, file, basePath)
-            self.readmeGenerator.append_category(file, basePath)
+            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, base_path)
+            self.graphPlotter.plot_oquare_subcategories(categories, file, base_path)
+            self.readmeGenerator.append_category(file, base_path)
+            self.readmeGenerator.append_subcategory(file, base_path, list(categories.keys()))
 
         except FileNotFoundError as e:
             print("Error: " + e.strerror + ". Abort", flush=True)
             sys.exit()
 
 
-    def handle_oquare_model(self, basepath: str, inputPath: str) -> None:
+    def handle_oquare_model(self, basepath: str, input_path: str) -> None:
         oquare_model_values = {}
 
         for filepath in glob.iglob(basepath + '**/*.xml', recursive=True):
@@ -49,12 +50,12 @@ class Controller:
             ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
             oquare_model_values[ontology_name] = parsed_metrics.parse_oquare_value()
         
-        self.graphPlotter.plot_oquare_values(oquare_model_values, inputPath)
-        self.readmeGenerator.append_oquare_value(inputPath)
+        self.graphPlotter.plot_oquare_values(oquare_model_values, input_path)
+        self.readmeGenerator.append_oquare_value(input_path)
 
-    def handle_historic(self, inputPath: str) -> None:
-        archive_path = inputPath + '/archives/'
-        results_path = inputPath + '/results/'
+    def handle_historic(self, input_path: str) -> None:
+        archive_path = input_path + '/archives/'
+        results_path = input_path + '/results/'
         oquare_model_values_historic = {}
         entries = sorted(os.listdir(archive_path))
         current_date = os.listdir(results_path)[0]
@@ -73,8 +74,8 @@ class Controller:
         dates.append(current_date)
         self.__scan_entry(results_path, current_date, oquare_model_values_historic)
 
-        self.graphPlotter.plot_historic(oquare_model_values_historic, current_date, inputPath)
-        self.readmeGenerator.append_oquare_historic(inputPath, current_date)
+        self.graphPlotter.plot_historic(oquare_model_values_historic, current_date, input_path)
+        self.readmeGenerator.append_oquare_historic(input_path, current_date)
     
 
     def handle_category_evolution(self, file: str, input_path: str) -> None:
@@ -109,7 +110,7 @@ class Controller:
                 category_evolution.get(category)[current_date] = values.get('value')
 
             self.graphPlotter.plot_oquare_category_evolution(category_evolution, current_date, dir)
-            
+            self.readmeGenerator.append_category_evolution(dir)
 
 
     def handle_category_evolution_old(self, basePath: str, file: str, inputPath: str) -> None:
