@@ -14,16 +14,6 @@ class Controller:
         self.graphPlotter = oquareGraphs()
         self.readmeGenerator = readmeGen()
 
-    def __scan_entry(self, basepath: str, entry: str, value_dict: dict) -> None:
-        
-        for filepath in glob.iglob(basepath + entry + '/**/*.xml', recursive=True):
-            ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
-            if not value_dict.get(ontology_name):
-                value_dict[ontology_name] = {}
-            
-            parsed_metrics = MetricsParser(filepath)
-            value_dict.get(ontology_name)[entry] = parsed_metrics.parse_oquare_value()
-
     def handle_categories(self, temp_path: str, file: str) -> None:
         oquare_category_values = {}
 
@@ -41,35 +31,10 @@ class Controller:
         except FileNotFoundError as e:
             print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
-
-
-
-    def handle_historic(self, input_path: str) -> None:
-        archive_path = input_path + '/archives/'
-        results_path = input_path + '/results/'
-        oquare_model_values_historic = {}
-        entries = sorted(os.listdir(archive_path))
-        current_date = os.listdir(results_path)[0]
-        dates = []
-
-        if len(entries) < 19:
-            dates = entries
-            for entry in entries:
-                self.__scan_entry(archive_path, entry, oquare_model_values_historic)
-        else:
-            for i in range(len(entries)-19, len(entries)):
-                entry = entries[i]
-                dates.append(entry)
-                self.__scan_entry(archive_path, entry, oquare_model_values_historic)
-        
-        dates.append(current_date)
-        self.__scan_entry(results_path, current_date, oquare_model_values_historic)
-
-        self.graphPlotter.plot_historic(oquare_model_values_historic, current_date, input_path)
-        self.readmeGenerator.append_oquare_historic(input_path, current_date)
     
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         archive_path = input_path + '\\archives\\'
+        results_path = input_path + '\\results\\'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         oquare_model_values = {}
 
@@ -82,8 +47,17 @@ class Controller:
             parsed_metrics = MetricsParser(path)
             oquare_model_values[archive_date] = parsed_metrics.parse_oquare_value()
         
+
+        results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
+        if len(results_file_path) > 0:
+            results_file_path = results_file_path[0]
+            entry = results_file_path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
+            results_date = entry.rsplit('\\')[0]
+
+            parsed_metrics = MetricsParser(results_file_path)
+            oquare_model_values[results_date] = parsed_metrics.parse_oquare_value()
+
         try:
-            print(temp_path + '/metrics/' + file + '.xml')
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             oquare_model_values[date] = parsed_metrics.parse_oquare_value()
 
@@ -97,11 +71,11 @@ class Controller:
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
 
         archive_path = input_path + '\\archives\\'
+        results_path = input_path + '\\results\\'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         category_evolution = {}
 
-        # archive_path/ontology_source/file/date/metrics/file.xml
-        archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
+        archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml'))[-19:]
         for path in archive_list:
             entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
             archive_date = entry.rsplit('\\')[0]
@@ -114,6 +88,20 @@ class Controller:
                     category_evolution[category] = {}
                 
                 category_evolution.get(category)[archive_date] = values.get('value')
+
+        results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
+        if len(results_file_path) > 0:
+            results_file_path = results_file_path[0]
+            entry = results_file_path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
+            results_date = entry.rsplit('\\')[0]
+
+            parsed_metrics = MetricsParser(results_file_path)
+            categories = parsed_metrics.parse_category_metrics()
+            for category, values in categories.items():
+                if not category_evolution.get(category):
+                    category_evolution[category] = {}
+                category_evolution.get(category)[results_date] = values.get('value')
+
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
@@ -121,7 +109,7 @@ class Controller:
                 if not category_evolution.get(category):
                     category_evolution[category] = {}
                 category_evolution.get(category)[date] = values.get('value')
-
+            
             self.graphPlotter.plot_oquare_category_evolution(category_evolution, temp_path)
             self.readmeGenerator.append_category_evolution(temp_path)
             
