@@ -2,9 +2,9 @@
 import glob
 import os
 import sys
-from Plotter import oquareGraphs
-from Parser import MetricsParser
-from Reporter import readmeGen
+from tools.Plotter import oquareGraphs
+from tools.Parser import MetricsParser
+from tools.Reporter import readmeGen
 
 
 class Controller:

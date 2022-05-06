@@ -119,14 +119,14 @@ runs:
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $? 
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $? 
                 fi
               fi
             done
           done
 
           if [ ${{ inputs.model-plot }} = "true" ]; then \
-            python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
+            python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
           fi
 
           mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
@@ -156,7 +156,7 @@ runs:
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $?
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $?
                 fi
               fi
             done
@@ -173,7 +173,7 @@ runs:
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
             if [ ${{ inputs.category-plots }} = "true" ]; then \
-              python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $?
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $?
             fi
           done
         fi
@@ -181,7 +181,7 @@ runs:
     
     - name: 'Plot oquare model value'
       if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -m
+      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
       shell: bash
       
     - name: Archive previous results
@@ -204,13 +204,13 @@ runs:
         for file in ${{ steps.changed-files.outputs.all_changed_files }}
         do
           outputFile=$(basename "$file" .owl)
-          python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder}} -e -f $outputFile
+          python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -f $outputFile
         done
       shell: bash
 
     - name: 'Plot historic'
       if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -g
+      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
       
       

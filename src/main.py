@@ -1,7 +1,5 @@
 import sys
-import os
 import getopt
-from Parser import MetricsParser
 from Controller import Controller
 
 if __name__ == '__main__':

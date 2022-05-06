@@ -1,5 +1,3 @@
-
-
 class readmeGen:
 
     def append_category(self, file_name: str, path: str):
@@ -40,5 +38,3 @@ class readmeGen:
         readme_file.write('Evolution of each category overtime on a scale of 1 to 5\n\n')
         readme_file.write('![category values plot](categories_evolution.png)\n')
         readme_file.close()
-
-
