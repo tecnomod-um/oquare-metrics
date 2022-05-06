@@ -8,6 +8,9 @@ inputs:
   contents-folder:
     description: 'Folder which will contain results and archives'
     default: 'OQuaRE'
+  copy-previous:
+    description: 'Indicates the module to copy previous results onto the current run. It will decrease the precision of evolution plots, but has all of the metrics on the folder for easy access'
+    default: 'false'
   reasoner:
     description: 'Reasoner used by OQuaRE framework'
     required: true
@@ -27,7 +30,7 @@ inputs:
   categories-evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
-
+  
 runs: 
   using: 'composite'
   steps:
@@ -199,7 +202,7 @@ runs:
       shell: bash
 
     - name: 'Plot categories evolution of modified ontologies'
-      if: inputs.categories_evolution_plot == 'true' && steps.changed_files.outputs.any_changed == 'true'
+      if: inputs.categories-evolution-plot == 'true' && steps.changed_files.outputs.any_changed == 'true'
       run: |
         for file in ${{ steps.changed-files.outputs.all_changed_files }}
         do
