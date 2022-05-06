@@ -13,10 +13,10 @@ class oquareGraphs:
             plt.rc('font', size=10)
             plt.ylim([0, 5])
             plt.plot(xpos, values, '-ko', mfc='red')
-            plt.xticks(xpos, dates, fontsize=8, rotation=90)
+            plt.xticks(xpos, dates, fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
             plt.gca().grid(True, which='major', axis='both', color='#888888', linestyle='--')
             plt.title('OQuaRE model values')
-            plt.savefig(output_path + 'OQuaRE_model_values.png', format="png", bbox_inches='tight')
+            plt.savefig(output_path + '/OQuaRE_model_values.png', format="png", bbox_inches='tight')
 
         plt.clf()
 

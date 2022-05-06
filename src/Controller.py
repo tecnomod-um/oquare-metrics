@@ -1,6 +1,7 @@
 
 import glob
 import os
+from pprint import pprint
 import sys
 from tools.Plotter import oquareGraphs
 from tools.Parser import MetricsParser
@@ -82,6 +83,7 @@ class Controller:
             oquare_model_values[archive_date] = parsed_metrics.parse_oquare_value()
         
         try:
+            print(temp_path + '/metrics/' + file + '.xml')
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             oquare_model_values[date] = parsed_metrics.parse_oquare_value()
 
@@ -112,11 +114,12 @@ class Controller:
                     category_evolution[category] = {}
                 
                 category_evolution.get(category)[archive_date] = values.get('value')
-        
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
             for category, values in categories.items():
+                if not category_evolution.get(category):
+                    category_evolution[category] = {}
                 category_evolution.get(category)[date] = values.get('value')
 
             self.graphPlotter.plot_oquare_category_evolution(category_evolution, temp_path)
