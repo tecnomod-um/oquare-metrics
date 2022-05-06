@@ -64,7 +64,7 @@ if __name__ == '__main__':
     elif plot_categories_evolution:
         controller.handle_category_evolution(file, input_path)
     elif plot_models:
-        controller.handle_oquare_model(temp_path, input_path)
+        controller.handle_oquare_model(temp_path)
     elif plot_historic:
         controller.handle_historic(input_path)
 

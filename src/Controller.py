@@ -42,16 +42,16 @@ class Controller:
             sys.exit()
 
 
-    def handle_oquare_model(self, basepath: str, input_path: str) -> None:
+    def handle_oquare_model(self, temp_path: str) -> None:
         oquare_model_values = {}
 
-        for filepath in glob.iglob(basepath + '**/*.xml', recursive=True):
+        for filepath in glob.iglob(temp_path + '**/*.xml', recursive=True):
             parsed_metrics = MetricsParser(filepath)
             ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
             oquare_model_values[ontology_name] = parsed_metrics.parse_oquare_value()
         
-        self.graphPlotter.plot_oquare_values(oquare_model_values, input_path)
-        self.readmeGenerator.append_oquare_value(input_path)
+        self.graphPlotter.plot_oquare_values(oquare_model_values, temp_path)
+        self.readmeGenerator.append_oquare_value(temp_path)
 
     def handle_historic(self, input_path: str) -> None:
         archive_path = input_path + '/archives/'

@@ -8,7 +8,7 @@ class readmeGen:
         readme_file.close()
 
     def append_oquare_value(self, path: str):
-        readme_file = open(path + '/temp_results/README.md', 'a')
+        readme_file = open(path + 'README.md', 'a')
         readme_file.write('# OQuaRE metrics results\n')
         readme_file.write('## OQuaRE model value\n')
         readme_file.write('Represents the quality of the ontology when taking in all the values obtained after evaluation.' 

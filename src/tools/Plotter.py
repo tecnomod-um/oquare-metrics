@@ -4,7 +4,7 @@ import matplotx
 
 class oquareGraphs:
 
-    def plot_oquare_values(self, data: dict, outputPath: str):
+    def plot_oquare_values(self, data: dict, output_path: str):
         names = list(data.keys())
         values = list(data.values())
         xpos = range(len(values))
@@ -16,7 +16,7 @@ class oquareGraphs:
             plt.xticks(xpos, names, fontsize=8, rotation=90)
             plt.gca().grid(True, which='major', axis='y', color='#888888', linestyle='--')
             plt.title('OQuaRE model values')
-            plt.savefig(outputPath + '/temp_results/OQuaRE_model_values.png', format="png", bbox_inches='tight')
+            plt.savefig(output_path + 'OQuaRE_model_values.png', format="png", bbox_inches='tight')
 
         plt.clf()
 
