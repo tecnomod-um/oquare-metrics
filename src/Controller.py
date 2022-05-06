@@ -46,7 +46,8 @@ class Controller:
 
             parsed_metrics = MetricsParser(path)
             oquare_model_values[archive_date] = parsed_metrics.parse_oquare_value()
-        
+            
+        pprint(oquare_model_values)
 
         results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
@@ -56,6 +57,7 @@ class Controller:
 
             parsed_metrics = MetricsParser(results_file_path)
             oquare_model_values[results_date] = parsed_metrics.parse_oquare_value()
+            pprint(oquare_model_values)
 
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
@@ -90,7 +92,7 @@ class Controller:
                     category_evolution[category] = {}
                 
                 category_evolution.get(category)[archive_date] = values.get('value')
-
+        pprint(category_evolution)
         results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
@@ -103,7 +105,7 @@ class Controller:
                 if not category_evolution.get(category):
                     category_evolution[category] = {}
                 category_evolution.get(category)[results_date] = values.get('value')
-
+        pprint(category_evolution)
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
