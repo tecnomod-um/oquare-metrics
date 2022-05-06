@@ -62,7 +62,7 @@ if __name__ == '__main__':
         controller.handle_categories(temp_path, file)
 
     elif plot_categories_evolution:
-        controller.handle_category_evolution(file, input_path)
+        controller.handle_category_evolution(file, input_path, ontology_source, date)
     elif plot_models:
         controller.handle_oquare_model(temp_path)
     elif plot_historic:

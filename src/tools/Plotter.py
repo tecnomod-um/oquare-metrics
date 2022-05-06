@@ -75,7 +75,7 @@ class oquareGraphs:
                 plt.savefig(basePath + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
-    def plot_oquare_category_evolution(self, data: dict, current_date: str, dir: str) -> None:
+    def plot_oquare_category_evolution(self, data: dict, dir: str) -> None:
 
         line_labels = list(data.keys())
         with plt.style.context(matplotx.styles.ayu["light"]):
