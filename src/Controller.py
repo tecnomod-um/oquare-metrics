@@ -80,6 +80,7 @@ class Controller:
         category_evolution = {}
 
         archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml'))[-19:]
+        print(archive_list)
         for path in archive_list:
             entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
             archive_date = entry.rsplit('\\')[0]
@@ -92,11 +93,12 @@ class Controller:
                     category_evolution[category] = {}
                 
                 category_evolution.get(category)[archive_date] = values.get('value')
-        pprint(category_evolution)
+
         results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
+        print(results_file_path)
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            entry = results_file_path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
+            entry = results_file_path.rsplit(results_path + ontology_source + '\\' + file + '\\', 1)[1]
             results_date = entry.rsplit('\\')[0]
 
             parsed_metrics = MetricsParser(results_file_path)
@@ -105,7 +107,7 @@ class Controller:
                 if not category_evolution.get(category):
                     category_evolution[category] = {}
                 category_evolution.get(category)[results_date] = values.get('value')
-        pprint(category_evolution)
+                
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
@@ -113,8 +115,6 @@ class Controller:
                 if not category_evolution.get(category):
                     category_evolution[category] = {}
                 category_evolution.get(category)[date] = values.get('value')
-            
-            pprint(category_evolution)
 
             self.graphPlotter.plot_oquare_category_evolution(category_evolution, temp_path)
             self.readmeGenerator.append_category_evolution(temp_path)
