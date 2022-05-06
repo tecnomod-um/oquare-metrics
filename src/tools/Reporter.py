@@ -1,7 +1,7 @@
 class readmeGen:
 
     def append_category(self, file_name: str, path: str):
-        readme_file = open(path + file_name + '/' + 'README.md', 'a')
+        readme_file = open(path + '/' + 'README.md', 'a')
         readme_file.write('# OQuaRE category values\n')
         readme_file.write('Each category has a value on a scale of 1 to 5, indicating how good the ontology is for each category\n\n')
         readme_file.write('![category values plot](' + file_name + '_category_values.png)\n')
@@ -24,7 +24,7 @@ class readmeGen:
         readme_file.close()
 
     def append_subcategory(self, file_name: str, path: str, categories: list):
-        readme_file = open(path + file_name + '/' + 'README.md', 'a')
+        readme_file = open(path + '/' + 'README.md', 'a')
         readme_file.write('## OQuaRE subcategories metrics\n')
         readme_file.write('Each category has a set of subcategories with metrics on a scale of 1 to 5, which makes up the category end value\n\n')
         

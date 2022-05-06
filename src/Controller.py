@@ -23,11 +23,11 @@ class Controller:
             parsed_metrics = MetricsParser(filepath)
             value_dict.get(ontology_name)[entry] = parsed_metrics.parse_oquare_value()
 
-    def handle_categories(self, base_path: str, file: str, input_path: str) -> None:
+    def handle_categories(self, base_path: str, file: str) -> None:
         oquare_category_values = {}
 
         try:
-            parsed_metrics = MetricsParser(base_path + file + '/metrics/' + file + '.xml')
+            parsed_metrics = MetricsParser(base_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
             for category, values in categories.items():
                 oquare_category_values[category] = values.get('value')

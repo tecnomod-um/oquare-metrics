@@ -32,7 +32,7 @@ class oquareGraphs:
             plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
             matplotx.show_bar_values("{:.2f}")
             plt.title('OQuaRE category values')
-            plt.savefig(basePath + fileName + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
+            plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
         
         plt.clf()
 
@@ -72,7 +72,7 @@ class oquareGraphs:
                 plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
                 plt.title(category + ' metrics')
                 plt.gca().grid(True, which='major', axis='y', color='#aaaaaa', linestyle='--')
-                plt.savefig(basePath + fileName + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
+                plt.savefig(basePath + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
     def plot_oquare_category_evolution(self, data: dict, current_date: str, dir: str) -> None:
