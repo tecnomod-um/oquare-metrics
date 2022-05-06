@@ -51,7 +51,7 @@ class Controller:
         results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            entry = results_file_path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
+            entry = results_file_path.rsplit(results_path + ontology_source + '/' + file + '/', 1)[1]
             results_date = entry.rsplit('/')[0]
 
             parsed_metrics = MetricsParser(results_file_path)
