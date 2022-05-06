@@ -137,7 +137,7 @@ runs:
             then
               python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $? -d $date
             fi
-            
+
             if [ ${{ inputs.model-plot }} = "true" ]
             then
               python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
@@ -157,7 +157,8 @@ runs:
       run: |
         if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
         then
-          mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/
+          rsync -a ${{ inputs.contents-folder }}/results/ ${{ inputs.contents-folder }}/archives/
+          rm -rf ${{ inputs.contents-folder }}/results/*
         fi 
       shell: bash
 
