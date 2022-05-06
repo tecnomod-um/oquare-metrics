@@ -33,37 +33,33 @@ class Controller:
             sys.exit()
     
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
-        archive_path = input_path + '\\archives\\'
-        results_path = input_path + '\\results\\'
+        archive_path = input_path + '/archives/'
+        results_path = input_path + '/results/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         oquare_model_values = {}
 
 
-        archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
+        archive_list = sorted(glob.glob(archive_path + ontology_source + '/' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
         for path in archive_list:
-            entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
-            archive_date = entry.rsplit('\\')[0]
+            entry = path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
+            archive_date = entry.rsplit('/')[0]
 
             parsed_metrics = MetricsParser(path)
             oquare_model_values[archive_date] = parsed_metrics.parse_oquare_value()
             
-        pprint(oquare_model_values)
 
-        results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
+        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            entry = results_file_path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
-            results_date = entry.rsplit('\\')[0]
+            entry = results_file_path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
+            results_date = entry.rsplit('/')[0]
 
             parsed_metrics = MetricsParser(results_file_path)
             oquare_model_values[results_date] = parsed_metrics.parse_oquare_value()
-            pprint(oquare_model_values)
 
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             oquare_model_values[date] = parsed_metrics.parse_oquare_value()
-
-            pprint(oquare_model_values)
 
             self.graphPlotter.plot_oquare_values(oquare_model_values, temp_path)
             self.readmeGenerator.append_oquare_value(temp_path)
@@ -80,7 +76,6 @@ class Controller:
         category_evolution = {}
 
         archive_list = sorted(glob.glob(archive_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml'))[-19:]
-        print(archive_list)
         for path in archive_list:
             entry = path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
             archive_date = entry.rsplit('/')[0]
@@ -95,7 +90,6 @@ class Controller:
                 category_evolution.get(category)[archive_date] = values.get('value')
 
         results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
-        print(results_file_path)
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
             entry = results_file_path.rsplit(results_path + ontology_source + '/' + file + '/', 1)[1]
