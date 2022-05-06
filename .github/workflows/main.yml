@@ -21,5 +21,4 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           archive-plot: 'true'
-          ontology-folders: ontologies test/ontology/imports
-          ignore-files: test/ontology/imports/go_inferences_null.owl
+          ontology-folders: ontologies ontologies/imports
