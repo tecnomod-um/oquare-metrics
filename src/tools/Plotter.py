@@ -5,16 +5,16 @@ import matplotx
 class oquareGraphs:
 
     def plot_oquare_values(self, data: dict, output_path: str):
-        names = list(data.keys())
+        dates = list(data.keys())
         values = list(data.values())
         xpos = range(len(values))
 
         with plt.style.context(matplotx.styles.ayu["light"]):
             plt.rc('font', size=10)
             plt.ylim([0, 5])
-            plt.bar(xpos, values)
-            plt.xticks(xpos, names, fontsize=8, rotation=90)
-            plt.gca().grid(True, which='major', axis='y', color='#888888', linestyle='--')
+            plt.plot(xpos, values, '-ko', mfc='red')
+            plt.xticks(xpos, dates, fontsize=8, rotation=90)
+            plt.gca().grid(True, which='major', axis='both', color='#888888', linestyle='--')
             plt.title('OQuaRE model values')
             plt.savefig(output_path + 'OQuaRE_model_values.png', format="png", bbox_inches='tight')
 

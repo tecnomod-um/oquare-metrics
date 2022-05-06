@@ -42,16 +42,6 @@ class Controller:
             sys.exit()
 
 
-    def handle_oquare_model(self, temp_path: str) -> None:
-        oquare_model_values = {}
-
-        for filepath in glob.iglob(temp_path + '**/*.xml', recursive=True):
-            parsed_metrics = MetricsParser(filepath)
-            ontology_name = os.path.basename(filepath).rsplit('.', 1)[0]
-            oquare_model_values[ontology_name] = parsed_metrics.parse_oquare_value()
-        
-        self.graphPlotter.plot_oquare_values(oquare_model_values, temp_path)
-        self.readmeGenerator.append_oquare_value(temp_path)
 
     def handle_historic(self, input_path: str) -> None:
         archive_path = input_path + '/archives/'
@@ -77,8 +67,31 @@ class Controller:
         self.graphPlotter.plot_historic(oquare_model_values_historic, current_date, input_path)
         self.readmeGenerator.append_oquare_historic(input_path, current_date)
     
+    def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        archive_path = input_path + '\\archives\\'
+        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
+        oquare_model_values = {}
 
 
+        archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
+        for path in archive_list:
+            entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
+            archive_date = entry.rsplit('\\')[0]
+
+            parsed_metrics = MetricsParser(path)
+            oquare_model_values[archive_date] = parsed_metrics.parse_oquare_value()
+        
+        try:
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+            oquare_model_values[date] = parsed_metrics.parse_oquare_value()
+
+            self.graphPlotter.plot_oquare_values(oquare_model_values, temp_path)
+            self.readmeGenerator.append_oquare_value(temp_path)
+            
+        except FileNotFoundError as e:
+            print("Error: " + e.strerror + ". Abort", flush=True)
+            sys.exit()    
+        
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
 
         archive_path = input_path + '\\archives\\'
@@ -89,7 +102,7 @@ class Controller:
         archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
         for path in archive_list:
             entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
-            date = entry.rsplit('\\')[0]
+            archive_date = entry.rsplit('\\')[0]
 
             parsed_metrics = MetricsParser(path)
             categories = parsed_metrics.parse_category_metrics()
@@ -98,7 +111,7 @@ class Controller:
                 if not category_evolution.get(category):
                     category_evolution[category] = {}
                 
-                category_evolution.get(category)[date] = values.get('value')
+                category_evolution.get(category)[archive_date] = values.get('value')
         
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')

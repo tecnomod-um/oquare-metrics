@@ -133,6 +133,11 @@ runs:
             rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/$date/README.md"
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
+            if [ ${{ inputs.model-plot }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+            fi
+
             if [ ${{ inputs.category-plots }} = "true" ]
             then
               python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $? -d $date
@@ -145,14 +150,9 @@ runs:
           done
         fi
       shell: bash
-    
-    - name: 'Plot oquare model value'
-      if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
-      shell: bash
       
     - name: Archive previous results
-      if: steps.changed-files.outputs.any_modified == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
         then
@@ -161,18 +161,17 @@ runs:
       shell: bash
 
     - name: Move results to results folder and tag it with a date
-      if: steps.changed-files.outputs.any_modified == 'true'
-      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
       shell: bash
 
     - name: 'Plot historic'
       if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
       run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -g
       shell: bash
-      
-      
+          
     - name: Commit and push
-      if: steps.changed-files.outputs.any_modified == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
