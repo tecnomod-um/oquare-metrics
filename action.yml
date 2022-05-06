@@ -133,8 +133,14 @@ runs:
             rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/$date/README.md"
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
-            if [ ${{ inputs.category-plots }} = "true" ]; then \
+            if [ ${{ inputs.category-plots }} = "true" ]
+            then
               python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $? -d $date
+            fi
+
+            if [ ${{ inputs.categories-evolution-plot}} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -s "$dir" -f $outputFile -d $date
             fi
           done
         fi
@@ -157,16 +163,6 @@ runs:
     - name: Move results to results folder and tag it with a date
       if: steps.changed-files.outputs.any_modified == 'true'
       run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results
-      shell: bash
-
-    - name: 'Plot categories evolution of modified ontologies'
-      if: inputs.categories-evolution-plot == 'true' && steps.changed_files.outputs.any_changed == 'true'
-      run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}
-        do
-          outputFile=$(basename "$file" .owl)
-          python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -f $outputFile
-        done
       shell: bash
 
     - name: 'Plot historic'
