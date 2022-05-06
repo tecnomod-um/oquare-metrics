@@ -33,7 +33,7 @@ runs:
   steps:
     - uses: actions/checkout@v2
       with:
-          fetch-depth: 2
+          fetch-depth: 0
     - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
 
