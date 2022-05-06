@@ -38,7 +38,7 @@ class Controller:
             self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
 
         except FileNotFoundError as e:
-            print("Error: " + e.strerror + ". Abort", flush=True)
+            print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
 
 
@@ -89,7 +89,7 @@ class Controller:
             self.readmeGenerator.append_oquare_value(temp_path)
             
         except FileNotFoundError as e:
-            print("Error: " + e.strerror + ". Abort", flush=True)
+            print("Error MODEL PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()    
         
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
@@ -123,7 +123,7 @@ class Controller:
             self.readmeGenerator.append_category_evolution(temp_path)
             
         except FileNotFoundError as e:
-            print("Error: " + e.strerror + ". Abort", flush=True)
+            print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
 
 
