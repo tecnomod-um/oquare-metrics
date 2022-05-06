@@ -62,7 +62,7 @@ runs:
     - name: Checks if its the first run (results empty folder)
       if: steps.changed-files.outputs.any_modified == 'false'
       run: |
-        date = "$(date +%Y-%m-%d_%H-%M-%S)"
+        date="$(date +%Y-%m-%d_%H-%M-%S)"
         if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]
         then
           for ontology_source in ${{ inputs.ontology-folders }}
@@ -101,7 +101,7 @@ runs:
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        date = "$(date +%Y-%m-%d_%H-%M-%S)"
+        date="$(date +%Y-%m-%d_%H-%M-%S)"
         if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]
         then
           for ontology_source in ${{ inputs.ontology-folders }}
