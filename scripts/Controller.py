@@ -1,7 +1,7 @@
 
 import glob
 import os
-from pprint import pprint
+import sys
 from Plotter import oquareGraphs
 from Parser import MetricsParser
 from Reporter import readmeGen
@@ -26,14 +26,20 @@ class Controller:
     def handle_categories(self, basePath: str, file: str, inputPath: str) -> None:
         oquare_category_values = {}
 
-        parsed_metrics = MetricsParser(basePath + file + '/metrics/' + file + '.xml')
-        categories = parsed_metrics.parse_category_metrics()
-        for category, values in categories.items():
-            oquare_category_values[category] = values.get('value')
-        
-        self.graphPlotter.plot_oquare_categories(oquare_category_values, file, basePath)
-        self.graphPlotter.plot_oquare_subcategories(categories, file, basePath)
-        self.readmeGenerator.append_category(file, basePath)
+        try:
+            parsed_metrics = MetricsParser(basePath + file + '/metrics/' + file + '.xml')
+            categories = parsed_metrics.parse_category_metrics()
+            for category, values in categories.items():
+                oquare_category_values[category] = values.get('value')
+            
+            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, basePath)
+            self.graphPlotter.plot_oquare_subcategories(categories, file, basePath)
+            self.readmeGenerator.append_category(file, basePath)
+
+        except FileNotFoundError as e:
+            print("Error: " + e.strerror + ". Abort", flush=True)
+            sys.exit()
+
 
     def handle_oquare_model(self, basepath: str, inputPath: str) -> None:
         oquare_model_values = {}
@@ -92,16 +98,17 @@ class Controller:
                 
                 category_evolution.get(category)[date] = values.get('value')
         
-        filepath = glob.glob(results_path + '*/**/' + file + '/metrics/' + file + '.xml', recursive=True)[0]
-        dir = os.path.dirname(os.path.dirname(filepath))
-        parsed_metrics = MetricsParser(filepath)
-        categories = parsed_metrics.parse_category_metrics()
+        filepath = glob.glob(results_path + '*/**/' + file + '/metrics/' + file + '.xml', recursive=True)
+        if (len(filepath) > 0):
+            filepath = filepath[0]
+            dir = os.path.dirname(os.path.dirname(filepath))
+            parsed_metrics = MetricsParser(filepath)
+            categories = parsed_metrics.parse_category_metrics()
 
-        for category, values in categories.items():
-            category_evolution.get(category)[current_date] = values.get('value')
-        
-        #pprint(category_evolution)
-        self.graphPlotter.plot_oquare_category_evolution(category_evolution, current_date, dir)
+            for category, values in categories.items():
+                category_evolution.get(category)[current_date] = values.get('value')
+
+            self.graphPlotter.plot_oquare_category_evolution(category_evolution, current_date, dir)
             
 
 

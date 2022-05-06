@@ -119,7 +119,7 @@ runs:
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $? 
                 fi
               fi
             done
@@ -156,7 +156,7 @@ runs:
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" 
+                  python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $?
                 fi
               fi
             done
@@ -173,7 +173,7 @@ runs:
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
             if [ ${{ inputs.category-plots }} = "true" ]; then \
-              python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile"
+              python $GITHUB_ACTION_PATH/scripts/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $?
             fi
           done
         fi

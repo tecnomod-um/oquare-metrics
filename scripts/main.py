@@ -14,12 +14,13 @@ if __name__ == '__main__':
     plot_categories_evolution = False
     file = ''
     ontology_source = ''
+    code = "0"
     help_msg = "Uso: {0} -i <folderPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
 
     controller = Controller()
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcge", ["help", "input=","source=", "file=", "model", "categories", "global", "cat_evolution"])
+        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcgeq:", ["help", "input=","source=", "file=", "model", "categories", "global", "cat_evolution", "code="])
     except:
         print(help_msg)
         sys.exit(2)
@@ -42,8 +43,14 @@ if __name__ == '__main__':
             ontology_source = arg
         elif opt in ("-e", "--cat_evolution"):
             plot_categories_evolution = True
+        elif opt in ("-q", "--code"):
+            code = arg
 
     temp_path = input_path + '/temp_results/'
+
+    if code != "0":
+        print('Error: ' + code + ", aborted. Check OQuaRE logs")
+        sys.exit()
 
     if plot_categories:
         if not file or plot_historic or plot_models:
