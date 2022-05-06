@@ -74,16 +74,16 @@ class Controller:
         
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
 
-        archive_path = input_path + '\\archives\\'
-        results_path = input_path + '\\results\\'
+        archive_path = input_path + '/archives/'
+        results_path = input_path + '/results/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         category_evolution = {}
 
-        archive_list = sorted(glob.glob(archive_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml'))[-19:]
+        archive_list = sorted(glob.glob(archive_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml'))[-19:]
         print(archive_list)
         for path in archive_list:
-            entry = path.rsplit(archive_path + ontology_source + '\\' + file + '\\', 1)[1]
-            archive_date = entry.rsplit('\\')[0]
+            entry = path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
+            archive_date = entry.rsplit('/')[0]
 
             parsed_metrics = MetricsParser(path)
             categories = parsed_metrics.parse_category_metrics()
@@ -94,12 +94,12 @@ class Controller:
                 
                 category_evolution.get(category)[archive_date] = values.get('value')
 
-        results_file_path = glob.glob(results_path + ontology_source + '\\' + file + '/*/metrics/' + file + '.xml')
+        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
         print(results_file_path)
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            entry = results_file_path.rsplit(results_path + ontology_source + '\\' + file + '\\', 1)[1]
-            results_date = entry.rsplit('\\')[0]
+            entry = results_file_path.rsplit(results_path + ontology_source + '/' + file + '/', 1)[1]
+            results_date = entry.rsplit('/')[0]
 
             parsed_metrics = MetricsParser(results_file_path)
             categories = parsed_metrics.parse_category_metrics()
