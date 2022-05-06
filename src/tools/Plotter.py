@@ -90,4 +90,4 @@ class oquareGraphs:
         plt.yticks(fontsize=10)
         plt.title('Categories evolution over time')
         matplotx.line_labels()
-        plt.savefig(dir + '\\categories_evolution.png', format='png', bbox_inches='tight')
+        plt.savefig(dir + '/categories_evolution.png', format='png', bbox_inches='tight')
