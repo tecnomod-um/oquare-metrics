@@ -23,19 +23,19 @@ class Controller:
             parsed_metrics = MetricsParser(filepath)
             value_dict.get(ontology_name)[entry] = parsed_metrics.parse_oquare_value()
 
-    def handle_categories(self, base_path: str, file: str) -> None:
+    def handle_categories(self, temp_path: str, file: str) -> None:
         oquare_category_values = {}
 
         try:
-            parsed_metrics = MetricsParser(base_path + '/metrics/' + file + '.xml')
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
             for category, values in categories.items():
                 oquare_category_values[category] = values.get('value')
             
-            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, base_path)
-            self.graphPlotter.plot_oquare_subcategories(categories, file, base_path)
-            self.readmeGenerator.append_category(file, base_path)
-            self.readmeGenerator.append_subcategory(file, base_path, list(categories.keys()))
+            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, temp_path)
+            self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
+            self.readmeGenerator.append_category(file, temp_path)
+            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
 
         except FileNotFoundError as e:
             print("Error: " + e.strerror + ". Abort", flush=True)
