@@ -36,6 +36,7 @@ jobs:
 
       - name: Modify ontology file
         run: |
+          git pull
           echo -e "\n" >> ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: Modify ontology file"
@@ -48,6 +49,7 @@ jobs:
 
       - name: Clean modified file and rename
         run: |
+          git pull
           head -n -1 ontologies/imports/obi.owl > temp.txt
           mv temp.txt ontologies/imports/obi.owl
           mv ontologies/imports/obi.owl ontologies/imports/obi_renamed.owl
@@ -62,6 +64,7 @@ jobs:
       
       - name: Modify non-ontology file
         run: |
+          git pull
           touch test-file
           echo "Test file" >> test-file
           git add .
@@ -75,6 +78,7 @@ jobs:
       
       - name: Deletion of ontology file
         run: |
+          git pull
           touch ontologies/imports/deleted_ontology.owl
           git add .
           git commit -m "Module testing: created new ontology"
@@ -90,6 +94,7 @@ jobs:
 
       - name: Rename ontology back to original name
         run: |
+          git pull
           mv ontologies/imports/obi_renamed.owl ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: renaming file to original name"
