@@ -1,0 +1,98 @@
+on: 
+  workflow_dispatch:
+    branches: [ testing ]
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: OQuaRE-metrics-test
+    steps:
+      # To use this repository's private action
+      # You need to check out the repo
+      - uses: actions/checkout@v2
+      # Configuration
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      
+      - name: Delete contents folder
+        run: |
+          rm -rf OQuaRE
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Module testing: delete contents folder"
+      
+      - name: Initial OQuaRE run test
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+
+      - name: Modify ontology file
+        run: |
+          echo -e "\n" >> ontologies/imports/obi.owl
+          git add .
+          git commit -m "Module testing: Modify ontology file"
+
+      - name: Basic OQuaRE run test
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+
+      - name: Clean modified file and rename
+        run: |
+          head -n -1 ontologies/imports/obi.owl > temp.txt
+          mv temp.txt ontologies/imports/obi.owl
+          mv ontologies/imports/obi.owl ontologies/imports/obi_renamed.owl
+          git add .
+          git commit -m "Module testing: Clean and rename"
+
+      - name: OQuaRE run - Renamed file
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+      
+      - name: Modify non-ontology file
+        run: |
+          touch test-file
+          echo "Test file" >> test-file
+          git add .
+          git commit -m "Module testing: Modify non-ontology file"
+      
+      - name: OQuaRE run - Non-ontology file modified
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+      
+      - name: Deletion of ontology file
+        run: |
+          touch ontologies/imports/deleted_ontology.owl
+          git add .
+          git commit -m "Module testing: created new ontology"
+          rm -f ontologies/imports/deleted_ontology.owl
+          git add .
+          git commit -m "Module testing: Deletion of ontology-file"
+
+      - name: OQuaRE run - Deletion of ontology file
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+
+      - name: Rename ontology back to original name
+        run: |
+          mv ontologies/imports/obi_renamed.owl ontologies/imports/obi.owl
+          git add .
+          git commit -m "Module testing: renaming file to original name"
+      
+      - name: OQuaRE run - modified parameters
+        uses: ./
+        with:
+          ontology_folders: ontologies ontologies/imports
+          reasoner: HERMIT
+          category-plots: "false"
+
