@@ -14,7 +14,6 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Easy to configure and use on both existing and new pipelines
 * Compatible with Docker
 * Set of different reports, showcasing different aspects of the quality of each ontology
-* Archive of metrics generated from previous versions of ontologies contained within the repository.
 * Visual representation of how modifications done to an ontology affect the quality of that ontology.
 * Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
@@ -63,7 +62,7 @@ jobs:
 | reasoner        | string | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                                         |
 | category-plots  | string (ELK/HERMIT) | false    | 'true'       | Indicates the module to generate category values plots                                           |
 | model-plot      | string | false    | 'true'       | Indicates the module to generate OQuaRE model value plot                                         |
-| archive-plot    | string | false    | 'false'      | Indicates the module to generate OQuaRE model value plot across the latest 20 versions of metrics |
+| categories-evolution-plot | string | false | 'true' | Indicates if you want the plotting of the evolution of each category of an ontology             |
 
 ## Examples
 
@@ -89,7 +88,6 @@ jobs:
     with:
         category-plots: 'false'
         model-plot: 'true'
-        archive-plot: 'true'
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
     - name: Ontology file ignore configuration
