@@ -173,7 +173,7 @@ runs:
       shell: bash
           
     - name: Commit and push
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' && ${{ !env.ACT }}
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
