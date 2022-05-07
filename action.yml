@@ -21,9 +21,6 @@ inputs:
   model-plot:
     description: 'Indicates if you want oquare model value plots'
     default: 'true'
-  archive-plot:
-    description: 'Indicates if you want oquare model value plot across the latest 20 versions'
-    default: 'false'
   categories-evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
@@ -89,7 +86,7 @@ runs:
             python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
           fi
 
-          mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results
+          mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add ${{ inputs.contents-folder }}/
@@ -167,13 +164,8 @@ runs:
       run: mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
       shell: bash
 
-    - name: 'Plot historic'
-      if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -g
-      shell: bash
-          
     - name: Commit and push
-      if: steps.changed-files.outputs.any_changed == 'true' && ${{ !env.ACT }}
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
