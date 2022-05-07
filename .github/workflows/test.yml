@@ -10,6 +10,8 @@ jobs:
       # To use this repository's private action
       # You need to check out the repo
       - uses: actions/checkout@v2
+        with:
+          ref: testing
       # Configuration
       - uses: actions/setup-java@v2
         with:
