@@ -37,6 +37,7 @@ jobs:
         with:
           ontology-folders: ontologies ontologies/imports
           testing-ref: ${{ steps.delete-contents.outputs.commitid }}
+          testing: "true"
 
       - name: Modify ontology file
         id: modify-ontology
@@ -54,6 +55,7 @@ jobs:
         with:
           ontology-folders: ontologies ontologies/imports
           testing-ref: ${{ steps.modify-ontology.outputs.commitid }}
+          testing: "true"
 
       - name: Clean modified file and rename
         id: clean-rename
@@ -71,6 +73,7 @@ jobs:
         with:
           ontology-folders: ontologies ontologies/imports
           testing-ref: ${{ steps.clean-rename.outputs.commitid }}
+          testing: "true"
       
       - name: Modify non-ontology file
         id: modify-non-ontology
@@ -87,6 +90,7 @@ jobs:
         with:
           ontology-folders: ontologies ontologies/imports
           testing-ref: ${{ steps.modify-non-ontology.outputs.commitid }}
+          testing: "true"
       
       - name: Deletion of ontology file
         id: ontology-deletion
@@ -107,6 +111,7 @@ jobs:
         with:
           ontology-folders: ontologies ontologies/imports
           testing-ref: ${{ steps.ontology-deletion.outputs.commitid }}
+          testing: "true"
 
       - name: Rename ontology back to original name
         id: rename-back
@@ -126,4 +131,5 @@ jobs:
           reasoner: HERMIT
           category-plots: "false"
           testing-ref: ${{ steps.rename-back.outputs.commitid }}
+          testing: "true"
 
