@@ -13,8 +13,7 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Robust tool for ontology metrics, based of OQuaRE framework for ontology quality evaluation
 * Easy to configure and use on both existing and new pipelines
 * Compatible with Docker
-* Set of different reports, showcasing different aspects of the quality of each ontology
-* Visual representation of how modifications done to an ontology affect the quality of that ontology.
+* Set of different plots and graphs, showcasing different aspects of the quality of each ontology and how modifications affects them
 * Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
 * Possibility to ignore certain files that might not want to be parsed
