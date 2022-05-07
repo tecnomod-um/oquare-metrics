@@ -27,6 +27,12 @@ inputs:
   categories-evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
+  testing:
+    description: 'Flag that enables testing characteristics of the module'
+    default: 'false'
+  testing-message:
+    description: 'Message for commit'
+    default: ''
   
 runs: 
   using: 'composite'
@@ -173,13 +179,22 @@ runs:
       shell: bash
           
     - name: Commit and push
-      if: steps.changed-files.outputs.any_changed == 'true' && ${{ !env.ACT }}
+      if: steps.changed-files.outputs.any_changed == 'true' && inputs.testing != 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add ${{ inputs.contents-folder }}/
         git commit -m "Ontology metrics calculated - OQuaRE"
         git push
+      shell: bash
+
+    - name: Commit (testing)
+      if: steps.changed-files.outputs.any_changed == 'true' && inputs.testing == 'true'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add ${{ inputs.contents-folder }}/
+        git commit -m "${{ inputs.testing-message }}"
       shell: bash
 
 
