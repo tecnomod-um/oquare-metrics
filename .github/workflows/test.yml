@@ -21,62 +21,75 @@ jobs:
           cache: 'pip'
       
       - name: Delete contents folder
+        id: delete-contents
         run: |
           rm -rf OQuaRE
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "Module testing: delete contents folder"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA" 
       
       - name: Initial OQuaRE run test
         uses: ./
         with:
           ontology-folders: ontologies ontologies/imports
+          testing-ref: ${{ steps.delete-contents.outputs.commitid }}
 
       - name: Modify ontology file
+        id: modify-ontology
         run: |
           git pull
           echo -e "\n" >> ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: Modify ontology file"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA"
 
       - name: Basic OQuaRE run test
         uses: ./
         with:
           ontology-folders: ontologies ontologies/imports
+          testing-ref: ${{ steps.modify-ontology.outputs.commitid }}
 
       - name: Clean modified file and rename
+        id: clean-rename
         run: |
           git pull
           head -n -1 ontologies/imports/obi.owl > temp.txt
           mv temp.txt ontologies/imports/obi.owl
           mv ontologies/imports/obi.owl ontologies/imports/obi_renamed.owl
-          git add .
-          git commit -m "Module testing: Clean and rename"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA"
 
       - name: OQuaRE run - Renamed file
         uses: ./
         with:
           ontology-folders: ontologies ontologies/imports
+          testing-ref: ${{ steps.clean-rename.outputs.commitid }}
       
       - name: Modify non-ontology file
+        id: modify-non-ontology
         run: |
           git pull
           touch test-file
           echo "Test file" >> test-file
-          git add .
-          git commit -m "Module testing: Modify non-ontology file"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA"
       
       - name: OQuaRE run - Non-ontology file modified
         uses: ./
         with:
           ontology-folders: ontologies ontologies/imports
+          testing-ref: ${{ steps.modify-non-ontology.outputs.commitid }}
       
       - name: Deletion of ontology file
+        id: ontology-deletion
         run: |
           git pull
           touch ontologies/imports/deleted_ontology.owl
@@ -85,20 +98,26 @@ jobs:
           rm -f ontologies/imports/deleted_ontology.owl
           git add .
           git commit -m "Module testing: Deletion of ontology-file"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA"
 
       - name: OQuaRE run - Deletion of ontology file
         uses: ./
         with:
           ontology-folders: ontologies ontologies/imports
+          testing-ref: ${{ steps.ontology-deletion.outputs.commitid }}
 
       - name: Rename ontology back to original name
+        id: rename-back
         run: |
           git pull
           mv ontologies/imports/obi_renamed.owl ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: renaming file to original name"
-          git push
+          git push -u origin $GITHUB_REF
+          SHA=$(git rev-parse HEAD)
+          echo "::set-output name=commitid::$SHA"
       
       - name: OQuaRE run - modified parameters
         uses: ./
@@ -106,4 +125,5 @@ jobs:
           ontology-folders: ontologies ontologies/imports
           reasoner: HERMIT
           category-plots: "false"
+          testing-ref: ${{ steps.rename-back.outputs.commitid }}
 
