@@ -27,22 +27,24 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Module testing: delete contents folder"
+          git push
       
       - name: Initial OQuaRE run test
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
 
       - name: Modify ontology file
         run: |
           echo -e "\n" >> ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: Modify ontology file"
+          git push
 
       - name: Basic OQuaRE run test
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
 
       - name: Clean modified file and rename
         run: |
@@ -51,11 +53,12 @@ jobs:
           mv ontologies/imports/obi.owl ontologies/imports/obi_renamed.owl
           git add .
           git commit -m "Module testing: Clean and rename"
+          git push
 
       - name: OQuaRE run - Renamed file
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
       
       - name: Modify non-ontology file
         run: |
@@ -63,11 +66,12 @@ jobs:
           echo "Test file" >> test-file
           git add .
           git commit -m "Module testing: Modify non-ontology file"
+          git push
       
       - name: OQuaRE run - Non-ontology file modified
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
       
       - name: Deletion of ontology file
         run: |
@@ -77,22 +81,24 @@ jobs:
           rm -f ontologies/imports/deleted_ontology.owl
           git add .
           git commit -m "Module testing: Deletion of ontology-file"
+          git push
 
       - name: OQuaRE run - Deletion of ontology file
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
 
       - name: Rename ontology back to original name
         run: |
           mv ontologies/imports/obi_renamed.owl ontologies/imports/obi.owl
           git add .
           git commit -m "Module testing: renaming file to original name"
+          git push
       
       - name: OQuaRE run - modified parameters
         uses: ./
         with:
-          ontology_folders: ontologies ontologies/imports
+          ontology-folders: ontologies ontologies/imports
           reasoner: HERMIT
           category-plots: "false"
 
