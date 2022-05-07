@@ -44,7 +44,7 @@ runs:
         files_separator: ' '
         files_ignore_separator: ' '
         files: |
-          ${{ join(inputs.ontology-folders, '/*.owl ') }}${{ inputs.ontology-files }}
+          ${{ join(inputs.ontology-folders, '/*.owl ') }} ${{ inputs.ontology-files }}
         files_ignore: |
           ${{ inputs.ignore-files }}
 
