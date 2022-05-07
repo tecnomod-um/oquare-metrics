@@ -96,7 +96,7 @@ runs:
             python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
           fi
 
-          mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results
+          mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add ${{ inputs.contents-folder }}/
