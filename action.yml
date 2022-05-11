@@ -206,7 +206,7 @@ runs:
 
             if [ ${{ inputs.model-plot }} = "true" ]
             then
-              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -M -s $dir -f $outputFile -d $date
             fi
 
             if [ ${{ inputs.categories-evolution-plot}} = "true" ]
