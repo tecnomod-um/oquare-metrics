@@ -79,14 +79,25 @@ class oquareGraphs:
 
             names = list(subcategories.keys())
             values = list(subcategories.values())
-            xpos = range(len(values))
+            ypos = range(len(values))
 
             with plt.style.context(matplotx.styles.ayu["light"]):
-                plt.ylim([0, 5])
-                plt.bar(xpos, values)
-                plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
-                plt.title(category + ' metrics')
-                plt.gca().grid(True, which='major', axis='y', color='#aaaaaa', linestyle='--')
+
+                if len(values) == 1:
+                    plt.ylim(-1,1)
+                    plt.barh(ypos, values, height=0.6)
+                elif len(values) < 3 and len(values) > 1:
+                    plt.ylim(-1, 2)
+                    plt.barh(ypos, values, height=0.8)
+                else:
+                    plt.barh(ypos, values)
+                plt.yticks(ypos, names)
+                plt.xlim([0, 5.5])
+
+                for i in ypos:
+                    plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
+                    
+
                 plt.savefig(basePath + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
