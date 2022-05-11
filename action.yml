@@ -5,12 +5,12 @@ inputs:
     description: 'Folders which contains .owl files'
     required: true
     default: 'ontologies'
+  ontology-files:
+    description: 'Individual ontology files to parse'
+    default: ''
   contents-folder:
     description: 'Folder which will contain results and archives'
     default: 'OQuaRE'
-  copy-previous:
-    description: 'Indicates the module to copy previous results onto the current run. It will decrease the precision of evolution plots, but has all of the metrics on the folder for easy access'
-    default: 'false'
   reasoner:
     description: 'Reasoner used by OQuaRE framework'
     required: true
@@ -24,9 +24,6 @@ inputs:
   model-plot:
     description: 'Indicates if you want oquare model value plots'
     default: 'true'
-  archive-plot:
-    description: 'Indicates if you want oquare model value plot across the latest 20 versions'
-    default: 'false'
   categories-evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
@@ -36,7 +33,7 @@ runs:
   steps:
     - uses: actions/checkout@v2
       with:
-          fetch-depth: 2
+          fetch-depth: 0
     - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
 
@@ -47,7 +44,7 @@ runs:
         files_separator: ' '
         files_ignore_separator: ' '
         files: |
-          ${{ join(inputs.ontology-folders, '/*.owl ') }}
+          ${{ join(inputs.ontology-folders, '/*.owl ') }} ${{ inputs.ontology-files }}
         files_ignore: |
           ${{ inputs.ignore-files }}
 
@@ -55,57 +52,12 @@ runs:
       run: |
         mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
         && mkdir -p ${{ inputs.contents-folder }}/temp_results
-
-        for ontology_source in ${{ inputs.ontology_folders }}
-        do
-          mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source
-        done
       shell: bash
     
-    - name: Find and copy previous results
-      if: steps.changed-files.outputs.any_modified == 'true'
-      run: |
-        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
-        then 
-          cp -r $(find ${{ inputs.contents-folder }}/results/* -maxdepth 0)/* ${{ inputs.contents-folder }}/temp_results
-        fi
-      shell: bash
-
-    - name: Removes previous run plots 
-      if: steps.changed-files.outputs.any_modified == 'true'
-      run: |
-        rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values_global.png
-        rm -f ${{ inputs.contents-folder }}/temp_results/OQuaRE_model_values.png
-        rm -f ${{ inputs.contents-folder }}/temp_results/README.md
-      shell: bash
-
-    - name: If file deleted, remove its folder from results
-      if: steps.changed-files.outputs.any_deleted == 'true'
-      run: |
-        for file in ${{ steps.changed-files.outputs.deleted_files }}
-        do
-          dir=$(dirname "$file")
-          deletedFile=$(basename "$file" .owl); 
-          rm -rf ${{ inputs.contents-folder }}/temp_results/$dir/$deletedFile;
-        done
-      shell: bash
-
-    - name: If file renamed, delete nonmatching folders on temporal folder
-      if: steps.changed-files.outputs.renamed_files
-      run: |
-        for ontology_source in ${{ inputs.ontology_folders }}
-        do
-          comm -13 <(ls -1 ${ ontology_source } | sed s/.owl//g) <( ls -1 ${{ inputs.contents-folder}}/temp_results/$ontology_source) | \
-          while read file
-          do
-            rm -rf ${{ inputs.contents-folder}}/temp_results/$ontology_source/$file;
-          done
-        done
-      shell: bash
-
     - name: Checks if its the first run (results empty folder)
       if: steps.changed-files.outputs.any_modified == 'false'
       run: |
+        date="$(date +%Y-%m-%d_%H-%M-%S)"
         if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]
         then
           for ontology_source in ${{ inputs.ontology-folders }}
@@ -113,26 +65,48 @@ runs:
             find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
               outputFile=$(basename "$file")
-              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)] && [ -z $(printf '%s\n' "${{ inputs.ontology-files }}" | grep -Fx $file)]
               then
                 outputFile=$(basename "$file" .owl) 
-                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
-                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
+                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/$date/metrics
+                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/$date/metrics/$outputFile.xml"
                 java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $? 
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $ontology_source -c -f $outputFile -q $? -d $date
+                fi
+
+                if [ ${{ inputs.model-plot }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
                 fi
               fi
             done
           done
 
-          if [ ${{ inputs.model-plot }} = "true" ]; then \
-            python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
-          fi
+          for ontology_file in ${{ inputs.ontology-files}}
+          do
+            dir=$(dirname "$ontology_file")
+            outputFile=$(basename "$ontology_file" .owl)
+            mkdir -p ${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics
+            outputFilePath="${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
+            rm -f "$outputFilePath"
+            rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/$date/README.md"
+            java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$ontology_file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
-          mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
+            if [ ${{ inputs.category-plots }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -c -f $outputFile -q $? -d $date
+            fi
+
+            if [ ${{ inputs.model-plot }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+            fi
+          done
+
+          mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add ${{ inputs.contents-folder }}/
@@ -144,81 +118,99 @@ runs:
     - name: Call oquare library
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
+        date="$(date +%Y-%m-%d_%H-%M-%S)"
         if [ -z "$(ls -A ./${{ inputs.contents-folder }}/results)" ]
         then
           for ontology_source in ${{ inputs.ontology-folders }}
           do
             find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
             do
-              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)]
+              if [ -z $(printf '%s\n' "${{ inputs.ignore-files }}" | grep -Fx $file)] && [ -z $(printf '%s\n' "${{ inputs.ontology-files }}" | grep -Fx $file)]
               then
                 outputFile=$(basename "$file" .owl) 
-                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics
-                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/metrics/$outputFile.xml"
+                mkdir -p ${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/$date/metrics
+                outputFilePath="${{ inputs.contents-folder }}/temp_results/$ontology_source/$outputFile/$date/metrics/$outputFile.xml"
                 java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
                 
                 if [ ${{ inputs.category-plots }} = "true" ]
                 then
-                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$ontology_source" -c -f "$outputFile" -q $?
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $ontology_source -c -f $outputFile -q $? -d $date
+                fi
+
+                if [ ${{ inputs.model-plot }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
                 fi
               fi
             done
+          done
+          for ontology_file in ${{ inputs.ontology-files}}
+          do
+            dir=$(dirname "$ontology_file")
+            outputFile=$(basename "$ontology_file" .owl)
+            mkdir -p ${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics
+            outputFilePath="${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
+            rm -f "$outputFilePath"
+            rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/$date/README.md"
+            java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$ontology_file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
+
+            if [ ${{ inputs.category-plots }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -c -f "$outputFile" -q $? -d $date
+            fi
+
+            if [ ${{ inputs.model-plot }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+            fi
+
           done
         else
           for file in ${{ steps.changed-files.outputs.all_changed_files }}
           do
             dir=$(dirname "$file")
             outputFile=$(basename "$file" .owl)
-            mkdir -p ${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/metrics
-            outputFilePath="${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/metrics/$outputFile.xml"
+            mkdir -p ${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics
+            outputFilePath="${{ inputs.contents-folder }}/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
             rm -f "$outputFilePath"
-            rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/README.md"
+            rm -f "${{ inputs.contents-folder}}/temp_results/$dir/$outputFile/$date/README.md"
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "${{ inputs.reasoner }}" --outputFile "$outputFilePath"
 
-            if [ ${{ inputs.category-plots }} = "true" ]; then \
-              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $?
+            if [ ${{ inputs.category-plots }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -q $? -d $date
+            fi
+
+            if [ ${{ inputs.model-plot }} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+            fi
+
+            if [ ${{ inputs.categories-evolution-plot}} = "true" ]
+            then
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -s "$dir" -f $outputFile -d $date
             fi
           done
         fi
       shell: bash
-    
-    - name: 'Plot oquare model value'
-      if: inputs.model-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m
-      shell: bash
       
     - name: Archive previous results
-      if: steps.changed-files.outputs.any_modified == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
         then
-          mv -v ${{ inputs.contents-folder }}/results/* ${{ inputs.contents-folder }}/archives/
+          rsync -a ${{ inputs.contents-folder }}/results/ ${{ inputs.contents-folder }}/archives/
+          rm -rf ${{ inputs.contents-folder }}/results/*
         fi 
       shell: bash
 
     - name: Move results to results folder and tag it with a date
-      if: steps.changed-files.outputs.any_modified == 'true'
-      run: mv ${{ inputs.contents-folder }}/temp_results ${{ inputs.contents-folder }}/results/"$(date +%Y-%m-%d_%H-%M-%S)"
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
       shell: bash
 
-    - name: 'Plot categories evolution of modified ontologies'
-      if: inputs.categories-evolution-plot == 'true' && steps.changed_files.outputs.any_changed == 'true'
-      run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}
-        do
-          outputFile=$(basename "$file" .owl)
-          python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -f $outputFile
-        done
-      shell: bash
-
-    - name: 'Plot historic'
-      if: inputs.archive-plot == 'true' && steps.changed-files.outputs.any_modified == 'true'
-      run: python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -g
-      shell: bash
-      
-      
     - name: Commit and push
-      if: steps.changed-files.outputs.any_modified == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com

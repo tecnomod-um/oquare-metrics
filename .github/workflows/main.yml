@@ -20,5 +20,5 @@ jobs:
       - name: Basic testing
         uses: ./ # Uses an action in the root directory
         with:
-          archive-plot: 'true'
           ontology-folders: ontologies ontologies/imports
+          ontology-files: ontologyFBBI.owl

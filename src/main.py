@@ -13,12 +13,13 @@ if __name__ == '__main__':
     file = ''
     ontology_source = ''
     code = "0"
+    date= ""
     help_msg = "Uso: {0} -i <folderPath> [-c -f <fileNAME (no extension, no path)>] || [-m -g]".format(argv[0])
 
     controller = Controller()
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcgeq:", ["help", "input=","source=", "file=", "model", "categories", "global", "cat_evolution", "code="])
+        opts, args = getopt.getopt(argv[1:], "hi:s:f:mcgeq:d:", ["help", "input=","source=", "file=", "model", "categories", "global", "cat_evolution", "code=", "date="])
     except:
         print(help_msg)
         sys.exit(2)
@@ -43,6 +44,8 @@ if __name__ == '__main__':
             plot_categories_evolution = True
         elif opt in ("-q", "--code"):
             code = arg
+        elif opt in ("-d", "--date"):
+            date = arg
 
     temp_path = input_path + '/temp_results/'
 
@@ -55,15 +58,13 @@ if __name__ == '__main__':
             print(help_msg)
             sys.exit(2)
         
-        temp_path += ontology_source + '/'
-        controller.handle_categories(temp_path, file, input_path)
+        temp_path += ontology_source + '/' + file + '/' + date 
+        controller.handle_categories(temp_path, file)
 
     elif plot_categories_evolution:
-        controller.handle_category_evolution(file, input_path)
-    else:        
-        if plot_models:
-            controller.handle_oquare_model(temp_path, input_path)
-
-        if plot_historic:
-            controller.handle_historic(input_path)
+        controller.handle_category_evolution(file, input_path, ontology_source, date)
+    elif plot_models:
+        controller.handle_oquare_model(file, input_path, ontology_source, date)
+    elif plot_historic:
+        controller.handle_historic(input_path)
 

@@ -13,12 +13,11 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Robust tool for ontology metrics, based of OQuaRE framework for ontology quality evaluation
 * Easy to configure and use on both existing and new pipelines
 * Compatible with Docker
-* Set of different reports, showcasing different aspects of the quality of each ontology
-* Archive of metrics generated from previous versions of ontologies contained within the repository.
-* Visual representation of how modifications done to an ontology affect the quality of that ontology.
+* Set of different plots and graphs, showcasing different aspects of the quality of each ontology and how modifications affects them
 * Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
 * Possibility to ignore certain files that might not want to be parsed
+* Individual ontology file parsing instead of by folders
 
 ## Usage
 > NOTE: :warning:
@@ -58,12 +57,13 @@ jobs:
 | Input           | Type   | Required | Default      | Description                                                                                      |
 |-----------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------|
 | ontology-folders | string | true     | 'ontologies' | Sets the folders to search ontologies within the repository. Space separated values, no trailing slash needed                                      |
+| ontology-files  | string | false    | ''           | Set of individual ontologies to parse. Space separated values.                                   |
 | contents-folder | string | true     | 'OQuaRE'     | Sets the folder on which the module will save all generated content                              |
-| ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files                           |
+| ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files. Space separated values   |
 | reasoner        | string | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                                         |
 | category-plots  | string (ELK/HERMIT) | false    | 'true'       | Indicates the module to generate category values plots                                           |
 | model-plot      | string | false    | 'true'       | Indicates the module to generate OQuaRE model value plot                                         |
-| archive-plot    | string | false    | 'false'      | Indicates the module to generate OQuaRE model value plot across the latest 20 versions of metrics |
+| categories-evolution-plot | string | false | 'true' | Indicates if you want the plotting of the evolution of each category of an ontology             |
 
 ## Examples
 
@@ -89,13 +89,14 @@ jobs:
     with:
         category-plots: 'false'
         model-plot: 'true'
-        archive-plot: 'true'
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
+    # Also parse ontology_file.owl which is stored on the root folder
     - name: Ontology file ignore configuration
     uses: Emdien/oquare-metrics@v0.0.16 
     with:
         ontology-folders: src/ontologies/imports
+        ontology-files: ontology_file.owl
         ignore-files: src/ontologies/imports/null_ontology.owl
     
   
