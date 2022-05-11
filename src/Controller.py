@@ -31,6 +31,21 @@ class Controller:
         except FileNotFoundError as e:
             print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
+
+    def handle_metrics(self, temp_path: str, file: str) -> None:
+        try:
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+            metrics = parsed_metrics.parse_metrics()
+
+            self.graphPlotter.plot_metrics(metrics, file, temp_path)
+            self.readmeGenerator.append_metrics(file, temp_path)
+
+        except FileNotFoundError as e:
+            print("Error METRICS: " + e.strerror + ". Abort", flush=True)
+
+    def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+
+        return
     
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         archive_path = input_path + '/archives/'
