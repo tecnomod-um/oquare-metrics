@@ -27,6 +27,9 @@ inputs:
   categories-evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
+  metrics-plot:
+    description: 'Indicates if you want fine grained metrics plotted'
+    default: 'true'
   
 runs: 
   using: 'composite'
@@ -79,6 +82,11 @@ runs:
 
                 if [ ${{ inputs.model-plot }} = "true" ]
                 then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -M -s $ontology_source -f $outputFile -d $date
+                fi
+
+                if [ ${{ inputs.metrics-plot }} = "true" ]
+                then
                   python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
                 fi
               fi
@@ -102,7 +110,12 @@ runs:
 
             if [ ${{ inputs.model-plot }} = "true" ]
             then
-              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -M -s $dir -f $outputFile -d $date
+            fi
+
+            if [ ${{ inputs.metrics-plot }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
             fi
           done
 
@@ -139,6 +152,11 @@ runs:
 
                 if [ ${{ inputs.model-plot }} = "true" ]
                 then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -M -s $ontology_source -f $outputFile -d $date
+                fi
+
+                if [ ${{ inputs.metrics-plot }} = "true" ]
+                then
                   python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
                 fi
               fi
@@ -161,7 +179,12 @@ runs:
 
             if [ ${{ inputs.model-plot }} = "true" ]
             then
-              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+              python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -M -s $dir -f $outputFile -d $date
+            fi
+
+            if [ ${{ inputs.metrics-plot }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
             fi
 
           done
@@ -190,6 +213,11 @@ runs:
             then
               python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder}} -e -s "$dir" -f $outputFile -d $date
             fi
+
+            if [ ${{ inputs.metrics-plot }} = "true" ]
+                then
+                  python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $ontology_source -f $outputFile -d $date
+            fi
           done
         fi
       shell: bash
@@ -197,7 +225,7 @@ runs:
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] 
+        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] && [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)"] 
         then
           rsync -a ${{ inputs.contents-folder }}/results/ ${{ inputs.contents-folder }}/archives/
           rm -rf ${{ inputs.contents-folder }}/results/*
