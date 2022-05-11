@@ -27,7 +27,7 @@ class oquareGraphs:
         values = list(data.values())
         xpos = range(len(values))
 
-        angles = [i/len(names) * 2 * np.pi for i in range(len(names))]
+        angles = [i/len(names) * 2 * np.pi for i in xpos]
         values += values[:1]
         angles += angles[:1]
 
@@ -40,14 +40,6 @@ class oquareGraphs:
 
         plt.title('OQuaRE category values')
         plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
-
-        #with plt.style.context(matplotx.styles.ayu["light"]):
-        #    plt.ylim([0, 5])
-        #    plt.bar(xpos, values)
-        #    plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
-        #    matplotx.show_bar_values("{:.2f}")
-        #    plt.title('OQuaRE category values')
-        #    plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
         
         plt.clf()
 
