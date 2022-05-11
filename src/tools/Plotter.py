@@ -100,7 +100,7 @@ class oquareGraphs:
                 for i in ypos:
                     plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
                     
-
+                plt.title(category + ' metrics')
                 plt.savefig(basePath + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
