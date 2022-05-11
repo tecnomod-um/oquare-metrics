@@ -21,7 +21,7 @@ class oquareGraphs:
 
         plt.clf()
 
-    def plot_oquare_categories(self, data: dict, fileName: str, basePath: str):
+    def plot_oquare_categories(self, data: dict, file: str, temp_path: str):
 
         names = list(data.keys())
         values = list(data.values())
@@ -39,7 +39,29 @@ class oquareGraphs:
         ax.fill(angles, values, 'skyblue', alpha=0.4)
 
         plt.title('OQuaRE category values')
-        plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
+        plt.savefig(temp_path + '/' + file + "_category_values.png", format="png", bbox_inches='tight')
+        
+        plt.clf()
+
+
+    def plot_metrics(self, data: dict, file: str, temp_path: str):
+        names = list(data.keys())
+        values = list(data.values())
+        ypos = range(len(names))
+
+        with plt.style.context(matplotx.styles.ayu["light"]):
+            plt.hlines(y=ypos, xmin=0, xmax=values, color='skyblue')
+            plt.xlim([0, 5.5])
+            plt.yticks(ypos, names)
+            plt.plot(values, ypos, "D")
+
+            plt.gca().grid(True, which='major', axis='x', color='#888888', linestyle='--')
+
+            for i in ypos:
+                    plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
+
+            plt.title('OQuaRE  metrics')
+            plt.savefig(temp_path + '/' + file + "_metrics.png", format="png", bbox_inches='tight')
         
         plt.clf()
 
@@ -103,9 +125,26 @@ class oquareGraphs:
                 dates = data.get(label).keys()
                 plt.plot(dates, values, label=label)
         
-        plt.ylim([0, 5])
-        plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
-        plt.yticks(fontsize=10)
-        plt.title('Categories evolution over time')
-        matplotx.line_labels()
-        plt.savefig(dir + '/categories_evolution.png', format='png', bbox_inches='tight')
+            plt.ylim([0, 5])
+            plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
+            plt.yticks(fontsize=10)
+            plt.title('Categories evolution over time')
+            matplotx.line_labels()
+            plt.savefig(dir + '/categories_evolution.png', format='png', bbox_inches='tight')
+
+    def plot_metrics_evolution(self, data: dict, dir: str) -> None:
+        
+        line_labels = list(data.keys())
+        with plt.style.context(matplotx.styles.ayu["light"]):
+
+            for label in line_labels:
+                values = data.get(label).values()
+                dates = data.get(label).keys()
+                plt.plot(dates, values, label=label)
+        
+            plt.ylim([0, 5])
+            plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
+            plt.yticks(fontsize=10)
+            plt.title('Metrics evolution over time')
+            matplotx.line_labels()
+            plt.savefig(dir + '/metrics_evolution.png', format='png', bbox_inches='tight')
