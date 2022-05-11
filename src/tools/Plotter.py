@@ -1,6 +1,7 @@
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 import matplotx
+import numpy as np
 
 class oquareGraphs:
 
@@ -26,13 +27,27 @@ class oquareGraphs:
         values = list(data.values())
         xpos = range(len(values))
 
-        with plt.style.context(matplotx.styles.ayu["light"]):
-            plt.ylim([0, 5])
-            plt.bar(xpos, values)
-            plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
-            matplotx.show_bar_values("{:.2f}")
-            plt.title('OQuaRE category values')
-            plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
+        angles = [i/len(names) * 2 * np.pi for i in range(len(names))]
+        values += values[:1]
+        angles += angles[:1]
+
+        ax = plt.subplot(111, polar=True)
+        plt.xticks(angles[:-1], names, color='grey', size=12)
+        plt.yticks([1, 2, 3, 4], ["1", "2", "3", "4"], color="grey", size='7')
+        plt.ylim([0, 5])
+        ax.plot(angles, values, linewidth=1, linestyle='solid')
+        ax.fill(angles, values, 'skyblue', alpha=0.4)
+
+        plt.title('OQuaRE category values')
+        plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
+
+        #with plt.style.context(matplotx.styles.ayu["light"]):
+        #    plt.ylim([0, 5])
+        #    plt.bar(xpos, values)
+        #    plt.xticks(xpos, names, fontsize=10, rotation=-45, ha="left", rotation_mode="anchor")
+        #    matplotx.show_bar_values("{:.2f}")
+        #    plt.title('OQuaRE category values')
+        #    plt.savefig(basePath + '/' + fileName + "_category_values.png", format="png", bbox_inches='tight')
         
         plt.clf()
 
