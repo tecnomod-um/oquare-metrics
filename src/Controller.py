@@ -35,12 +35,11 @@ class Controller:
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             metrics = parsed_metrics.parse_metrics()
+            scaled_metrics = parsed_metrics.parse_scaled_metrics()
 
             self.graphPlotter.plot_metrics(metrics, file, temp_path, False)
-            #self.readmeGenerator.append_metrics(file, temp_path)
-
-            scaled_metrics = parsed_metrics.parse_scaled_metrics()
             self.graphPlotter.plot_metrics(scaled_metrics, file, temp_path, True)
+            self.readmeGenerator.append_metrics(file, temp_path)
 
         except FileNotFoundError as e:
             print("Error METRICS: " + e.strerror + ". Abort", flush=True)
@@ -129,7 +128,7 @@ class Controller:
                 metrics_evolution.get(metric)[date] = value
                 
             self.graphPlotter.plot_metrics_evolution(metrics_evolution, temp_path)
-            #self.readmeGenerator.append_metrics_evolution(temp_path)
+            self.readmeGenerator.append_metrics_evolution(temp_path, list(metrics_evolution.keys()))
         except FileNotFoundError as e:
             print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
             sys.exit()  

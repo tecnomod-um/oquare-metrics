@@ -15,13 +15,6 @@ class readmeGen:
         readme_file.write('![OQuaRE model value plot](OQuaRE_model_values.png)\n')
         readme_file.close()
 
-    def append_oquare_historic(self, path: str, date: str):
-        readme_file = open(path + '/results/' + date +'/README.md', 'a')
-        readme_file.write('## OQuaRE historic model value\n')
-        readme_file.write('Progress of each analyzed ontology across the latest 20 versions on a scale of 1 to 5\n\n')
-        readme_file.write('![OQuaRE historic values plot](OQuaRE_historic_model_value.png)\n')
-        readme_file.close()
-
     def append_subcategory(self, file_name: str, path: str, categories: list):
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE subcategories metrics\n')
@@ -32,8 +25,26 @@ class readmeGen:
         readme_file.close()
     
     def append_category_evolution(self, path: str):
-        readme_file = open(path + '/' + 'README.md', 'a')
+        readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE category evolution\n')
         readme_file.write('Evolution of each category overtime on a scale of 1 to 5\n\n')
         readme_file.write('![category values plot](categories_evolution.png)\n')
+        readme_file.close()
+
+    def append_metrics(self, file_name: str, path: str): 
+        readme_file = open(path + '/README.md', 'a')
+        readme_file.write('## OQuaRE metrics values\n')
+        readme_file.write('Fine grained metrics, lowest level of ontology analysis provided. Scaled version uses a 1 to 5 scale\n\n')
+        readme_file.write('![category values plot](' + file_name + '_metrics.png)\n')
+        readme_file.write('![category values plot](' + file_name + '_scaled_metrics.png)\n')
+        readme_file.close()
+
+    def append_metrics_evolution(self, path: str, metrics: list):
+        readme_file = open(path + '/README.md', 'a')
+        readme_file.write('## OQuaRE metrics evolution\n')
+        readme_file.write('Evolution of each of the 19 metrics obtained from an ontology\n')
+        
+        for metric in metrics:
+            readme_file.write('### ' + metric +' evolution\n\n')
+            readme_file.write('![' + metric + ' metrics plot](' + metric + '_metric_evolution.png)\n\n')
         readme_file.close()
