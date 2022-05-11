@@ -225,7 +225,7 @@ runs:
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] && [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)"] 
+        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] && [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)" ] 
         then
           rsync -a ${{ inputs.contents-folder }}/results/ ${{ inputs.contents-folder }}/archives/
           rm -rf ${{ inputs.contents-folder }}/results/*
