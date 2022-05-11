@@ -43,9 +43,6 @@ class Controller:
         except FileNotFoundError as e:
             print("Error METRICS: " + e.strerror + ". Abort", flush=True)
 
-    def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
-
-        return
     
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         archive_path = input_path + '/archives/'
@@ -82,7 +79,62 @@ class Controller:
         except FileNotFoundError as e:
             print("Error MODEL PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()    
-        
+
+
+    def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        archive_path = input_path + '/archives/'
+        results_path = input_path + '/results/'
+        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
+        metrics_evolution = {}
+
+        archive_list = sorted(glob.glob(archive_path + ontology_source + '/' + file + '/*/' + 'metrics/' + file + '.xml'))[-19:]
+        for path in archive_list:
+            entry = path.rsplit(archive_path + ontology_source + '/' + file + '/', 1)[1]
+            archive_date = entry.rsplit('/')[0]
+
+            parsed_metrics = MetricsParser(path)
+            metrics = parsed_metrics.parse_metrics()
+
+            for metric, value in metrics.items():
+                if not metrics_evolution.get(metric):
+                    metrics_evolution[metric] = {}
+
+                metrics_evolution.get(metric)[archive_date] = value
+
+        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
+        if len(results_file_path) > 0:
+            results_file_path = results_file_path[0]
+            entry = results_file_path.rsplit(results_path + ontology_source + '/' + file + '/', 1)[1]
+            results_date = entry.rsplit('/')[0]
+
+            parsed_metrics = MetricsParser(results_file_path)
+            metrics = parsed_metrics.parse_metrics()
+
+            for metric, value in metrics.items():
+                if not metrics_evolution.get(metric):
+                    metrics_evolution[metric] = {}
+
+                metrics_evolution.get(metric)[results_date] = value
+
+        try:
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+            metrics = parsed_metrics.parse_metrics()
+
+            for metric, value in metrics.items():
+                if not metrics_evolution.get(metric):
+                    metrics_evolution[metric] = {}
+
+                metrics_evolution.get(metric)[date] = value
+
+            self.graphPlotter.plot_metrics_evolution(metrics_evolution, temp_path)
+            self.readmeGenerator.append_metrics_evolution(temp_path)
+            return
+        except FileNotFoundError as e:
+            print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
+            sys.exit()  
+
+
+
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
 
         archive_path = input_path + '/archives/'
