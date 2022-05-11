@@ -44,47 +44,36 @@ class oquareGraphs:
         plt.clf()
 
 
-    def plot_metrics(self, data: dict, file: str, temp_path: str):
+    def plot_metrics(self, data: dict, file: str, temp_path: str, scaled: bool):
         names = list(data.keys())
         values = list(data.values())
         ypos = range(len(names))
 
         with plt.style.context(matplotx.styles.ayu["light"]):
             plt.hlines(y=ypos, xmin=0, xmax=values, color='skyblue')
-            plt.xlim([0, 5.5])
+
+            if scaled:
+                plt.xlim([0, 5.5])
             plt.yticks(ypos, names)
             plt.plot(values, ypos, "D")
 
-            plt.gca().grid(True, which='major', axis='x', color='#888888', linestyle='--')
+            #plt.gca().grid(True, which='major', axis='x', color='#888888', linestyle='--')
 
             for i in ypos:
-                    plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
+                if scaled:
+                    plt.annotate('%s' % values[i], xy=(values[i] + 0.2, i - 0.15), textcoords='data', fontsize=8)
+                else:
+                    plt.annotate('%s' % values[i], xy=(values[i] + 0.3, i - 0.15), textcoords='data', fontsize=8)
 
-            plt.title('OQuaRE  metrics')
-            plt.savefig(temp_path + '/' + file + "_metrics.png", format="png", bbox_inches='tight')
+            if scaled:
+                plt.title('OQuaRE scaled metrics')
+                plt.savefig(temp_path + '/' + file + "_scaled_metrics.png", format="png", bbox_inches='tight')
+            else:
+                plt.title('OQuaRE metrics')
+                plt.savefig(temp_path + '/' + file + "_metrics.png", format="png", bbox_inches='tight')
         
         plt.clf()
 
-    def plot_historic(self, data: dict, date: str, outputPath: str):
-
-        line_labels = list(data.keys())
-        
-        with plt.style.context(matplotx.styles.ayu["light"]):
-            plt.rc('font', size=10)
-
-            for label in line_labels:
-                values = data.get(label).values()
-                dates = data.get(label).keys()
-                plt.plot(dates, values, label=label)
-
-            plt.ylim([0, 5])
-            plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
-            plt.yticks(fontsize=10)
-            plt.title("OQuaRE historic values")
-            matplotx.line_labels()
-            plt.savefig(outputPath + '/results/' + date + '/OQuaRE_historic_model_value.png', format="png", bbox_inches='tight')
-
-        plt.clf()
 
     def plot_oquare_subcategories(self, data: dict, fileName: str, basePath: str) -> None:
 
@@ -131,9 +120,9 @@ class oquareGraphs:
             plt.title('Categories evolution over time')
             matplotx.line_labels()
             plt.savefig(dir + '/categories_evolution.png', format='png', bbox_inches='tight')
+        plt.clf()
 
     def plot_metrics_evolution(self, data: dict, dir: str) -> None:
-        
         line_labels = list(data.keys())
         with plt.style.context(matplotx.styles.ayu["light"]):
 
@@ -142,9 +131,9 @@ class oquareGraphs:
                 dates = data.get(label).keys()
                 plt.plot(dates, values, label=label)
         
-            plt.ylim([0, 5])
-            plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
-            plt.yticks(fontsize=10)
-            plt.title('Metrics evolution over time')
-            matplotx.line_labels()
-            plt.savefig(dir + '/metrics_evolution.png', format='png', bbox_inches='tight')
+                plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
+                plt.yticks(fontsize=10)
+                plt.title(label + ' evolution over time')
+                matplotx.line_labels()
+                plt.savefig(dir + '/' + label +'_metric_evolution.png', format='png', bbox_inches='tight')
+                plt.clf()

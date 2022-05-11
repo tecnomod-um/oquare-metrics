@@ -1,7 +1,6 @@
 
 import glob
 import os
-from pprint import pprint
 import sys
 from tools.Plotter import oquareGraphs
 from tools.Parser import MetricsParser
@@ -37,8 +36,11 @@ class Controller:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             metrics = parsed_metrics.parse_metrics()
 
-            self.graphPlotter.plot_metrics(metrics, file, temp_path)
-            self.readmeGenerator.append_metrics(file, temp_path)
+            self.graphPlotter.plot_metrics(metrics, file, temp_path, False)
+            #self.readmeGenerator.append_metrics(file, temp_path)
+
+            scaled_metrics = parsed_metrics.parse_scaled_metrics()
+            self.graphPlotter.plot_metrics(scaled_metrics, file, temp_path, True)
 
         except FileNotFoundError as e:
             print("Error METRICS: " + e.strerror + ". Abort", flush=True)
@@ -125,10 +127,9 @@ class Controller:
                     metrics_evolution[metric] = {}
 
                 metrics_evolution.get(metric)[date] = value
-
+                
             self.graphPlotter.plot_metrics_evolution(metrics_evolution, temp_path)
-            self.readmeGenerator.append_metrics_evolution(temp_path)
-            return
+            #self.readmeGenerator.append_metrics_evolution(temp_path)
         except FileNotFoundError as e:
             print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
             sys.exit()  
@@ -183,19 +184,3 @@ class Controller:
         except FileNotFoundError as e:
             print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
-
-
-
-
-        #filepath = glob.glob(results_path + '*/**/' + file + '/metrics/' + file + '.xml', recursive=True)
-        #if (len(filepath) > 0):
-        #    filepath = filepath[0]
-        #    dir = os.path.dirname(os.path.dirname(filepath))
-        #    parsed_metrics = MetricsParser(filepath)
-        #    categories = parsed_metrics.parse_category_metrics()
-
-        #    for category, values in categories.items():
-        #        category_evolution.get(category)[current_date] = values.get('value')
-
-        #    self.graphPlotter.plot_oquare_category_evolution(category_evolution, current_date, dir)
-        #    self.readmeGenerator.append_category_evolution(dir)
