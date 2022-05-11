@@ -13,7 +13,7 @@ class MetricsParser:
         scaled_metrics = self.root.findall('./oquareMetricsScaled/')
         metrics_dict = {}
         for metric in scaled_metrics:
-            metrics_dict[metric.tag] = metric.text
+            metrics_dict[metric.tag] = float(metric.text)
         
         return metrics_dict
     
@@ -21,7 +21,7 @@ class MetricsParser:
         metrics = self.root.findall('./oquareMetrics/')
         metrics_dict = {}
         for metric in metrics:
-            metrics_dict[metric.tag] = metric.text
+            metrics_dict[metric.tag] = float(metric.text)
 
         return metrics_dict
 
