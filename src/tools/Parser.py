@@ -16,6 +16,14 @@ class MetricsParser:
             metrics_dict[metric.tag] = metric.text
         
         return metrics_dict
+    
+    def parse_metrics(self):
+        metrics = self.root.findall('./oquareMetrics/')
+        metrics_dict = {}
+        for metric in metrics:
+            metrics_dict[metric.tag] = metric.text
+
+        return metrics_dict
 
     def parse_category_metrics(self):
         oquare_model = self.root.findall('oquareModel/')
