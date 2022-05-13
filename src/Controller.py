@@ -1,25 +1,55 @@
 
 import glob
-import os
 import sys
 from tools.Plotter import oquareGraphs
 from tools.Parser import MetricsParser
 from tools.Reporter import readmeGen
 
-
 class Controller:
+    """Controller class that handles file system and additional tool calls
+
+    This class is designed with file system managing responsability in mind, as well
+    as calling additional tooling for different purposes. Its responsability lies in
+    extracting the paths to metric files aswell as storing and managing extracted data.
+
+    This class makes uses of functionality provided by Plotter, Parser and Reporter classes
+    so that it can extract data from metrics files, plot them on different ways and finally
+    generate a report which shows different metrics in a visual way.
+
+    """
 
     def __init__(self):
+        """ Controller init method
+
+        Class has a plotter and reporter instances as fields for easy usage
+
+        """
         self.graphPlotter = oquareGraphs()
         self.readmeGenerator = readmeGen()
 
     def store_metrics_evolution(self, metrics: dict, data_store: dict, date: str) -> None:
+        """Stores values of metrics at a certain date in a dictionary
+        
+        Keyword arguments:
+        metrics -- Dictionary which contains all 19 metrics and their values
+        data_store -- Dictionary to store the values for a given date
+        date -- Date to which the metrics values are associated to
+
+        """
         for metric, value in metrics.items():
             if not data_store.get(metric):
                 data_store[metric] = {}
             data_store.get(metric)[date] = value
     
     def store_categories_evolution(self, categories: dict, data_store: dict, date: str) -> None:
+        """Stores values of categories at a certain date in a dictionary
+        
+        Keyword arguments:
+        categories -- Dictionary which contains categories information such as value
+        data_store -- Dictionary to store the values for a given date
+        date -- Date to which the categories values are associated to
+
+        """
         for category, values in categories.items():
             if not data_store.get(category):
                 data_store[category] = {}
@@ -27,6 +57,15 @@ class Controller:
             data_store.get(category)[date] = values.get('value')
 
     def parse_entry(self, base_path: str, file_path: str, data_store: dict, parse_type: str) -> None:
+        """Parses a file entry to extract its date and store the values on a dict by dates
+        
+        Keyword arguments:
+        base_path -- Path that contains date entries for a given ontology
+        file_path -- Full path to an ontology metrics file
+        data_store -- Dictionary to store the values for a given date
+        parse_type -- Indicates which data should be extracted from metrics and its handling
+
+        """
         entry = file_path.rsplit(base_path, 1)[1]
         entry_date = entry.rsplit('/')[0]
         parsed_metrics = MetricsParser(file_path)
@@ -41,6 +80,14 @@ class Controller:
             self.store_categories_evolution(categories, data_store, entry_date)
 
     def handle_categories(self, temp_path: str, file: str) -> None:
+        """Handles category data extraction, plotting and reporting
+        
+        Keyword arguments:
+        temp_path -- Fully structured path to current execution temp_folder. The path is
+        as it follows: input_path/temp_results/ontology_source/file/date. No trailing slash
+        file -- Current ontology file being analysed
+
+        """
         oquare_category_values = {}
 
         try:
@@ -59,6 +106,14 @@ class Controller:
             sys.exit()
 
     def handle_metrics(self, temp_path: str, file: str) -> None:
+        """Handles metrics data extraction, plotting and reporting
+        
+        Keyword arguments:
+        temp_path -- Fully structured path to current execution temp_folder. The path is
+        as it follows: input_path/temp_results/ontology_source/file/date. No trailing slash
+        file -- Current ontology file being analysed
+
+        """
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             metrics = parsed_metrics.parse_metrics()
@@ -72,6 +127,15 @@ class Controller:
             print("Error METRICS: " + e.strerror + ". Abort", flush=True)
      
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles oquare model evolution data extraction, plotting and reporting
+        
+        Keyword arguments:
+        file -- Current ontology file being analysed
+        input_path -- Folder which stores generated results
+        ontology_source -- Source folder which contains ontology file being analysed
+        date -- Current date of module execution
+
+        """
         archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
@@ -99,6 +163,15 @@ class Controller:
             sys.exit()    
 
     def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles metrics evolution data extraction, plotting and reporting
+        
+        Keyword arguments:
+        file -- Current ontology file being analysed
+        input_path -- Folder which stores generated results
+        ontology_source -- Source folder which contains ontology file being analysed
+        date -- Current date of module execution
+
+        """
         archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
@@ -125,6 +198,15 @@ class Controller:
             sys.exit()  
 
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles category evolution data extraction, plotting and reporting
+        
+        Keyword arguments:
+        file -- Current ontology file being analysed
+        input_path -- Folder which stores generated results
+        ontology_source -- Source folder which contains ontology file being analysed
+        date -- Current date of module execution
+        
+        """
         archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date

@@ -30,8 +30,6 @@ if __name__ == '__main__':
             plot_models = True
         elif opt in ("-c", "--categories"):
             plot_categories = True
-        elif opt in ("-g", "--global"):
-            plot_historic = True
         elif opt in ("-f", "--file"):
             file = arg
         elif opt in ("-s", "--source"):

@@ -5,7 +5,29 @@ import numpy as np
 
 class oquareGraphs:
 
+    """Plotter class which makes use of matplotlib
+
+    The responsabilities of the class consist on the visual representation of the 
+    metrics data that was extracted according to the type of data is handling. 
+
+    Its able to plot both current run data aswell as evolution data.
+
+    Makes use of additional matplotx library for style adjustments.
+    
+    """
+
     def plot_oquare_values(self, data: dict, output_path: str):
+        """Plotting method for oquare model values
+
+        Line plotting, shows evolution of general quality of ontology.
+        Dotted plot with red dots on X axis ticks
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        output_path -- Path to where the figure will be saved to
+
+        """
+
         dates = list(data.keys())
         values = list(data.values())
         xpos = range(len(values))
@@ -22,12 +44,24 @@ class oquareGraphs:
         plt.clf()
 
     def plot_oquare_categories(self, data: dict, file: str, temp_path: str):
+        """Plotting method for categories
 
+        Uses a spider graph which shows both the general quality of the ontology
+        at a quick glance, as well as the values of each of the categories.
+        Scaled on range of 0 to 5 (values are on scale 1 to 5).
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        file -- File name of the ontology being plotted
+        temp_path -- Path to the temporal folder which holds generated results for current run
+        
+        """
         names = list(data.keys())
         values = list(data.values())
-        xpos = range(len(values))
+        value_range = range(len(values))
 
-        angles = [i/len(names) * 2 * np.pi for i in xpos]
+        # Calculates angles and closes the plots by repeating first item
+        angles = [i/len(names) * 2 * np.pi for i in value_range]
         values += values[:1]
         angles += angles[:1]
 
@@ -45,6 +79,19 @@ class oquareGraphs:
 
 
     def plot_metrics(self, data: dict, file: str, temp_path: str, scaled: bool):
+        """Plotting method for metrics
+
+        Uses horizontal lollipop/stem graph with value label next to the stem with annotations. 
+        Allows for easy knowledge of current values for each metric
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        file -- File name of the ontology being plotted
+        temp_path -- Path to the temporal folder which holds generated results for current run
+        scaled -- Indicates if the plotting is making use of scaled metrics or not. If True,
+        plot is then scaled on range 0 to 5.5 (for right side margin its added an extra 0.5).
+        
+        """
         names = list(data.keys())
         values = list(data.values())
         ypos = range(len(names))
@@ -75,8 +122,22 @@ class oquareGraphs:
         plt.clf()
 
 
-    def plot_oquare_subcategories(self, data: dict, fileName: str, basePath: str) -> None:
+    def plot_oquare_subcategories(self, data: dict, file: str, output_path: str) -> None:
+        """Plotting method for subcategories
 
+        Uses horizontal bars with annotations instead of stems like in metrics. 
+        This is due to the fact that in some cases there is a single subcategory 
+        per category, or just 2 of them. In which a stem graph would not look good at all.
+
+        Bars have adjusted width depending on the amount of values its plotting.
+        Checks are for 1 and 2 subcategories, everything else automatically scale.
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        file -- File name of the ontology being plotted
+        output_path -- Path to where the figure will be saved to
+        
+        """
         for category in data.keys():
             subcategories: dict = data.get(category).get('subcategories')
 
@@ -89,7 +150,7 @@ class oquareGraphs:
                 if len(values) == 1:
                     plt.ylim(-1,1)
                     plt.barh(ypos, values, height=0.6)
-                elif len(values) < 3 and len(values) > 1:
+                elif len(values) == 2:
                     plt.ylim(-1, 2)
                     plt.barh(ypos, values, height=0.8)
                 else:
@@ -101,14 +162,23 @@ class oquareGraphs:
                     plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
                     
                 plt.title(category + ' metrics')
-                plt.savefig(basePath + '/' + fileName + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
+                plt.savefig(output_path + '/' + file + "_" + category + "_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
-    def plot_oquare_category_evolution(self, data: dict, dir: str) -> None:
+    def plot_oquare_category_evolution(self, data: dict, output_path: str) -> None:
+        """Plotting method for category evolution
 
+        Multiple colored plot lines that represent the evolution of each category
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        output_path -- Path to where the figure will be saved to
+
+        """
         line_labels = list(data.keys())
         with plt.style.context(matplotx.styles.ayu["light"]):
             
+            # For each category, plot its evolution data.
             for label in line_labels:
                 values = data.get(label).values()
                 dates = data.get(label).keys()
@@ -119,10 +189,19 @@ class oquareGraphs:
             plt.yticks(fontsize=10)
             plt.title('Categories evolution over time')
             matplotx.line_labels()
-            plt.savefig(dir + '/categories_evolution.png', format='png', bbox_inches='tight')
+            plt.savefig(output_path + '/categories_evolution.png', format='png', bbox_inches='tight')
         plt.clf()
 
-    def plot_metrics_evolution(self, data: dict, dir: str) -> None:
+    def plot_metrics_evolution(self, data: dict, output_path: str) -> None:
+        """Plotting method for metrics evolution
+
+        Individual evolution plot for each metric due to the difference in scales.
+
+        Keyword arguments:
+        data -- Dictionary which holds the values to plot
+        output_path -- Path to where the figure will be saved to
+
+        """
         line_labels = list(data.keys())
         with plt.style.context(matplotx.styles.ayu["light"]):
 
@@ -135,5 +214,5 @@ class oquareGraphs:
                 plt.yticks(fontsize=10)
                 plt.title(label + ' evolution over time')
                 matplotx.line_labels()
-                plt.savefig(dir + '/' + label +'_metric_evolution.png', format='png', bbox_inches='tight')
+                plt.savefig(output_path + '/' + label +'_metric_evolution.png', format='png', bbox_inches='tight')
                 plt.clf()
