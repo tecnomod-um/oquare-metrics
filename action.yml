@@ -232,7 +232,7 @@ runs:
 
             if [ ${{ inputs.model-plot }} = "true" ]
             then
-              if [ ${{ inputs.evolution-plot}} = "true" ]
+              if [ ${{ inputs.evolution-plot }} = "true" ]
               then
                 python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -M -e -f $outputFile -d $date
               else
@@ -242,27 +242,27 @@ runs:
 
             if [ ${{ inputs.category-plots }} = "true" ]
             then
-              if [ ${{ inputs.evolution-plot}} = "true" ]
+              if [ ${{ inputs.evolution-plot }} = "true" ]
               then
-                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -e -f "$outputFile" -d $date
+                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -c -e -f $outputFile -d $date
               else
-                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -c -f "$outputFile" -d $date
+                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -c -f $outputFile -d $date
               fi
             fi
 
             if [ ${{ inputs.subcategory-plots }} = "true" ]
             then
-              if [ ${{ inputs.evolution-plot}} = "true" ]
+              if [ ${{ inputs.evolution-plot }} = "true" ]
               then
-                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -S -e -f "$outputFile" -d $date
+                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -S -e -f $outputFile -d $date
               else
-                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -S -f "$outputFile" -d $date
+                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s $dir -S -f $outputFile -d $date
               fi
             fi
 
             if [ ${{ inputs.metrics-plot }} = "true" ]
             then
-              if [ ${{ inputs.evolution-plot}} = "true" ]
+              if [ ${{ inputs.evolution-plot }} = "true" ]
               then
                 python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -e -s $dir -f $outputFile -d $date
               else

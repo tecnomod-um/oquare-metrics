@@ -90,7 +90,7 @@ class Controller:
 
         """
         entry = file_path.rsplit(base_path, 1)[1]
-        entry_date = entry.rsplit('\\')[0]
+        entry_date = entry.rsplit('/')[0]
         parsed_metrics = MetricsParser(file_path)
 
         if parse_type == 'oquare_value':
@@ -286,9 +286,9 @@ class Controller:
         date -- Current date of module execution
         
         """
-        archive_path = input_path + '/archives/' + ontology_source + '/' + file + '\\'
-        results_path = input_path + '/results/' + ontology_source + '/' + file + '\\'
-        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '\\' + date
+        archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
+        results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
+        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         subcategories_evolution = {}
 
         archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-19:]
