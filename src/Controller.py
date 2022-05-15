@@ -90,7 +90,7 @@ class Controller:
 
         """
         entry = file_path.rsplit(base_path, 1)[1]
-        entry_date = entry.rsplit('/')[0]
+        entry_date = entry.rsplit('\\')[0]
         parsed_metrics = MetricsParser(file_path)
 
         if parse_type == 'oquare_value':
@@ -198,8 +198,8 @@ class Controller:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             oquare_model_values[date] = parsed_metrics.parse_oquare_value()
 
-            self.graphPlotter.plot_oquare_values(oquare_model_values, temp_path)
-            self.readmeGenerator.append_oquare_value(temp_path)
+            self.graphPlotter.plot_oquare_values(oquare_model_values, file, temp_path)
+            self.readmeGenerator.append_oquare_value(file, temp_path)
             
         except FileNotFoundError as e:
             print("Error MODEL PLOTTING: " + e.strerror + ". Abort", flush=True)
@@ -234,8 +234,8 @@ class Controller:
             metrics = parsed_metrics.parse_metrics()
             self.store_metrics_evolution(metrics, metrics_evolution, date)
                 
-            self.graphPlotter.plot_metrics_evolution(metrics_evolution, temp_path)
-            self.readmeGenerator.append_metrics_evolution(temp_path, list(metrics_evolution.keys()))
+            self.graphPlotter.plot_metrics_evolution(metrics_evolution, file, temp_path)
+            self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
         except FileNotFoundError as e:
             print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
             sys.exit()  
@@ -269,8 +269,8 @@ class Controller:
             categories = parsed_metrics.parse_category_metrics()
             self.store_categories_evolution(categories, categories_evolution, date)
 
-            self.graphPlotter.plot_oquare_category_evolution(categories_evolution, temp_path)
-            self.readmeGenerator.append_category_evolution(temp_path)
+            self.graphPlotter.plot_oquare_category_evolution(categories_evolution, file, temp_path)
+            self.readmeGenerator.append_category_evolution(file, temp_path)
             
         except FileNotFoundError as e:
             print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
@@ -286,31 +286,13 @@ class Controller:
         date -- Current date of module execution
         
         """
-        archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
-        results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
-        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
+        archive_path = input_path + '/archives/' + ontology_source + '/' + file + '\\'
+        results_path = input_path + '/results/' + ontology_source + '/' + file + '\\'
+        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '\\' + date
         subcategories_evolution = {}
-
-        """
-            
-        categoria: {
-            subcat1: {
-                fecha1: valor,
-                fecha2: valor,
-                fecha3: valor
-            },
-            subcat2: {
-                fecha1: valor,
-                fecha2: valor,
-                fecha3: valor
-            }
-        }
-        
-        """
 
         archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-19:]
         for path in archive_list:
-            print(path)
             self.parse_entry(archive_path, path, subcategories_evolution, 'subcategories')
 
         results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
@@ -323,10 +305,8 @@ class Controller:
             categories = parsed_metrics.parse_category_metrics()
             self.store_subcategories_evolution(categories, subcategories_evolution, date)
 
-            #pprint(subcategories_evolution)
-
-            #self.graphPlotter.plot_oquare_category_evolution(categories_evolution, temp_path)
-            #self.readmeGenerator.append_category_evolution(temp_path)
+            self.graphPlotter.plot_oquare_subcategories_evolution(subcategories_evolution, file, temp_path)
+            self.readmeGenerator.append_subcategories_evolution(file, temp_path, list(categories.keys()))
             
         except FileNotFoundError as e:
             print("Error SUBCATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
