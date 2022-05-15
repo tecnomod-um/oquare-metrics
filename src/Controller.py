@@ -1,6 +1,8 @@
 
 import glob
+from pprint import pprint
 import sys
+from unicodedata import category
 from tools.Plotter import oquareGraphs
 from tools.Parser import MetricsParser
 from tools.Reporter import readmeGen
@@ -55,6 +57,27 @@ class Controller:
                 data_store[category] = {}
             
             data_store.get(category)[date] = values.get('value')
+    
+    def store_subcategories_evolution(self, categories: dict, data_store: dict, date: str) -> None:
+        """Stores values of subcategories at a certain date in a dictionary
+        
+        Keyword arguments:
+        categories -- Dictionary which contains categories information such as subcategories values
+        data_store -- Dictionary to store the values for a given date
+        date -- Date to which the categories values are associated to
+
+        """
+        for category, values in categories.items():
+            if not data_store.get(category):
+                data_store[category] = {}
+
+            subcategories = values.get('subcategories')
+
+            for subcategory, value in subcategories.items():
+                if not data_store.get(category).get(subcategory):
+                    data_store.get(category)[subcategory] = {}
+
+                data_store.get(category).get(subcategory)[date] = value        
 
     def parse_entry(self, base_path: str, file_path: str, data_store: dict, parse_type: str) -> None:
         """Parses a file entry to extract its date and store the values on a dict by dates
@@ -78,6 +101,9 @@ class Controller:
         elif parse_type == 'categories':
             categories = parsed_metrics.parse_category_metrics()
             self.store_categories_evolution(categories, data_store, entry_date)
+        elif parse_type == 'subcategories':
+            categories = parsed_metrics.parse_category_metrics()
+            self.store_subcategories_evolution(categories, data_store, entry_date)
 
     def handle_categories(self, temp_path: str, file: str) -> None:
         """Handles category data extraction, plotting and reporting
@@ -116,7 +142,7 @@ class Controller:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             categories = parsed_metrics.parse_category_metrics()
             self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
-            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys))
+            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
 
         except FileNotFoundError as e:
             print("Error SUBCATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
@@ -249,4 +275,59 @@ class Controller:
         except FileNotFoundError as e:
             print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
-    
+
+    def handle_subcategory_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles subcategory evolution data extraction, plotting and reporting
+        
+        Keyword arguments:
+        file -- Current ontology file being analysed
+        input_path -- Folder which stores generated results
+        ontology_source -- Source folder which contains ontology file being analysed
+        date -- Current date of module execution
+        
+        """
+        archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
+        results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
+        temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
+        subcategories_evolution = {}
+
+        """
+            
+        categoria: {
+            subcat1: {
+                fecha1: valor,
+                fecha2: valor,
+                fecha3: valor
+            },
+            subcat2: {
+                fecha1: valor,
+                fecha2: valor,
+                fecha3: valor
+            }
+        }
+        
+        """
+
+        archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-19:]
+        for path in archive_list:
+            print(path)
+            self.parse_entry(archive_path, path, subcategories_evolution, 'subcategories')
+
+        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
+        if len(results_file_path) > 0:
+            results_file_path = results_file_path[0]
+            self.parse_entry(results_path, results_file_path, subcategories_evolution, 'subcategories')
+                
+        try:
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+            categories = parsed_metrics.parse_category_metrics()
+            self.store_subcategories_evolution(categories, subcategories_evolution, date)
+
+            #pprint(subcategories_evolution)
+
+            #self.graphPlotter.plot_oquare_category_evolution(categories_evolution, temp_path)
+            #self.readmeGenerator.append_category_evolution(temp_path)
+            
+        except FileNotFoundError as e:
+            print("Error SUBCATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
+            sys.exit()
