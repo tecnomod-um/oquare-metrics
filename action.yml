@@ -267,6 +267,7 @@ runs:
                 python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -e -s $dir -f $outputFile -d $date
               else
                 python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -m -s $dir -f $outputFile -d $date
+              fi
             fi
           done
         fi
