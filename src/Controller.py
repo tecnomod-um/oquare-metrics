@@ -97,12 +97,29 @@ class Controller:
                 oquare_category_values[category] = values.get('value')
             
             self.graphPlotter.plot_oquare_categories(oquare_category_values, file, temp_path)
-            self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
             self.readmeGenerator.append_category(file, temp_path)
-            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
 
         except FileNotFoundError as e:
             print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
+            sys.exit()
+
+    def handle_subcategories(self, temp_path: str, file: str) -> None:
+        """Handles subcategory data extraction, plotting and reporting
+        
+        Keyword arguments:
+        temp_path -- Fully structured path to current execution temp_folder. The path is
+        as it follows: input_path/temp_results/ontology_source/file/date. No trailing slash
+        file -- Current ontology file being analysed
+
+        """
+        try:
+            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+            categories = parsed_metrics.parse_category_metrics()
+            self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
+            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys))
+
+        except FileNotFoundError as e:
+            print("Error SUBCATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
 
     def handle_metrics(self, temp_path: str, file: str) -> None:
@@ -232,3 +249,4 @@ class Controller:
         except FileNotFoundError as e:
             print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
             sys.exit()
+    
