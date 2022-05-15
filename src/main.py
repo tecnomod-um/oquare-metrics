@@ -19,7 +19,7 @@ if __name__ == '__main__':
     controller = Controller()
 
     try:
-        opts, args = getopt.getopt(argv[1:], "i:s:f:McmSed:", ["input=","source=", "file=", "model", "categories", "subcategories", "metrics", "evolution", "date="])
+        opts, args = getopt.getopt(argv[1:], "i:s:f:McSmed:", ["input=","source=", "file=", "model", "categories", "subcategories", "metrics", "evolution", "date="])
     except:
         sys.exit(2)
     

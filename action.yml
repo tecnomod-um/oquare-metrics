@@ -254,7 +254,7 @@ runs:
             then
               if [ ${{ inputs.evolution-plot}} = "true" ]
               then
-                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s  "$dir" -S -e -f "$outputFile" -d $date
+                python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -S -e -f "$outputFile" -d $date
               else
                 python $GITHUB_ACTION_PATH/src/main.py -i ${{ inputs.contents-folder }} -s "$dir" -S -f "$outputFile" -d $date
               fi
