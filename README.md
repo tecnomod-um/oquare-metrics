@@ -18,6 +18,7 @@ This module makes use of said framework to bring its capabilities to ontology re
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
 * Possibility to ignore certain files that might not want to be parsed
 * Individual ontology file parsing instead of by folders
+* Out of the box functionality with no configuration needed
 
 ## Usage
 > NOTE: :warning:
@@ -56,14 +57,16 @@ jobs:
 
 | Input           | Type   | Required | Default      | Description                                                                                      |
 |-----------------|--------|----------|--------------|--------------------------------------------------------------------------------------------------|
-| ontology-folders | string | true     | 'ontologies' | Sets the folders to search ontologies within the repository. Space separated values, no trailing slash needed                                      |
+| ontology-folders | string | true     | 'ontologies' | Sets the folders to track ontologies. Space separated values, no trailing slash needed          |
 | ontology-files  | string | false    | ''           | Set of individual ontologies to parse. Space separated values.                                   |
 | contents-folder | string | true     | 'OQuaRE'     | Sets the folder on which the module will save all generated content                              |
 | ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files. Space separated values   |
-| reasoner        | string | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                                         |
-| category-plots  | string (ELK/HERMIT) | false    | 'true'       | Indicates the module to generate category values plots                                           |
-| model-plot      | string | false    | 'true'       | Indicates the module to generate OQuaRE model value plot                                         |
-| categories-evolution-plot | string | false | 'true' | Indicates if you want the plotting of the evolution of each category of an ontology             |
+| reasoner        | string (ELK/HERMIT) | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                            |
+| model-plot      | bool   | false    |  true        | Indicates the module to generate OQuaRE model value plot                                         |
+| category-plots  | bool   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
+| subcategory-plots  | bool   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
+| metrics-plots   | bool   | false    |  true        | Indicates the module to plot OQuaRE fine-grained metrics                                         |
+| evolution-plot  | bool   | false    |  true        | Indicates if you want the plotting of the evolution of the previous inputs that are set as True  |
 
 ## Examples
 
@@ -72,27 +75,27 @@ jobs:
     # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production and src/ontologies/imports
     # And we want to store the metrics on src/ontologies/metrics
     - name: Ontology folder configuration
-    uses: Emdien/oquare-metrics@v0.0.16 
+    uses: Emdien/oquare-metrics@v1 
     with:
         ontology-folders: src/ontologies/production src/ontologies/imports
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
     - name: Ontology reasoner configuration
-    uses: Emdien/oquare-metrics@v0.0.16 
+    uses: Emdien/oquare-metrics@v1 
     with:
         reasoner: HERMIT
 
-    # Only generate model and archive plots, but not categories
+    # Only plot model, subcategories and metrics but not categories and their evolution
     - name: Ontology plots configurtion
-    uses: Emdien/oquare-metrics@v0.0.16 
+    uses: Emdien/oquare-metrics@v1 
     with:
-        category-plots: 'false'
-        model-plot: 'true'
+        category-plots: false
+        evolution-plot: false
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
     # Also parse ontology_file.owl which is stored on the root folder
-    - name: Ontology file ignore configuration
+    - name: Ontology file configuration
     uses: Emdien/oquare-metrics@v0.0.16 
     with:
         ontology-folders: src/ontologies/imports
