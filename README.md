@@ -62,11 +62,11 @@ jobs:
 | contents-folder | string | true     | 'OQuaRE'     | Sets the folder on which the module will save all generated content                              |
 | ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files. Space separated values   |
 | reasoner        | string (ELK/HERMIT) | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                            |
-| model-plot      | bool   | false    |  true        | Indicates the module to generate OQuaRE model value plot                                         |
-| category-plots  | bool   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
-| subcategory-plots  | bool   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
-| metrics-plots   | bool   | false    |  true        | Indicates the module to plot OQuaRE fine-grained metrics                                         |
-| evolution-plot  | bool   | false    |  true        | Indicates if you want the plotting of the evolution of the previous inputs that are set as True  |
+| model-plot      | boolean   | false    |  true        | Indicates the module to plot OQuaRE model metrics                                                |
+| category-plots  | boolean   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
+| subcategory-plots  | boolean   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
+| metrics-plots   | boolean   | false    |  true        | Indicates the module to plot OQuaRE fine-grained metrics                                         |
+| evolution-plot  | boolean   | false    |  true        | Indicates if you want the plotting of the evolution of the previous inputs that are set as True  |
 
 ## Examples
 
