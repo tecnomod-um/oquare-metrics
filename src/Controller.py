@@ -259,7 +259,7 @@ class Controller:
         for path in archive_list:
             self.parse_entry(archive_path, path, categories_evolution, 'categories')
 
-        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
+        results_file_path = glob.glob(results_path + '*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, categories_evolution, 'categories')
@@ -295,7 +295,7 @@ class Controller:
         for path in archive_list:
             self.parse_entry(archive_path, path, subcategories_evolution, 'subcategories')
 
-        results_file_path = glob.glob(results_path + ontology_source + '/' + file + '/*/metrics/' + file + '.xml')
+        results_file_path = glob.glob(results_path + '*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, subcategories_evolution, 'subcategories')
