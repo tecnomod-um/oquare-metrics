@@ -29,7 +29,7 @@ class MetricsParser:
         Returns a float value which represents the oquare model metric value
 
         """
-        oquare_value = math.floor(float(self.root.find('oquareModel').attrib.get('oquareValue') * 10 ** 2)) / 10 ** 2  
+        oquare_value = math.floor(float(self.root.find('oquareModel').attrib.get('oquareValue')) * 10 ** 2) / 10 ** 2  
         return oquare_value
     
     def parse_scaled_metrics(self) -> dict:
