@@ -28,7 +28,7 @@ class MetricsParser:
         Returns a float value which represents the oquare model metric value
 
         """
-        oquare_value = float(self.root.find('oquareModel').attrib.get('oquareValue'))
+        oquare_value = float("{:.2f}".format(self.root.find('oquareModel').attrib.get('oquareValue')))
         return oquare_value
     
     def parse_scaled_metrics(self) -> dict:
@@ -40,7 +40,7 @@ class MetricsParser:
         scaled_metrics = self.root.findall('./oquareMetricsScaled/')
         metrics_dict = {}
         for metric in scaled_metrics:
-            metrics_dict[metric.tag] = float(metric.text)
+            metrics_dict[metric.tag] = float("{:.2f}".format(metric.text))
         
         return metrics_dict
     
@@ -53,7 +53,7 @@ class MetricsParser:
         metrics = self.root.findall('./oquareMetrics/')
         metrics_dict = {}
         for metric in metrics:
-            metrics_dict[metric.tag] = float(metric.text)
+            metrics_dict[metric.tag] = float("{:.2f}".format(metric.text))
 
         return metrics_dict
 
@@ -76,14 +76,14 @@ class MetricsParser:
             metric_name, metric_value = next(iter(metric.attrib.items()))
 
             oquare_category = {}
-            oquare_category['value'] = float(metric_value)
+            oquare_category['value'] = float("{:.2f}".format(metric_value))
             
             oquare_sub_categories = {}
             
             # Get subcategories
             subcategories = self.root.findall('oquareModel/' + metric.tag + '/')
             for subcategory in subcategories:
-                oquare_sub_categories[subcategory.tag] = float(subcategory.text)
+                oquare_sub_categories[subcategory.tag] = float("{:.2f}".format(subcategory.text))
 
             # Put subcategories under the main category
             oquare_category['subcategories'] = oquare_sub_categories
