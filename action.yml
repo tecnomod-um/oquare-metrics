@@ -38,6 +38,8 @@ runs:
   using: 'composite'
   steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
 
