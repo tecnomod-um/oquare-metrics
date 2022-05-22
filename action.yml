@@ -62,7 +62,7 @@ runs:
     
     - name: Checks if its the first run (results empty folder)
       run: |
-        chmod u+x $GITHUB_ACTION_PATH/src/initial.sh 
+        chmod u+x $GITHUB_ACTION_PATH/initial.sh 
         $GITHUB_ACTION_PATH/initial.sh "${{ inputs.contents_folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model_plot }} ${{ inputs.category_plot }} ${{ inputs.subcategory_plot }} \
         ${{ inputs.metrics-plot }}
