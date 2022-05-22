@@ -74,7 +74,7 @@ runs:
         chmod u+x $GITHUB_ACTION_PATH/src/modified.sh 
         $GITHUB_ACTION_PATH/src/modified.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.category-plot }} ${{ inputs.subcategory-plot }} \
-        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }}
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       shell: bash
       
     - name: Archive previous results
