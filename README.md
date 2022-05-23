@@ -49,7 +49,36 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v0.0.16 
+        uses: Emdien/oquare-metrics@v1.6 
+```
+### Release mode example
+```yaml
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Evaluate ontologies - release mode
+    steps:
+      - uses: actions/checkout@v2
+      # Configuration
+      # Java setup
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Python setup
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+          
+      - name: OQuaRE module
+        uses: Emdien/oquare-metrics@v1.6
+        with:
+          release: true
 ```
 
 ## Inputs
@@ -62,10 +91,11 @@ jobs:
 | ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files. Space separated values   |
 | reasoner        | string (ELK/HERMIT) | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                            |
 | model-plot      | boolean   | false    |  true        | Indicates the module to plot OQuaRE model metrics                                                |
-| category-plots  | boolean   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
-| subcategory-plots  | boolean   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
+| category-plot   | boolean   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
+| subcategory-plot  | boolean   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
 | metrics-plots   | boolean   | false    |  true        | Indicates the module to plot OQuaRE fine-grained metrics                                         |
 | evolution-plot  | boolean   | false    |  true        | Indicates if you want the plotting of the evolution of the previous inputs that are set as True  |
+| release         | boolean   | false    | false      | Used to obtain the metrics for all of the ontologies. Intended to be used paired with a on release workflow. DANGER: enabling this on normal runs might cause duplicates and parse non-modified ontologies all the time |
 
 ## Examples
 
@@ -89,7 +119,7 @@ jobs:
     - name: Ontology plots configurtion
     uses: Emdien/oquare-metrics@v1 
     with:
-        category-plots: false
+        category-plot: false
         evolution-plot: false
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
@@ -104,16 +134,8 @@ jobs:
   
 ```
 
-## Results
-
-TODO
-
 ## Known Limitations
 
 > * The module currently requires of previous, first hand setup of Java and Python. This is done so there is no compatibility issues with some Docker images
+> * Currently when doing a release, it will ONLY update master branch. Can't update any other branch or add the commit to the release
 
-## Bug Report
-
-For bug report, you can contact the following emals: (TODO)
-* email1@um.es
-* email2@um.es
