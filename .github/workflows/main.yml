@@ -20,5 +20,4 @@ jobs:
       - name: Basic testing
         uses: ./ # Uses an action in the root directory
         with:
-          ontology-folders: nofolder
           ontology-files: ontologies/imports/obi.owl

@@ -3,7 +3,7 @@ description: 'Calculates the metrics of ontology files in the given folder based
 inputs:
   ontology-folders:
     description: 'Folders which contains .owl files'
-    default: 'ontologies'
+    default: ''
   ontology-files:
     description: 'Individual ontology files to parse'
     default: ''
