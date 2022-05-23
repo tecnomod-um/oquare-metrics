@@ -50,7 +50,10 @@ jobs:
           
       - name: OQuaRE module
         uses: Emdien/oquare-metrics@v1.6 
-        
+```
+### Release mode example
+```yaml
+
 on:
   release:
     types: [published]
@@ -60,8 +63,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Evaluate ontologies - release mode
     steps:
-      
-      ...
+      - uses: actions/checkout@v2
+      # Configuration
+      # Java setup
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      # Python setup
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
           
       - name: OQuaRE module
         uses: Emdien/oquare-metrics@v0.0.16
