@@ -33,25 +33,8 @@ then
             outputFilePath="$contents_folder/temp_results/$ontology_source/$outputFile/$date/metrics/$outputFile.xml"
             java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "$reasoner" --outputFile "$outputFilePath"
             
-            if [ $model_plot = "true" ]
-            then
-            python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -M -f $outputFile -d $date
-            fi
-
-            if [ $category_plot = "true" ]
-            then
-            python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -c -f "$outputFile" -d $date
-            fi
-
-            if [ $subcategory_plot = "true" ]
-            then
-            python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -S -f "$outputFile" -d $date
-            fi
-
-            if [ $metrics_plot = "true" ]
-            then
-            python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -m -f $outputFile -d $date
-            fi
+            python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -f $outputFile -d $date \
+                -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e false
         fi
         done
     fi
@@ -69,77 +52,23 @@ then
         rm -f "$contents_folder/temp_results/$dir/$outputFile/$date/README.md"
         java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$ontology_file" --reasoner "$reasoner" --outputFile "$outputFilePath"
 
-        if [ $model_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -M -f $outputFile -d $date
-        fi
-
-        if [ $category_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -c -f "$outputFile" -d $date
-        fi
-
-        if [ $subcategory_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -S -f "$outputFile" -d $date
-        fi
-
-        if [ $metrics_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -m -f $outputFile -d $date
-        fi
+        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
+            -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e $evolution_plot
     fi
     done
 else
     for file in $modified_files
     do
-    dir=$(dirname "$file")
-    outputFile=$(basename "$file" .owl)
-    mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/metrics
-    mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
-    outputFilePath="$contents_folder/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
-    rm -f "$outputFilePath"
-    rm -f "$contents_folder/temp_results/$dir/$outputFile/$date/README.md"
-    java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "$reasoner" --outputFile "$outputFilePath"
+        dir=$(dirname "$file")
+        outputFile=$(basename "$file" .owl)
+        mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/metrics
+        mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
+        outputFilePath="$contents_folder/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
+        rm -f "$outputFilePath"
+        rm -f "$contents_folder/temp_results/$dir/$outputFile/$date/README.md"
+        java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "$reasoner" --outputFile "$outputFilePath"
 
-    if [ $model_plot = "true" ]
-    then
-        if [ $evolution_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -M -e -f $outputFile -d $date
-        else
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -M -f $outputFile -d $date
-        fi
-    fi
-
-    if [ $category_plot = "true" ]
-    then
-        if [ $evolution_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -c -e -f $outputFile -d $date
-        else
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -c -f $outputFile -d $date
-        fi
-    fi
-
-    if [ $subcategory_plot = "true" ]
-    then
-        if [ $evolution_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -S -e -f $outputFile -d $date
-        else
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -S -f $outputFile -d $date
-        fi
-    fi
-
-    if [ $metrics_plot = "true" ]
-    then
-        if [ $evolution_plot = "true" ]
-        then
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -m -e -s $dir -f $outputFile -d $date
-        else
-        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -m -s $dir -f $outputFile -d $date
-        fi
-    fi
+        python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
+                -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e $evolution_plot
     done
 fi
