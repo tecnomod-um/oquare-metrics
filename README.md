@@ -76,7 +76,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v0.0.16
+        uses: Emdien/oquare-metrics@v1.6
         with:
           release: true
 ```
