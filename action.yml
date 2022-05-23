@@ -3,7 +3,6 @@ description: 'Calculates the metrics of ontology files in the given folder based
 inputs:
   ontology-folders:
     description: 'Folders which contains .owl files'
-    required: true
     default: 'ontologies'
   ontology-files:
     description: 'Individual ontology files to parse'
@@ -61,11 +60,12 @@ runs:
       shell: bash
     
     - name: Checks if its the first run (results empty folder)
+      if: steps.changed-files.outputs.any_modified == 'false'
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/initial.sh 
         $GITHUB_ACTION_PATH/src/initial.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.category-plot }} ${{ inputs.subcategory-plot }} \
-        ${{ inputs.metrics-plot }}
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }}
       shell: bash
 
     - name: Call oquare library
