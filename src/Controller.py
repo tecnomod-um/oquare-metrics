@@ -205,7 +205,7 @@ class Controller:
             self.readmeGenerator.append_oquare_value(file, temp_path)
             
         except FileNotFoundError as e:
-            print("Error MODEL PLOTTING: " + e.strerror + ". Abort", flush=True)
+            print("Error MODEL PLOTTING: " + e.strerror + ": " + temp_path + "/metrics/" + file + ".xml. Abort", flush=True)
             sys.exit()    
 
     def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
