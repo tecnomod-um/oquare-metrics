@@ -87,7 +87,7 @@ then
             git commit -m "Ontology metrics calculated - OQuaRE"
             git checkout master
             git merge temp_branch
-            git push origin master
+            git push origin HEAD:refs/heads/master
         else
             git add $contents_folder/
             git commit -m "Ontology metrics calculated - OQuaRE"
