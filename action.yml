@@ -63,12 +63,12 @@ runs:
       shell: bash
     
     - name: Checks if its the first run (results empty folder)
-      if: ${{ inputs.release }} == 'true'
+      if: steps.changed-files.outputs.any_modified == 'false' || inputs.release == 'true'
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
         $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.category-plot }} ${{ inputs.subcategory-plot }} \
-        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} ${{{ inputs.release }}}
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} ${{ inputs.release }}
       shell: bash
 
     - name: Call oquare library if modified ontologies
