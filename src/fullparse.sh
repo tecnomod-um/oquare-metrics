@@ -70,7 +70,7 @@ then
 
     if [ "$(ls -A ./$contents_folder/temp_results)" ] 
     then
-        if [ $release == 'true'] && [ "$(ls -A ./$contents_folder/results)" ]
+        if [ $release == 'true' ] && [ "$(ls -A ./$contents_folder/results)" ]
         then
             rsync -a $contents_folder/results/ $contents_folder/archives/
             rm -rf $contents_folder/results/*
@@ -79,13 +79,20 @@ then
         mv -v $contents_folder/temp_results/* $contents_folder/results/
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add $contents_folder/
-        git commit -m "Ontology metrics calculated - OQuaRE"
         if [ $release == 'true' ]
         then
-            git push origin HEAD:master
+            git branch temp_branch
+            git checkout temp_branch
+            git add $contents_folder/
+            git commit -m "Ontology metrics calculated - OQuaRE"
+            git checkout master
+            git merge temp_branch
+            git push origin master
+        else
+            git add $contents_folder/
+            git commit -m "Ontology metrics calculated - OQuaRE"
+            git push
         fi
-        git push
 
     fi
 fi
