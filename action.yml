@@ -63,7 +63,7 @@ runs:
       shell: bash
     
     - name: Checks if its the first run (results empty folder)
-      if: ${{ (steps.changed-files.outputs.any_modified == 'false') || (inputs.release == 'true') }}
+      if: inputs.release == 'true'
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
         $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
