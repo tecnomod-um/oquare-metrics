@@ -32,6 +32,9 @@ inputs:
   evolution-plot:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
+  release:
+    description: 'Indicates that this is a release version of ontologies. Scans all ontologies and extracts metrics'
+    default: 'false'
   
 runs: 
   using: 'composite'
@@ -60,19 +63,19 @@ runs:
       shell: bash
     
     - name: Checks if its the first run (results empty folder)
-      if: steps.changed-files.outputs.any_modified == 'false'
+      if: steps.changed-files.outputs.any_modified == 'false' || inputs.release == 'true'
       run: |
-        chmod u+x $GITHUB_ACTION_PATH/src/initial.sh 
-        $GITHUB_ACTION_PATH/src/initial.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
+        chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
+        $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.category-plot }} ${{ inputs.subcategory-plot }} \
-        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }}
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} ${{{ inputs.release }}}
       shell: bash
 
-    - name: Call oquare library
+    - name: Call oquare library if modified ontologies
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        chmod u+x $GITHUB_ACTION_PATH/src/base.sh 
-        $GITHUB_ACTION_PATH/src/base.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
+        chmod u+x $GITHUB_ACTION_PATH/src/modified.sh 
+        $GITHUB_ACTION_PATH/src/modified.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.category-plot }} ${{ inputs.subcategory-plot }} \
         ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       shell: bash
@@ -87,7 +90,7 @@ runs:
         fi 
       shell: bash
 
-    - name: Move results to results folder and tag it with a date
+    - name: Move results to results folder
       if: steps.changed-files.outputs.any_changed == 'true'
       run: mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
       shell: bash

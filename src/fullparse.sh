@@ -12,9 +12,11 @@ subcategory_plot=$8
 metrics_plot=$9
 shift
 evolution_plot=$9
+shift
+release=$9
 
 
-if [ -z "$(ls -A ./$contents_folder/results)" ]
+if [ -z "$(ls -A ./$contents_folder/results)" ] || [ $release == 'true' ]
 then
     date="$(date +%Y-%m-%d_%H-%M-%S)"
     for ontology_source in $ontology_folders
@@ -62,11 +64,17 @@ then
 
     if [ "$(ls -A ./$contents_folder/temp_results)" ] 
     then
-    mv -v $contents_folder/temp_results/* $contents_folder/results/
-    git config user.name github-actions
-    git config user.email github-actions@github.com
-    git add $contents_folder/
-    git commit -m "Ontology metrics calculated - OQuaRE"
-    git push
+        if [ $release == 'true'] && [ "$(ls -A ./$contents_folder/results)" ]
+        then
+            rsync -a $contents_folder/results/ $contents_folder/archives/
+            rm -rf $contents_folder/results/*
+        fi
+
+        mv -v $contents_folder/temp_results/* $contents_folder/results/
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add $contents_folder/
+        git commit -m "Ontology metrics calculated - OQuaRE"
+        git push
     fi
 fi
