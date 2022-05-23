@@ -33,7 +33,7 @@ inputs:
     description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
     default: 'true'
   release:
-    description: 'Indicates that this is a release version of ontologies. Scans all ontologies and extracts metrics'
+    description: 'Indicates that this is a release version of ontologies. Scans and extracts metrics from all ontologies'
     default: 'false'
   
 runs: 
