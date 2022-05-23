@@ -262,7 +262,7 @@ class oquareGraphs:
                 dates = data.get(label).keys()
                 axs[row, col].plot(range(len(dates)), values, label=label)
                 axs[row, col].set_xticks(range(len(dates)))
-                axs[row, col].set_xticklabels(range(len(dates)), fontsize=7)
+                axs[row, col].set_xticklabels(range(len(dates)), fontsize=6)
                 axs[row, col].set_ylim(0, 5.5)
                 axs[row, col].set_title(label, fontsize=9)
 
