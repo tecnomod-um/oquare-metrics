@@ -81,6 +81,11 @@ then
         git config user.email github-actions@github.com
         git add $contents_folder/
         git commit -m "Ontology metrics calculated - OQuaRE"
+        if [ $release == 'true']
+        then
+            git push origin HEAD:master
+        fi
         git push
+
     fi
 fi
