@@ -107,7 +107,7 @@ jobs:
     - name: Ontology plots configurtion
     uses: Emdien/oquare-metrics@v1 
     with:
-        category-plots: false
+        category-plot: false
         evolution-plot: false
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
