@@ -21,3 +21,4 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           ontology-folders: ontologies
+          ontology-files: ontologies/imports/obi.owl
