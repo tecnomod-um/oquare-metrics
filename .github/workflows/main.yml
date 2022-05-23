@@ -20,4 +20,4 @@ jobs:
       - name: Basic testing
         uses: ./ # Uses an action in the root directory
         with:
-          ontology-files: ontologies/ontologyAGRO.owl
+          ontology-folders: ontologies

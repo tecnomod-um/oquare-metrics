@@ -197,16 +197,16 @@ class Controller:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, oquare_model_values, 'oquare_value')
 
-        try:
+        #try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             oquare_model_values[date] = parsed_metrics.parse_oquare_value()
 
             self.graphPlotter.plot_oquare_values(oquare_model_values, file, temp_path)
             self.readmeGenerator.append_oquare_value(file, temp_path)
             
-        except FileNotFoundError as e:
-            print("Error MODEL PLOTTING: " + e.strerror + ": " + temp_path + "/metrics/" + file + ".xml. Abort", flush=True)
-            sys.exit()    
+        #except FileNotFoundError as e:
+        #    print("Error MODEL PLOTTING: " + e.strerror + ": " + temp_path + "/metrics/" + file + ".xml. Abort", flush=True)
+        #    sys.exit()    
 
     def handle_metrics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         """Handles metrics evolution data extraction, plotting and reporting
