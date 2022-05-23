@@ -244,6 +244,7 @@ class Controller:
                 
             self.graphPlotter.plot_metrics_evolution(metrics_evolution, file, temp_path)
             self.graphPlotter.plot_scaled_metrics_evolution(metrics_evolution_scaled, file, temp_path)
+            self.readmeGenerator.append_scaled_metrics_evolution(file, temp_path)
             self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
         except FileNotFoundError as e:
             print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)

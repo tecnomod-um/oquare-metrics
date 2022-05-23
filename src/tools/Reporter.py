@@ -37,15 +37,15 @@ class readmeGen:
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE category evolution\n')
         readme_file.write('Evolution of each category overtime on a scale of 1 to 5\n\n')
-        readme_file.write('![category values plot](img/' + file_name + '_categories_evolution.png)\n')
+        readme_file.write('![category values evolution plot](img/' + file_name + '_categories_evolution.png)\n')
         readme_file.close()
 
     def append_metrics(self, file_name: str, path: str): 
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE metrics values\n')
         readme_file.write('Fine grained metrics, lowest level of ontology analysis provided. Scaled version uses a 1 to 5 scale\n\n')
-        readme_file.write('![category values plot](img/' + file_name + '_metrics.png)\n')
-        readme_file.write('![category values plot](img/' + file_name + '_scaled_metrics.png)\n')
+        readme_file.write('![metrics plot](img/' + file_name + '_metrics.png)\n')
+        readme_file.write('![scaled metrics plot](img/' + file_name + '_scaled_metrics.png)\n')
         readme_file.close()
 
     def append_metrics_evolution(self, file_name: str, path: str, metrics: list):
@@ -55,5 +55,12 @@ class readmeGen:
         
         for metric in metrics:
             readme_file.write('### ' + metric +' evolution\n\n')
-            readme_file.write('![' + metric + ' metrics plot](img/' + file_name + '_' + metric + '_metric_evolution.png)\n\n')
+            readme_file.write('![' + metric + ' metrics evolution plot](img/' + file_name + '_' + metric + '_metric_evolution.png)\n\n')
+        readme_file.close()
+    
+    def append_scaled_metrics_evolution(self, file_name: str, path: str):
+        readme_file = open(path + '/README.md', 'a')
+        readme_file.write('## OQuaRE scaled metrics evolution\n')
+        readme_file.write('Evolution of each of the 19 scaled metrics obtained from an ontology\n\n')
+        readme_file.write('![scaled metrics evolution plot](img/' + file_name + '_scaled_metrics_evolution.png)\n')
         readme_file.close()

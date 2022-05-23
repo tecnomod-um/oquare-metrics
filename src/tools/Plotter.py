@@ -261,10 +261,10 @@ class oquareGraphs:
                 values = data.get(label).values()
                 dates = data.get(label).keys()
                 axs[row, col].plot(range(len(dates)), values, label=label)
-                axs[row, col].set_xticks(range(len(dates)), fontsize=7)
-                #print(range(len(dates)))
+                axs[row, col].set_xticks(range(len(dates)))
+                axs[row, col].set_xticklabels(range(len(dates)), fontsize=7)
                 axs[row, col].set_ylim(0, 5.5)
-                axs[row, col].set_title(label, fontsize=8)
+                axs[row, col].set_title(label, fontsize=9)
 
                 col += 1
                 if col %5 == 0:
@@ -275,7 +275,7 @@ class oquareGraphs:
             for ax in axs.flat:
                     ax.label_outer()
             
-            plt.savefig(output_path + '/img/' + file + '_scaled_metric_evolution.png', format='png', bbox_inches='tight')
+            plt.savefig(output_path + '/img/' + file + '_scaled_metrics_evolution.png', format='png', bbox_inches='tight')
 
 
 
