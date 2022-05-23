@@ -47,6 +47,7 @@ if __name__ == '__main__':
     temp_path = input_path + '/temp_results/'
 
     if plot_models.lower() == 'true':
+        print(temp_path, file, input_path, ontology_source, date)
         controller.handle_oquare_model(file, input_path, ontology_source, date)
 
     temp_path += ontology_source + '/' + file + '/' + date 
