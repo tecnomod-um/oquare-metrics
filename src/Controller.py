@@ -98,6 +98,9 @@ class Controller:
         elif parse_type == 'metrics':
             metrics = parsed_metrics.parse_metrics()
             self.store_metrics_evolution(metrics, data_store, entry_date)
+        elif parse_type == 'metrics-scaled':
+            scaled_metrics = parsed_metrics.parse_scaled_metrics()
+            self.store_metrics_evolution(scaled_metrics, data_store, entry_date)
         elif parse_type == 'categories':
             categories = parsed_metrics.parse_category_metrics()
             self.store_categories_evolution(categories, data_store, entry_date)
@@ -219,22 +222,28 @@ class Controller:
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
         metrics_evolution = {}
+        metrics_evolution_scaled = {}
 
         archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-19:]
         for path in archive_list:
             self.parse_entry(archive_path, path, metrics_evolution, 'metrics')
+            self.parse_entry(archive_path, path, metrics_evolution_scaled, 'metrics-scaled')
 
         results_file_path = glob.glob(results_path + '*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, metrics_evolution, 'metrics')
+            self.parse_entry(results_path, results_file_path, metrics_evolution_scaled, 'metrics-scaled')
 
         try:
             parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
             metrics = parsed_metrics.parse_metrics()
+            scaled_metrics = parsed_metrics.parse_scaled_metrics()
             self.store_metrics_evolution(metrics, metrics_evolution, date)
+            self.store_metrics_evolution(scaled_metrics, metrics_evolution_scaled, date)
                 
             self.graphPlotter.plot_metrics_evolution(metrics_evolution, file, temp_path)
+            self.graphPlotter.plot_scaled_metrics_evolution(metrics_evolution_scaled, file, temp_path)
             self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
         except FileNotFoundError as e:
             print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)

@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     argv = sys.argv
     input_path = ""
-    plot_models = False
+    plot_models = ''
     plot_categories = ''
     plot_subcategories = ''
     plot_metrics = ''

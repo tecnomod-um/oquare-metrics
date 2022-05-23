@@ -245,3 +245,39 @@ class oquareGraphs:
                 plt.title(label + ' evolution over time')
                 plt.savefig(output_path + '/img/' + file + '_' + label +'_metric_evolution.png', format='png', bbox_inches='tight')
                 plt.clf()
+
+    def plot_scaled_metrics_evolution(self, data: dict, file: str, output_path: str) -> None:
+
+        line_labels = list(data.keys())
+        
+        with plt.style.context(matplotx.styles.ayu["light"]):
+
+            fig, axs = plt.subplots(4, 5, figsize=(10,10))
+            
+            row = 0
+            col = 0
+            plt.ylim([0, 5.5])
+            for label in line_labels:
+                values = data.get(label).values()
+                dates = data.get(label).keys()
+                axs[row, col].plot(range(len(dates)), values, label=label)
+                axs[row, col].set_xticks(range(len(dates)), fontsize=7)
+                #print(range(len(dates)))
+                axs[row, col].set_ylim(0, 5.5)
+                axs[row, col].set_title(label, fontsize=8)
+
+                col += 1
+                if col %5 == 0:
+                    row += 1
+                    col = 0
+
+            plt.delaxes(axs[3, 4])
+            for ax in axs.flat:
+                    ax.label_outer()
+            
+            plt.savefig(output_path + '/img/' + file + '_scaled_metric_evolution.png', format='png', bbox_inches='tight')
+
+
+
+
+        return
