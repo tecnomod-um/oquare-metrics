@@ -11,9 +11,15 @@ category_plot=$7
 subcategory_plot=$8
 metrics_plot=$9
 shift
-evolution_plot=$9
-shift
 release=$9
+shift
+if [ $release == 'true' ]
+then
+    evolution_plot=$9
+else
+    evolution_plot='false'
+fi
+
 
 
 if [ -z "$(ls -A ./$contents_folder/results)" ] || [ $release == 'true' ]
