@@ -119,18 +119,18 @@ class Controller:
         """
         oquare_category_values = {}
 
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            categories = parsed_metrics.parse_category_metrics()
-            for category, values in categories.items():
-                oquare_category_values[category] = values.get('value')
-            
-            self.graphPlotter.plot_oquare_categories(oquare_category_values, file, temp_path)
-            self.readmeGenerator.append_category(file, temp_path)
+        #try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        categories = parsed_metrics.parse_category_metrics()
+        for category, values in categories.items():
+            oquare_category_values[category] = values.get('value')
+        
+        self.graphPlotter.plot_oquare_categories(oquare_category_values, file, temp_path)
+        self.readmeGenerator.append_category(file, temp_path)
 
-        except FileNotFoundError as e:
-            print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
-            sys.exit()
+        #except FileNotFoundError as e:
+        #    print("Error CATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
+        #    sys.exit()
 
     def handle_subcategories(self, temp_path: str, file: str) -> None:
         """Handles subcategory data extraction, plotting and reporting
@@ -141,15 +141,15 @@ class Controller:
         file -- Current ontology file being analysed
 
         """
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            categories = parsed_metrics.parse_category_metrics()
-            self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
-            self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
+        #try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        categories = parsed_metrics.parse_category_metrics()
+        self.graphPlotter.plot_oquare_subcategories(categories, file, temp_path)
+        self.readmeGenerator.append_subcategory(file, temp_path, list(categories.keys()))
 
-        except FileNotFoundError as e:
-            print("Error SUBCATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
-            sys.exit()
+        #except FileNotFoundError as e:
+        #    print("Error SUBCATEGORY PLOTTING: " + e.strerror + ". Abort", flush=True)
+        #    sys.exit()
 
     def handle_metrics(self, temp_path: str, file: str) -> None:
         """Handles metrics data extraction, plotting and reporting
@@ -160,17 +160,17 @@ class Controller:
         file -- Current ontology file being analysed
 
         """
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            metrics = parsed_metrics.parse_metrics()
-            scaled_metrics = parsed_metrics.parse_scaled_metrics()
+        ##try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        metrics = parsed_metrics.parse_metrics()
+        scaled_metrics = parsed_metrics.parse_scaled_metrics()
+#
+        self.graphPlotter.plot_metrics(metrics, file, temp_path, False)
+        self.graphPlotter.plot_metrics(scaled_metrics, file, temp_path, True)
+        self.readmeGenerator.append_metrics(file, temp_path)
 
-            self.graphPlotter.plot_metrics(metrics, file, temp_path, False)
-            self.graphPlotter.plot_metrics(scaled_metrics, file, temp_path, True)
-            self.readmeGenerator.append_metrics(file, temp_path)
-
-        except FileNotFoundError as e:
-            print("Error METRICS: " + e.strerror + ". Abort", flush=True)
+        #except FileNotFoundError as e:
+        #    print("Error METRICS: " + e.strerror + ". Abort", flush=True)
      
     def handle_oquare_model(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         """Handles oquare model evolution data extraction, plotting and reporting
@@ -198,11 +198,11 @@ class Controller:
             self.parse_entry(results_path, results_file_path, oquare_model_values, 'oquare_value')
 
         #try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            oquare_model_values[date] = parsed_metrics.parse_oquare_value()
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        oquare_model_values[date] = parsed_metrics.parse_oquare_value()
 
-            self.graphPlotter.plot_oquare_values(oquare_model_values, file, temp_path)
-            self.readmeGenerator.append_oquare_value(file, temp_path)
+        self.graphPlotter.plot_oquare_values(oquare_model_values, file, temp_path)
+        self.readmeGenerator.append_oquare_value(file, temp_path)
             
         #except FileNotFoundError as e:
         #    print("Error MODEL PLOTTING: " + e.strerror + ": " + temp_path + "/metrics/" + file + ".xml. Abort", flush=True)
@@ -235,20 +235,20 @@ class Controller:
             self.parse_entry(results_path, results_file_path, metrics_evolution, 'metrics')
             self.parse_entry(results_path, results_file_path, metrics_evolution_scaled, 'metrics-scaled')
 
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            metrics = parsed_metrics.parse_metrics()
-            scaled_metrics = parsed_metrics.parse_scaled_metrics()
-            self.store_metrics_evolution(metrics, metrics_evolution, date)
-            self.store_metrics_evolution(scaled_metrics, metrics_evolution_scaled, date)
-                
-            self.graphPlotter.plot_metrics_evolution(metrics_evolution, file, temp_path)
-            self.graphPlotter.plot_scaled_metrics_evolution(metrics_evolution_scaled, file, temp_path)
-            self.readmeGenerator.append_scaled_metrics_evolution(file, temp_path)
-            self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
-        except FileNotFoundError as e:
-            print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
-            sys.exit()  
+        #try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        metrics = parsed_metrics.parse_metrics()
+        scaled_metrics = parsed_metrics.parse_scaled_metrics()
+        self.store_metrics_evolution(metrics, metrics_evolution, date)
+        self.store_metrics_evolution(scaled_metrics, metrics_evolution_scaled, date)
+            
+        self.graphPlotter.plot_metrics_evolution(metrics_evolution, file, temp_path)
+        self.graphPlotter.plot_scaled_metrics_evolution(metrics_evolution_scaled, file, temp_path)
+        self.readmeGenerator.append_scaled_metrics_evolution(file, temp_path)
+        self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
+        #except FileNotFoundError as e:
+        #    print("Error METRICS EVOLUTION: " + e.strerror + ". Abort", flush=True)
+        #    sys.exit()  
 
     def handle_category_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         """Handles category evolution data extraction, plotting and reporting
@@ -274,17 +274,17 @@ class Controller:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, categories_evolution, 'categories')
                 
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            categories = parsed_metrics.parse_category_metrics()
-            self.store_categories_evolution(categories, categories_evolution, date)
+        ##try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        categories = parsed_metrics.parse_category_metrics()
+        self.store_categories_evolution(categories, categories_evolution, date)
 
-            self.graphPlotter.plot_oquare_category_evolution(categories_evolution, file, temp_path)
-            self.readmeGenerator.append_category_evolution(file, temp_path)
+        self.graphPlotter.plot_oquare_category_evolution(categories_evolution, file, temp_path)
+        self.readmeGenerator.append_category_evolution(file, temp_path)
             
-        except FileNotFoundError as e:
-            print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
-            sys.exit()
+        #except FileNotFoundError as e:
+        #    print("Error CATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
+        #    sys.exit()
 
     def handle_subcategory_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
         """Handles subcategory evolution data extraction, plotting and reporting
@@ -310,14 +310,14 @@ class Controller:
             results_file_path = results_file_path[0]
             self.parse_entry(results_path, results_file_path, subcategories_evolution, 'subcategories')
                 
-        try:
-            parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-            categories = parsed_metrics.parse_category_metrics()
-            self.store_subcategories_evolution(categories, subcategories_evolution, date)
+        ##try:
+        parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
+        categories = parsed_metrics.parse_category_metrics()
+        self.store_subcategories_evolution(categories, subcategories_evolution, date)
 
-            self.graphPlotter.plot_oquare_subcategories_evolution(subcategories_evolution, file, temp_path)
-            self.readmeGenerator.append_subcategories_evolution(file, temp_path, list(categories.keys()))
+        self.graphPlotter.plot_oquare_subcategories_evolution(subcategories_evolution, file, temp_path)
+        self.readmeGenerator.append_subcategories_evolution(file, temp_path, list(categories.keys()))
             
-        except FileNotFoundError as e:
-            print("Error SUBCATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
-            sys.exit()
+        #except FileNotFoundError as e:
+        #    print("Error SUBCATEGORY EVOLUTION PLOTTING: " + e.strerror + ". Abort", flush=True)
+        #    sys.exit()
