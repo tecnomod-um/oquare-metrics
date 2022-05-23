@@ -36,7 +36,7 @@ then
             then
                 outputFile=$(basename "$file" .owl) 
                 mkdir -p $contents_folder/temp_results/$ontology_source/$outputFile/$date/metrics
-                mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
+                mkdir -p $contents_folder/temp_results/$ontology_source/$outputFile/$date/img
                 outputFilePath="$contents_folder/temp_results/$ontology_source/$outputFile/$date/metrics/$outputFile.xml"
                 java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "$reasoner" --outputFile "$outputFilePath"
                 
