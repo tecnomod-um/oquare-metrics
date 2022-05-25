@@ -33,7 +33,6 @@ class oquareGraphs:
         xpos = range(len(values))
 
         with plt.style.context(matplotx.styles.ayu["light"]):
-            plt.figure(figsize=(10,10))
             plt.rc('font', size=10)
             plt.ylim([0, 5.5])
             plt.plot(xpos, values, '-ko', mfc='red')
@@ -60,8 +59,6 @@ class oquareGraphs:
         names = list(data.keys())
         values = list(data.values())
         value_range = range(len(values))
-
-        plt.figure(figsize=(10,10))
 
         # Calculates angles and closes the plots by repeating first item
         angles = [i/len(names) * 2 * np.pi for i in value_range]
@@ -101,12 +98,13 @@ class oquareGraphs:
 
         with plt.style.context(matplotx.styles.ayu["light"]):
             plt.hlines(y=ypos, xmin=0, xmax=values, color='skyblue')
-            plt.figure(figsize=(10,10))
 
             if scaled:
                 plt.xlim([0, 5.5])
             plt.yticks(ypos, names)
             plt.plot(values, ypos, "D")
+
+            #plt.gca().grid(True, which='major', axis='x', color='#888888', linestyle='--')
 
             for i in ypos:
                 if scaled:
@@ -148,7 +146,6 @@ class oquareGraphs:
             ypos = range(len(values))
 
             with plt.style.context(matplotx.styles.ayu["light"]):
-                plt.figure(figsize=(10,10))
 
                 if len(values) == 1:
                     plt.ylim(-1,1)
@@ -187,7 +184,6 @@ class oquareGraphs:
                 dates = data.get(label).keys()
                 plt.plot(dates, values, label=label)
 
-            plt.figure(figsize=(10,10))
             plt.rc('font', size=8)
             plt.ylim([0, 5.5])
             plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
@@ -217,7 +213,6 @@ class oquareGraphs:
                     values = subcategory_data.get(label).values()
                     dates = subcategory_data.get(label).keys()
                     plt.plot(dates, values, label=label)
-                plt.figure(figsize=(10,10))
                 plt.rc('font', size=8)
                 plt.ylim([0, 5.5])
                 plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
@@ -244,7 +239,6 @@ class oquareGraphs:
             for label in line_labels:
                 values = data.get(label).values()
                 dates = data.get(label).keys()
-                plt.figure(figsize=(10,10))
                 plt.plot(dates, values, label=label)
                 plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
                 plt.yticks(fontsize=10)
