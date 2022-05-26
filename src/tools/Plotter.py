@@ -252,7 +252,7 @@ class oquareGraphs:
         
         with plt.style.context(matplotx.styles.ayu["light"]):
 
-            fig, axs = plt.subplots(4, 5, figsize=(11,11))
+            fig, axs = plt.subplots(4, 5, figsize=(13,13))
             
             row = 0
             col = 0
