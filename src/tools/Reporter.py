@@ -6,7 +6,7 @@ class readmeGen:
         readme_file.write('Each category has a value on a scale of 1 to 5, indicating how good the ontology is for each category\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_category_values.png"/>\n')
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
 
     def append_oquare_value(self, file_name: str, path: str):
@@ -16,7 +16,7 @@ class readmeGen:
                         + 'On a scale of 1 to 5, 5 represents the highest quality attainable according to the OQuaRE framework\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_OQuaRE_model_values.png"/>\n')
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
 
     def append_subcategory(self, file_name: str, path: str, categories: list):
@@ -28,7 +28,7 @@ class readmeGen:
         for category in categories:
             readme_file.write('\t<img width="31%" src="img/' + file_name + '_' + category + '_subcategories_metrics.png"/>\n')
         
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
         
     
@@ -41,7 +41,7 @@ class readmeGen:
         for category in categories:
             readme_file.write('\t<img width="31%" src="img/' + file_name + '_' + category + '_subcategories_evolution.png"/>\n')
         
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
     
     def append_category_evolution(self, file_name: str, path: str, ):
@@ -50,7 +50,7 @@ class readmeGen:
         readme_file.write('Evolution of each category overtime on a scale of 1 to 5\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_categories_evolution.png"/>\n')
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
 
     def append_metrics(self, file_name: str, path: str): 
@@ -60,7 +60,7 @@ class readmeGen:
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img width="45%" src="img/' + file_name + '_metrics.png"/>\n')
         readme_file.write('\t<img width="45%" src="img/' + file_name + '_scaled_metrics.png"/>\n')
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
 
     def append_metrics_evolution(self, file_name: str, path: str, metrics: list):
@@ -70,10 +70,11 @@ class readmeGen:
         
         for metric in metrics:
             readme_file.write('<div style="width: 33%; float: left;">')
-            readme_file.write('### ' + metric +' evolution\n\n')
+            readme_file.write('<h3 align="center" width="100%">' + metric +' evolution</h3>\n\n')
             readme_file.write('<p align="center" width="100%">\n')
             readme_file.write('\t<img src="img/' + file_name + '_' + metric + '_metric_evolution.png"/>\n')
             readme_file.write('</p>\n')
+            readme_file.write('</div>\n\n')
             readme_file.write
         readme_file.close()
     
@@ -83,5 +84,5 @@ class readmeGen:
         readme_file.write('Evolution of each of the 19 scaled metrics obtained from an ontology\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_scaled_metrics_evolution.png"/>\n')
-        readme_file.write('</p>\n')
+        readme_file.write('</p>\n\n')
         readme_file.close()
