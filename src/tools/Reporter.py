@@ -58,16 +58,11 @@ class readmeGen:
         readme_file.write('## OQuaRE metrics values\n')
         readme_file.write('Fine grained metrics, lowest level of ontology analysis provided. Scaled version uses a 1 to 5 scale\n\n')
         
-        readme_file.write('<div style="display: flex; flex-wrap: wrap; justify-content: center;">\n')
-        readme_file.write('<div style="margin: 5px;">\n')
         readme_file.write('<p align="center" width="100%">\n')
-        readme_file.write('\t<img width="450px" height="350px" src="img/' + file_name + '_metrics.png"/>\n')
-        readme_file.write('</p>\n</div>\n')
-
-        readme_file.write('<div style="margin: 5px;">\n')
-        readme_file.write('<p align="center" width="100%">\n')
-        readme_file.write('\t<img width="450px" height="350px" src="img/' + file_name + '_scaled_metrics.png"/>\n')
-        readme_file.write('</p>\n</div>\n</div>\n\n')
+        readme_file.write('\t<img width="45%" style="object-fit: scale;" src="img/' + file_name + '_metrics.png"/>\n')
+        readme_file.write('\t<img width="45%" style="object-fit: scale;" src="img/' + file_name + '_scaled_metrics.png"/>\n')
+        readme_file.write('</p>\n\n')
+        
         readme_file.close()
 
     def append_metrics_evolution(self, file_name: str, path: str, metrics: list):
