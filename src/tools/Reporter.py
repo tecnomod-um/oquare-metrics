@@ -76,7 +76,7 @@ class readmeGen:
         
         for metric in metrics:
             readme_file.write('<div>\n')
-            readme_file.write('<h3 align="center" width="100%"' + metric +' evolution</h3>\n\n')
+            readme_file.write('<h3 align="center" width="100%">' + metric +' evolution</h3>\n\n')
             readme_file.write('<p align="center" width="100%">\n')
             readme_file.write('\t<img width="615px" style="object-fit: scale;" src="img/' + file_name + '_' + metric + '_metric_evolution.png"/>\n')
             readme_file.write('</p>\n')
