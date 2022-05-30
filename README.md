@@ -9,22 +9,21 @@ This module makes use of said framework to bring its capabilities to ontology re
 
 ## Features
 
-* Robust tool for ontology metrics, based of OQuaRE framework for ontology quality evaluation
-* Easy to configure and use on both existing and new pipelines
-* Compatible with Docker
+* Robust tool for ontology metrics, based on OQuaRE framework for ontology quality evaluation
+* Easy to configure and use on both new and existing pipelines
 * Set of different plots and graphs, showcasing different aspects of the quality of each ontology and how modifications affects them
 * Multiple ontology source folders
 * Two different ontology reasoners for ontology metrics calculation (ELK and HermiT)
 * Possibility to ignore certain files that might not want to be parsed
 * Individual ontology file parsing instead of by folders
-* Out of the box functionality with no configuration needed
+* Out of the box functionality with very little configuration needed
 
 ## Usage
 > NOTE: :warning:
 > 
 > * **IMPORTANT:** Currently you must have both Java and Python installed in the runner machine. This can be done by either a Docker image which has both, or by calling actions/setup-java and actions/setup-python
 > * The module has been tested to work under Java 8 Temurin Distribution as well as Python 3.9.4
-> * By default the module will search for ontologies on ./ontologies from the repository, and will also save the generated contents in a folder named ./OQuaRE
+> * By default the module will save the generated contents in a folder named ./OQuaRE
 
 ```yaml
 name: CI
@@ -49,7 +48,9 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v1.6 
+        uses: Emdien/oquare-metrics@v1.6
+        with:
+          ontology-folders: ontologies
 ```
 ### Release mode example
 ```yaml
@@ -78,6 +79,7 @@ jobs:
       - name: OQuaRE module
         uses: Emdien/oquare-metrics@v1.6
         with:
+          ontology-folders: ontologies
           release: true
 ```
 
