@@ -1,11 +1,11 @@
 class readmeGen:
 
-    def append_category(self, file_name: str, path: str):
+    def append_features(self, file_name: str, path: str):
         readme_file = open(path + '/README.md', 'a')
-        readme_file.write('## OQuaRE category values\n')
-        readme_file.write('Each category has a value on a scale of 1 to 5, indicating how good the ontology is for each category\n\n')
+        readme_file.write('## OQuaRE features values\n')
+        readme_file.write('Each feature has a value on a scale of 1 to 5, indicating how good the ontology is for each features\n\n')
         readme_file.write('<p align="center" width="100%">\n')
-        readme_file.write('\t<img src="img/' + file_name + '_category_values.png"/>\n')
+        readme_file.write('\t<img src="img/' + file_name + '_features_values.png"/>\n')
         readme_file.write('</p>\n\n')
         readme_file.close()
 
@@ -19,37 +19,37 @@ class readmeGen:
         readme_file.write('</p>\n\n')
         readme_file.close()
 
-    def append_subcategory(self, file_name: str, path: str, categories: list):
+    def append_subfeatures(self, file_name: str, path: str, features: list):
         readme_file = open(path + '/README.md', 'a')
-        readme_file.write('## OQuaRE subcategories metrics\n')
-        readme_file.write('Each category has a set of subcategories with metrics on a scale of 1 to 5, which makes up the category end value\n\n')
+        readme_file.write('## OQuaRE subfeatures metrics\n')
+        readme_file.write('Each feature has a set of subfeatures with metrics on a scale of 1 to 5, which makes up the features end value\n\n')
         readme_file.write('<p align="center" width="100%">\n')
 
-        for category in categories:
-            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + category + '_subcategories_metrics.png"/>\n')
+        for feature in features:
+            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + feature + '_subfeatures_metrics.png"/>\n')
         
         readme_file.write('</p>\n\n')
         readme_file.close()
         
     
-    def append_subcategories_evolution(self, file_name: str, path: str, categories: list):
+    def append_subfeatures_evolution(self, file_name: str, path: str, features: list):
         readme_file = open(path + '/README.md', 'a')
-        readme_file.write('## OQuaRE subcategories metrics evolution\n')
-        readme_file.write('Evolution of each category subcategories values overtime on a scale of 1 to 5\n\n')
+        readme_file.write('## OQuaRE subfeatures metrics evolution\n')
+        readme_file.write('Evolution of each feature subfeatures values overtime on a scale of 1 to 5\n\n')
         readme_file.write('<p align="center" width="100%">\n')
 
-        for category in categories:
-            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + category + '_subcategories_evolution.png"/>\n')
+        for feature in features:
+            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + feature + '_subfeatures_evolution.png"/>\n')
         
         readme_file.write('</p>\n\n')
         readme_file.close()
     
-    def append_category_evolution(self, file_name: str, path: str, ):
+    def append_features_evolution(self, file_name: str, path: str, ):
         readme_file = open(path + '/README.md', 'a')
-        readme_file.write('## OQuaRE category evolution\n')
-        readme_file.write('Evolution of each category overtime on a scale of 1 to 5\n\n')
+        readme_file.write('## OQuaRE features evolution\n')
+        readme_file.write('Evolution of each feature overtime on a scale of 1 to 5\n\n')
         readme_file.write('<p align="center" width="100%">\n')
-        readme_file.write('\t<img src="img/' + file_name + '_categories_evolution.png"/>\n')
+        readme_file.write('\t<img src="img/' + file_name + '_features_evolution.png"/>\n')
         readme_file.write('</p>\n\n')
         readme_file.close()
 

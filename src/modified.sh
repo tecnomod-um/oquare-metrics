@@ -7,8 +7,8 @@ ignore_files=$3
 ontology_files=$4
 reasoner=$5
 model_plot=$6
-category_plot=$7
-subcategory_plot=$8
+features_plot=$7
+subfeatures_plot=$8
 metrics_plot=$9
 shift
 evolution_plot=$9
@@ -36,7 +36,7 @@ then
             if [ -f "$outputFilePath" ]
             then
                 python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $ontology_source -f $outputFile -d $date \
-                    -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e false
+                    -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e false
             fi
         fi
         done
@@ -58,7 +58,7 @@ then
         if [ -f "$outputFilePath" ]
         then
             python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
-                -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e $evolution_plot
+                -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e $evolution_plot
         fi
     fi
     done
@@ -77,7 +77,7 @@ else
         if [ -f "$outputFilePath" ]
         then
             python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
-                -M $model_plot -c $category_plot -S $subcategory_plot -m $metrics_plot -e $evolution_plot
+                -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e $evolution_plot
         fi
     done
 fi

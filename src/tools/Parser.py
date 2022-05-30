@@ -58,38 +58,38 @@ class MetricsParser:
 
         return metrics_dict
 
-    def parse_category_metrics(self):
-        """OQuaRE category parse method
+    def parse_features_metrics(self):
+        """OQuaRE features parse method
         
-        Returns a dictionary which holds the value aswell as the subcategories and their values
-        of each category of metrics.
+        Returns a dictionary which holds the values aswell as the subfeatures and their values
+        of each feature.
 
         The dictionary is structured as it follows
-        category:
+        feature:
             value: float
-            subcategories
-                subcategory: float
+            subfeatures
+                subfeatures: float
 
         """
         oquare_model = self.root.findall('oquareModel/')
         oquare_model_dict = {}
-        for metric in oquare_model:
-            metric_name, metric_value = next(iter(metric.attrib.items()))
+        for feature in oquare_model:
+            feature_name, feature_value = next(iter(feature.attrib.items()))
 
-            oquare_category = {}
-            oquare_category['value'] = math.floor(float(metric_value) * 10 ** 2) / 10 ** 2  
+            oquare_feature = {}
+            oquare_feature['value'] = math.floor(float(feature_value) * 10 ** 2) / 10 ** 2  
             
-            oquare_sub_categories = {}
+            oquare_sub_features = {}
             
-            # Get subcategories
-            subcategories = self.root.findall('oquareModel/' + metric.tag + '/')
-            for subcategory in subcategories:
-                oquare_sub_categories[subcategory.tag] = math.floor(float(subcategory.text) * 10 ** 2) / 10 ** 2  
+            # Get subfeatures
+            subfeatures = self.root.findall('oquareModel/' + feature.tag + '/')
+            for subfeature in subfeatures:
+                oquare_sub_features[subfeature.tag] = math.floor(float(subfeature.text) * 10 ** 2) / 10 ** 2  
 
-            # Put subcategories under the main category
-            oquare_category['subcategories'] = oquare_sub_categories
+            # Put subfeatures under the main features
+            oquare_feature['subfeatures'] = oquare_sub_features
 
-            # Put each category inside the oquare_model_dict
-            oquare_model_dict[metric_name] = oquare_category
+            # Put each features inside the oquare_model_dict
+            oquare_model_dict[feature_name] = oquare_feature
 
         return oquare_model_dict
