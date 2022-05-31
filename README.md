@@ -48,7 +48,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v1.6
+        uses: Emdien/oquare-metrics@v2
         with:
           ontology-folders: ontologies
 ```
@@ -77,7 +77,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v1.6
+        uses: Emdien/oquare-metrics@v2
         with:
           ontology-folders: ontologies
           release: true
@@ -93,8 +93,8 @@ jobs:
 | ignore-files    | string | false    | ''           | Set of files that the module will ignore when analysing ontology files. Space separated values   |
 | reasoner        | string (ELK/HERMIT) | true     | 'ELK'        | Sets the reasoner to be used when evaluating an ontology                            |
 | model-plot      | boolean   | false    |  true        | Indicates the module to plot OQuaRE model metrics                                                |
-| category-plot   | boolean   | false    |  true        | Indicates the module to plot OQuaRE categories metrics                                           |
-| subcategory-plot  | boolean   | false |  true        | Indicates the module to plot OQuaRE subcategories metrics                                        |
+| feature-plot   | boolean   | false    |  true        | Indicates the module to plot OQuaRE features metrics                                           |
+| subfeature-plot  | boolean   | false |  true        | Indicates the module to plot OQuaRE subfeatures metrics                                        |
 | metrics-plots   | boolean   | false    |  true        | Indicates the module to plot OQuaRE fine-grained metrics                                         |
 | evolution-plot  | boolean   | false    |  true        | Indicates if you want the plotting of the evolution of the previous inputs that are set as True  |
 | release         | boolean   | false    | false      | Used to obtain the metrics for all of the ontologies. Intended to be used paired with a on release workflow. DANGER: enabling this on normal runs might cause duplicates and parse non-modified ontologies all the time |
@@ -117,11 +117,11 @@ jobs:
     with:
         reasoner: HERMIT
 
-    # Only plot model, subcategories and metrics but not categories and their evolution
+    # Only plot model, subfeatures and metrics but not features and their evolution
     - name: Ontology plots configurtion
     uses: Emdien/oquare-metrics@v1 
     with:
-        category-plot: false
+        feature-plot: false
         evolution-plot: false
 
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
