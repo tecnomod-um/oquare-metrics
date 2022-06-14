@@ -56,7 +56,7 @@ then
         if [ -f "$outputFilePath" ]
         then
             python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
-                -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e $evolution_plot
+                -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e false
         fi
     fi
     done
