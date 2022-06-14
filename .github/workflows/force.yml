@@ -1,0 +1,25 @@
+on: workflow_dispatch
+
+jobs:
+  force-parse:
+    runs-on: ubuntu-latest
+    name: OQuaRE-metrics-force-test
+    steps:
+    # To use this repository's private action
+    # You need to check out the repo
+    - uses: actions/checkout@v2
+    # Configuration
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '8'
+    - uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+        cache: 'pip'
+    - name: Basic testing
+      uses: ./ # Uses an action in the root directory
+      with:
+        ontology-folders: ontologies
+        ontology-files: ontologies/imports/obi.owl
+        force-parse: ontologies/imports/obi.owl
