@@ -93,7 +93,7 @@ runs:
       shell: bash
       
     - name: Archive previous results
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || inputs.force-parse != ''
       run: |
         if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] && [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)" ] 
         then
@@ -103,12 +103,12 @@ runs:
       shell: bash
 
     - name: Move results to results folder
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || inputs.force-parse != ''
       run: mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
       shell: bash
 
     - name: Commit and push
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || inputs.force-parse != ''
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
