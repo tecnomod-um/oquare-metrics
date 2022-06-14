@@ -3,13 +3,12 @@
 # Inputs
 contents_folder=$1
 force_parse=$2
-ignore_files=$3
-reasoner=$4
-model_plot=$5
-features_plot=$6
-subfeatures_plot=$7
-metrics_plot=$8
-evolution_plot=$9
+reasoner=$3
+model_plot=$4
+features_plot=$5
+subfeatures_plot=$6
+metrics_plot=$7
+evolution_plot=$8
 
 date="$(date +%Y-%m-%d_%H-%M-%S)"
 for file in $force_parse
