@@ -35,6 +35,9 @@ inputs:
   release:
     description: 'Indicates that this is a release version of ontologies. Scans and extracts metrics from all ontologies'
     default: 'false'
+  force-parse:
+    description: 'Parses ontologies regardless if they were modified or not'
+    default: ''
   
 runs: 
   using: 'composite'
@@ -79,6 +82,14 @@ runs:
         "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
         ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       shell: bash
+
+    - name: Force parse ontologies
+      if: inputs.force-parse != ''
+      run: |
+        chmod u+x $GITHUB_ACTION_PATH/src/force.sh
+        $GITHUB_ACTION_PATH/src/force.sh "${{ inputs.contents-folder }}" "${{ inputs.force-parse }}" ${{ inputs.reasoner }} \
+        ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       
     - name: Archive previous results
       if: steps.changed-files.outputs.any_changed == 'true'
