@@ -12,7 +12,7 @@ metrics_plot=$8
 evolution_plot=$9
 
 date="$(date +%Y-%m-%d_%H-%M-%S)"
-for file in $force-parse
+for file in $force_parse
 do
     dir=$(dirname "$file")
     outputFile=$(basename "$file" .owl)

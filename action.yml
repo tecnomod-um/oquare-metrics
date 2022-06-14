@@ -89,7 +89,7 @@ runs:
         chmod u+x $GITHUB_ACTION_PATH/src/force.sh
         $GITHUB_ACTION_PATH/src/force.sh "${{ inputs.contents-folder }}" "${{ inputs.force-parse }}" ${{ inputs.reasoner }} \
         ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
-        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }}
       shell: bash
       
     - name: Archive previous results
