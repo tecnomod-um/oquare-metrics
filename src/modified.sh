@@ -51,8 +51,6 @@ then
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/metrics
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
         outputFilePath="$contents_folder/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
-        rm -f "$outputFilePath"
-        rm -f "$contents_folder/temp_results/$dir/$outputFile/$date/README.md"
         java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$ontology_file" --reasoner "$reasoner" --outputFile "$outputFilePath"
 
         if [ -f "$outputFilePath" ]
@@ -70,8 +68,6 @@ else
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/metrics
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
         outputFilePath="$contents_folder/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
-        rm -f "$outputFilePath"
-        rm -f "$contents_folder/temp_results/$dir/$outputFile/$date/README.md"
         java -jar $GITHUB_ACTION_PATH/libs/oquare-versions.jar --ontology "$file" --reasoner "$reasoner" --outputFile "$outputFilePath"
 
         if [ -f "$outputFilePath" ]
