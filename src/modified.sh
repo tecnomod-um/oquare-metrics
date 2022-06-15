@@ -25,7 +25,7 @@ then
     then
         find $ontology_source -maxdepth 1 -type f -name "*.owl" | while read file
         do
-        if [ -z $(printf '%s\n' "$ignore_files" | grep -Fx $file)] && [ -z $(printf '%s\n' "$ontology_files" | grep -Fx $file)]
+        if [ -z $(printf '%s\n' "$ignore_files" | grep -Fx "$file") ] && [ -z $(printf '%s\n' "$ontology_files" | grep -Fx "$file") ]
         then
             outputFile=$(basename "$file" .owl) 
             mkdir -p $contents_folder/temp_results/$ontology_source/$outputFile/$date/metrics
