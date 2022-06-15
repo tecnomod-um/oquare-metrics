@@ -22,3 +22,4 @@ jobs:
         with:
           ontology-folders: ontologies
           ontology-files: ontologies/imports/obi.owl
+          force-parse: ontologies/imports/obi.owl
