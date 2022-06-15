@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     name: OQuaRE-metrics-test
     steps:
-      # To use this repository's private action
-      # You need to check out the repo
       - uses: actions/checkout@v2
       # Configuration
       - uses: actions/setup-java@v2
@@ -18,7 +16,7 @@ jobs:
           python-version: '3.9'
           cache: 'pip'
       - name: Basic testing
-        uses: ./ # Uses an action in the root directory
+        uses: ./
         with:
           ontology-files: ontologies/imports/obi.owl
           force-parse: ontologies/imports/obi.owl
