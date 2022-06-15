@@ -21,7 +21,7 @@ do
 
         # Remove folder if it exist. It will override results obtained on previous steps if the situation occurs.
 
-        rm -f $contents_folder/temp_results/$dir/$outputFile
+        rm -rf $contents_folder/temp_results/$dir/$outputFile
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/metrics
         mkdir -p $contents_folder/temp_results/$dir/$outputFile/$date/img
         outputFilePath="$contents_folder/temp_results/$dir/$outputFile/$date/metrics/$outputFile.xml"
