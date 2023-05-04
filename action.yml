@@ -42,7 +42,7 @@ inputs:
 runs: 
   using: 'composite'
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 2
     - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
@@ -50,7 +50,7 @@ runs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v18
+      uses: tj-actions/changed-files@v35
       with:
         files_separator: ' '
         files_ignore_separator: ' '
