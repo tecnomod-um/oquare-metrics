@@ -1,0 +1,22 @@
+on: []
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: OQuaRE-metrics-test
+    steps:
+      - uses: actions/checkout@v2
+      # Configuration
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - name: Basic testing
+        uses: ./
+        with:
+          ontology-files: ontologies/imports/obi.owl
+          force-parse: ontologies/imports/obi.owl
