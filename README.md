@@ -22,7 +22,7 @@ This module makes use of said framework to bring its capabilities to ontology re
 > NOTE: :warning:
 > 
 > * **IMPORTANT:** Currently you must have both Java and Python installed in the runner machine. This can be done by either a Docker image which has both, or by calling actions/setup-java and actions/setup-python
-> * The module has been tested to work under Java 8 Temurin Distribution as well as Python 3.9.4
+> * The module has been tested to work under Java 8 Temurin Distribution as well as Python 3.9.4.
 > * By default the module will save the generated contents in a folder named ./OQuaRE
 
 ```yaml
@@ -35,10 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Evaluate ontologies
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # Configuration
       # Java setup
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -64,10 +64,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Evaluate ontologies - release mode
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # Configuration
       # Java setup
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -77,7 +77,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v2
+        uses: Emdien/oquare-metrics@v3
         with:
           ontology-folders: ontologies
           release: true
@@ -106,20 +106,20 @@ jobs:
     # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production and src/ontologies/imports
     # And we want to store the metrics on src/ontologies/metrics
     - name: Ontology folder configuration
-    uses: Emdien/oquare-metrics@v1 
+    uses: Emdien/oquare-metrics@v2.1 
     with:
         ontology-folders: src/ontologies/production src/ontologies/imports
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
     - name: Ontology reasoner configuration
-    uses: Emdien/oquare-metrics@v1 
+    uses: Emdien/oquare-metrics@v2.1 
     with:
         reasoner: HERMIT
 
     # Only plot model, subfeatures and metrics but not features and their evolution
     - name: Ontology plots configurtion
-    uses: Emdien/oquare-metrics@v1 
+    uses: Emdien/oquare-metrics@v2.1 
     with:
         feature-plot: false
         evolution-plot: false
@@ -140,4 +140,7 @@ jobs:
 
 > * The module currently requires of previous, first hand setup of Java and Python. This is done so there is no compatibility issues with some Docker images
 > * Currently when doing a release, it will ONLY update master branch. Can't update any other branch or add the commit to the release
+
+## Contact
+If there is any issue regarding this action, please contact me on gonzalo.nicolasm@um.es, or make an issue in this repository explaining the error. Thank you!
 
