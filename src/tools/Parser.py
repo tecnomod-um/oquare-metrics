@@ -58,38 +58,38 @@ class MetricsParser:
 
         return metrics_dict
 
-    def parse_features_metrics(self):
-        """OQuaRE features parse method
+    def parse_characteristics_metrics(self):
+        """OQuaRE characteristics parse method
         
-        Returns a dictionary which holds the values aswell as the subfeatures and their values
-        of each feature.
+        Returns a dictionary which holds the values aswell as the subcharacteristics and their values
+        of each characteristic.
 
         The dictionary is structured as it follows
-        feature:
+        characteristic:
             value: float
-            subfeatures
-                subfeatures: float
+            subcharacteristics
+                subcharacteristics: float
 
         """
         oquare_model = self.root.findall('oquareModel/')
         oquare_model_dict = {}
-        for feature in oquare_model:
-            feature_name, feature_value = next(iter(feature.attrib.items()))
+        for characteristic in oquare_model:
+            characteristic_name, characteristic_value = next(iter(characteristic.attrib.items()))
 
-            oquare_feature = {}
-            oquare_feature['value'] = math.floor(float(feature_value) * 10 ** 2) / 10 ** 2  
+            oquare_characteristic = {}
+            oquare_characteristic['value'] = math.floor(float(characteristic_value) * 10 ** 2) / 10 ** 2  
             
-            oquare_sub_features = {}
+            oquare_sub_characteristics = {}
             
-            # Get subfeatures
-            subfeatures = self.root.findall('oquareModel/' + feature.tag + '/')
-            for subfeature in subfeatures:
-                oquare_sub_features[subfeature.tag] = math.floor(float(subfeature.text) * 10 ** 2) / 10 ** 2  
+            # Get subcharacteristics
+            subcharacteristics = self.root.findall('oquareModel/' + characteristic.tag + '/')
+            for subcharacteristic in subcharacteristics:
+                oquare_sub_characteristics[subcharacteristic.tag] = math.floor(float(subcharacteristic.text) * 10 ** 2) / 10 ** 2  
 
-            # Put subfeatures under the main features
-            oquare_feature['subfeatures'] = oquare_sub_features
+            # Put subcharacteristics under the main characteristics
+            oquare_characteristic['subcharacteristics'] = oquare_sub_characteristics
 
-            # Put each features inside the oquare_model_dict
-            oquare_model_dict[feature_name] = oquare_feature
+            # Put each characteristics inside the oquare_model_dict
+            oquare_model_dict[characteristic_name] = oquare_characteristic
 
         return oquare_model_dict

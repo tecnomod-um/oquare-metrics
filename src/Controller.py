@@ -40,41 +40,41 @@ class Controller:
                 data_store[metric] = {}
             data_store.get(metric)[date] = value
     
-    def store_features_evolution(self, features: dict, data_store: dict, date: str) -> None:
-        """Stores values of features at a certain date in a dictionary
+    def store_characteristics_evolution(self, characteristics: dict, data_store: dict, date: str) -> None:
+        """Stores values of characteristics at a certain date in a dictionary
         
         Keyword arguments:
-        features -- Dictionary which contains features information such as value
+        characteristics -- Dictionary which contains characteristics information such as value
         data_store -- Dictionary to store the values for a given date
-        date -- Date to which the features values are associated to
+        date -- Date to which the characteristics values are associated to
 
         """
-        for feature, values in features.items():
-            if not data_store.get(feature):
-                data_store[feature] = {}
+        for characteristic, values in characteristics.items():
+            if not data_store.get(characteristic):
+                data_store[characteristic] = {}
             
-            data_store.get(feature)[date] = values.get('value')
+            data_store.get(characteristic)[date] = values.get('value')
     
-    def store_subfeatures_evolution(self, features: dict, data_store: dict, date: str) -> None:
-        """Stores values of subfeatures at a certain date in a dictionary
+    def store_subcharacteristics_evolution(self, characteristics: dict, data_store: dict, date: str) -> None:
+        """Stores values of subcharacteristics at a certain date in a dictionary
         
         Keyword arguments:
-        features -- Dictionary which contains features information such as subfeatures values
+        characteristics -- Dictionary which contains characteristics information such as subcharacteristics values
         data_store -- Dictionary to store the values for a given date
-        date -- Date to which the features values are associated to
+        date -- Date to which the characteristics values are associated to
 
         """
-        for feature, values in features.items():
-            if not data_store.get(feature):
-                data_store[feature] = {}
+        for characteristic, values in characteristics.items():
+            if not data_store.get(characteristic):
+                data_store[characteristic] = {}
 
-            subfeatures = values.get('subfeatures')
+            subcharacteristics = values.get('subcharacteristics')
 
-            for subfeature, value in subfeatures.items():
-                if not data_store.get(feature).get(subfeature):
-                    data_store.get(feature)[subfeature] = {}
+            for subcharacteristic, value in subcharacteristics.items():
+                if not data_store.get(characteristic).get(subcharacteristic):
+                    data_store.get(characteristic)[subcharacteristic] = {}
 
-                data_store.get(feature).get(subfeature)[date] = value        
+                data_store.get(characteristic).get(subcharacteristic)[date] = value        
 
     def parse_entry(self, base_path: str, file_path: str, data_store: dict, parse_type: str) -> None:
         """Parses a file entry to extract its date and store the values on a dict by dates
@@ -98,15 +98,15 @@ class Controller:
         elif parse_type == 'metrics-scaled':
             scaled_metrics = parsed_metrics.parse_scaled_metrics()
             self.store_metrics_evolution(scaled_metrics, data_store, entry_date)
-        elif parse_type == 'features':
-            features = parsed_metrics.parse_features_metrics()
-            self.store_features_evolution(features, data_store, entry_date)
-        elif parse_type == 'subfeatures':
-            features = parsed_metrics.parse_features_metrics()
-            self.store_subfeatures_evolution(features, data_store, entry_date)
+        elif parse_type == 'characteristics':
+            characteristics = parsed_metrics.parse_characteristics_metrics()
+            self.store_characteristics_evolution(characteristics, data_store, entry_date)
+        elif parse_type == 'subcharacteristics':
+            characteristics = parsed_metrics.parse_characteristics_metrics()
+            self.store_subcharacteristics_evolution(characteristics, data_store, entry_date)
 
-    def handle_features(self, temp_path: str, file: str) -> None:
-        """Handles features data extraction, plotting and reporting
+    def handle_characteristics(self, temp_path: str, file: str) -> None:
+        """Handles characteristics data extraction, plotting and reporting
         
         Keyword arguments:
         temp_path -- Fully structured path to current execution temp_folder. The path is
@@ -114,18 +114,18 @@ class Controller:
         file -- Current ontology file being analysed
 
         """
-        oquare_features_values = {}
+        oquare_characteristics_values = {}
 
         parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-        features = parsed_metrics.parse_features_metrics()
-        for feature, values in features.items():
-            oquare_features_values[feature] = values.get('value')
+        characteristics = parsed_metrics.parse_characteristics_metrics()
+        for characteristic, values in characteristics.items():
+            oquare_characteristics_values[characteristic] = values.get('value')
         
-        self.graphPlotter.plot_oquare_features(oquare_features_values, file, temp_path)
-        self.readmeGenerator.append_features(file, temp_path)
+        self.graphPlotter.plot_oquare_characteristics(oquare_characteristics_values, file, temp_path)
+        self.readmeGenerator.append_characteristics(file, temp_path)
 
-    def handle_subfeatures(self, temp_path: str, file: str) -> None:
-        """Handles subfeatures data extraction, plotting and reporting
+    def handle_subcharacteristics(self, temp_path: str, file: str) -> None:
+        """Handles subcharacteristics data extraction, plotting and reporting
         
         Keyword arguments:
         temp_path -- Fully structured path to current execution temp_folder. The path is
@@ -134,9 +134,9 @@ class Controller:
 
         """
         parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-        features = parsed_metrics.parse_features_metrics()
-        self.graphPlotter.plot_oquare_subfeatures(features, file, temp_path)
-        self.readmeGenerator.append_subfeatures(file, temp_path, list(features.keys()))
+        characteristics = parsed_metrics.parse_characteristics_metrics()
+        self.graphPlotter.plot_oquare_subcharacteristics(characteristics, file, temp_path)
+        self.readmeGenerator.append_subcharacteristics(file, temp_path, list(characteristics.keys()))
 
 
     def handle_metrics(self, temp_path: str, file: str) -> None:
@@ -226,8 +226,8 @@ class Controller:
         self.readmeGenerator.append_scaled_metrics_evolution(file, temp_path)
         self.readmeGenerator.append_metrics_evolution(file, temp_path, list(metrics_evolution.keys()))
 
-    def handle_features_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
-        """Handles features evolution data extraction, plotting and reporting
+    def handle_characteristics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles characteristics evolution data extraction, plotting and reporting
         
         Keyword arguments:
         file -- Current ontology file being analysed
@@ -239,27 +239,27 @@ class Controller:
         archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
-        features_evolution = {}
+        characteristics_evolution = {}
 
         archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-18:]
         for path in archive_list:
-            self.parse_entry(archive_path, path, features_evolution, 'features')
+            self.parse_entry(archive_path, path, characteristics_evolution, 'characteristics')
 
         results_file_path = glob.glob(results_path + '*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            self.parse_entry(results_path, results_file_path, features_evolution, 'features')
+            self.parse_entry(results_path, results_file_path, characteristics_evolution, 'characteristics')
                 
         parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-        features = parsed_metrics.parse_features_metrics()
-        self.store_features_evolution(features, features_evolution, date)
+        characteristics = parsed_metrics.parse_characteristics_metrics()
+        self.store_characteristics_evolution(characteristics, characteristics_evolution, date)
 
-        self.graphPlotter.plot_oquare_features_evolution(features_evolution, file, temp_path)
-        self.readmeGenerator.append_features_evolution(file, temp_path)
+        self.graphPlotter.plot_oquare_characteristics_evolution(characteristics_evolution, file, temp_path)
+        self.readmeGenerator.append_characteristics_evolution(file, temp_path)
 
 
-    def handle_subfeatures_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
-        """Handles subfeatures evolution data extraction, plotting and reporting
+    def handle_subcharacteristics_evolution(self, file: str, input_path: str, ontology_source: str, date: str) -> None:
+        """Handles subcharacteristics evolution data extraction, plotting and reporting
         
         Keyword arguments:
         file -- Current ontology file being analysed
@@ -271,21 +271,21 @@ class Controller:
         archive_path = input_path + '/archives/' + ontology_source + '/' + file + '/'
         results_path = input_path + '/results/' + ontology_source + '/' + file + '/'
         temp_path = input_path + '/temp_results/' + ontology_source + '/' + file + '/' + date
-        subfeatures_evolution = {}
+        subcharacteristics_evolution = {}
 
         archive_list = sorted(glob.glob(archive_path + '*/metrics/' + file + '.xml'))[-18:]
         for path in archive_list:
-            self.parse_entry(archive_path, path, subfeatures_evolution, 'subfeatures')
+            self.parse_entry(archive_path, path, subcharacteristics_evolution, 'subcharacteristics')
 
         results_file_path = glob.glob(results_path + '*/metrics/' + file + '.xml')
         if len(results_file_path) > 0:
             results_file_path = results_file_path[0]
-            self.parse_entry(results_path, results_file_path, subfeatures_evolution, 'subfeatures')
+            self.parse_entry(results_path, results_file_path, subcharacteristics_evolution, 'subcharacteristics')
                 
         parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
-        features = parsed_metrics.parse_features_metrics()
-        self.store_subfeatures_evolution(features, subfeatures_evolution, date)
+        characteristics = parsed_metrics.parse_characteristics_metrics()
+        self.store_subcharacteristics_evolution(characteristics, subcharacteristics_evolution, date)
 
-        self.graphPlotter.plot_oquare_subfeatures_evolution(subfeatures_evolution, file, temp_path)
-        self.readmeGenerator.append_subfeatures_evolution(file, temp_path, list(features.keys()))
+        self.graphPlotter.plot_oquare_subcharacteristics_evolution(subcharacteristics_evolution, file, temp_path)
+        self.readmeGenerator.append_subcharacteristics_evolution(file, temp_path, list(characteristics.keys()))
             
