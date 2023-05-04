@@ -7,8 +7,8 @@ if __name__ == '__main__':
     argv = sys.argv
     input_path = ""
     plot_models = ''
-    plot_features = ''
-    plot_subfeatures = ''
+    plot_characteristics = ''
+    plot_subcharacteristics = ''
     plot_metrics = ''
     plot_evolution = ''
     file = ''
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     try:
         opts, args = getopt.getopt(argv[1:], "i:s:f:M:c:S:m:e:d:", 
-            ["input=","source=", "file=", "model=", "features=", "subfeatures=", "metrics=", "evolution=", "date="])
+            ["input=","source=", "file=", "model=", "characteristics=", "subcharacteristics=", "metrics=", "evolution=", "date="])
     except:
         sys.exit(2)
     
@@ -33,10 +33,10 @@ if __name__ == '__main__':
             file = arg
         elif opt in ("-M", "--model"):  
             plot_models = arg
-        elif opt in ("-c", "--features"):
-            plot_features = arg
-        elif opt in ("-S", "--subfeatures"):
-            plot_subfeatures = arg
+        elif opt in ("-c", "--characteristics"):
+            plot_characteristics = arg
+        elif opt in ("-S", "--subcharacteristics"):
+            plot_subcharacteristics = arg
         elif opt in ("-m", "--metrics"):
             plot_metrics = arg
         elif opt in ("-e", "--evolution"):
@@ -52,15 +52,15 @@ if __name__ == '__main__':
 
     temp_path += ontology_source + '/' + file + '/' + date 
 
-    if plot_features.lower() == 'true':
-        controller.handle_features(temp_path, file)
+    if plot_characteristics.lower() == 'true':
+        controller.handle_characteristics(temp_path, file)
         if plot_evolution.lower() == 'true':
-            controller.handle_features_evolution(file, input_path, ontology_source, date)
+            controller.handle_characteristics_evolution(file, input_path, ontology_source, date)
 
-    if plot_subfeatures.lower() == 'true':
-        controller.handle_subfeatures(temp_path, file)
+    if plot_subcharacteristics.lower() == 'true':
+        controller.handle_subcharacteristics(temp_path, file)
         if plot_evolution.lower() == 'true':
-            controller.handle_subfeatures_evolution(file, input_path, ontology_source, date)
+            controller.handle_subcharacteristics_evolution(file, input_path, ontology_source, date)
         
 
     if plot_metrics.lower() == 'true':

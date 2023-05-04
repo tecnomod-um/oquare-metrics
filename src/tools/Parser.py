@@ -58,17 +58,17 @@ class MetricsParser:
 
         return metrics_dict
 
-    def parse_features_metrics(self):
-        """OQuaRE features parse method
+    def parse_characteristics_metrics(self):
+        """OQuaRE characteristics parse method
         
-        Returns a dictionary which holds the values aswell as the subfeatures and their values
+        Returns a dictionary which holds the values aswell as the subcharacteristics and their values
         of each feature.
 
         The dictionary is structured as it follows
         feature:
             value: float
-            subfeatures
-                subfeatures: float
+            subcharacteristics
+                subcharacteristics: float
 
         """
         oquare_model = self.root.findall('oquareModel/')
@@ -79,17 +79,17 @@ class MetricsParser:
             oquare_feature = {}
             oquare_feature['value'] = math.floor(float(feature_value) * 10 ** 2) / 10 ** 2  
             
-            oquare_sub_features = {}
+            oquare_sub_characteristics = {}
             
-            # Get subfeatures
-            subfeatures = self.root.findall('oquareModel/' + feature.tag + '/')
-            for subfeature in subfeatures:
-                oquare_sub_features[subfeature.tag] = math.floor(float(subfeature.text) * 10 ** 2) / 10 ** 2  
+            # Get subcharacteristics
+            subcharacteristics = self.root.findall('oquareModel/' + feature.tag + '/')
+            for subfeature in subcharacteristics:
+                oquare_sub_characteristics[subfeature.tag] = math.floor(float(subfeature.text) * 10 ** 2) / 10 ** 2  
 
-            # Put subfeatures under the main features
-            oquare_feature['subfeatures'] = oquare_sub_features
+            # Put subcharacteristics under the main characteristics
+            oquare_feature['subcharacteristics'] = oquare_sub_characteristics
 
-            # Put each features inside the oquare_model_dict
+            # Put each characteristics inside the oquare_model_dict
             oquare_model_dict[feature_name] = oquare_feature
 
         return oquare_model_dict
