@@ -48,7 +48,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v2
+        uses: Emdien/oquare-metrics@v2.1
         with:
           ontology-folders: ontologies
 ```
@@ -77,7 +77,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v3
+        uses: Emdien/oquare-metrics@v2.1
         with:
           ontology-folders: ontologies
           release: true
