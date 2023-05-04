@@ -5,8 +5,8 @@ contents_folder=$1
 force_parse=$2
 reasoner=$3
 model_plot=$4
-features_plot=$5
-subfeatures_plot=$6
+characteristics_plot=$5
+subcharacteristics_plot=$6
 metrics_plot=$7
 evolution_plot=$8
 modified_files=$9
@@ -30,7 +30,7 @@ do
         if [ -f "$outputFilePath" ]
         then
             python $GITHUB_ACTION_PATH/src/main.py -i $contents_folder -s $dir -f $outputFile -d $date \
-                -M $model_plot -c $features_plot -S $subfeatures_plot -m $metrics_plot -e $evolution_plot
+                -M $model_plot -c $characteristics_plot -S $subcharacteristics_plot -m $metrics_plot -e $evolution_plot
         fi
     fi
 done
