@@ -20,11 +20,11 @@ inputs:
   model-plot:
     description: 'Indicates if you want oquare model value plots'
     default: 'true'
-  features-plot:
-    description: 'Indicates if you want features values plots'
+  characteristics-plot:
+    description: 'Indicates if you want characteristics values plots'
     default: 'true'
-  subfeatures-plot:
-    description: 'Indicates if you want subfeatures values plots'
+  subcharacteristics-plot:
+    description: 'Indicates if you want characteristics values plots'
     default: 'true'
   metrics-plot:
     description: 'Indicates if you want fine grained metrics plotted'
@@ -70,7 +70,7 @@ runs:
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
         $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
-        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
+        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
         ${{ inputs.metrics-plot }} ${{ inputs.release }} ${{ inputs.evolution-plot }} 
       shell: bash
 
@@ -79,7 +79,7 @@ runs:
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/modified.sh 
         $GITHUB_ACTION_PATH/src/modified.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
-        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
+        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
         ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       shell: bash
 
@@ -88,7 +88,7 @@ runs:
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/force.sh
         $GITHUB_ACTION_PATH/src/force.sh "${{ inputs.contents-folder }}" "${{ inputs.force-parse }}" ${{ inputs.reasoner }} \
-        ${{ inputs.model-plot }} ${{ inputs.features-plot }} ${{ inputs.subfeatures-plot }} \
+        ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
         ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
       shell: bash
       
