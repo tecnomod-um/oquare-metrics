@@ -49,11 +49,11 @@ class Controller:
         date -- Date to which the characteristics values are associated to
 
         """
-        for feature, values in characteristics.items():
-            if not data_store.get(feature):
-                data_store[feature] = {}
+        for characteristic, values in characteristics.items():
+            if not data_store.get(characteristic):
+                data_store[characteristic] = {}
             
-            data_store.get(feature)[date] = values.get('value')
+            data_store.get(characteristic)[date] = values.get('value')
     
     def store_subcharacteristics_evolution(self, characteristics: dict, data_store: dict, date: str) -> None:
         """Stores values of subcharacteristics at a certain date in a dictionary
@@ -64,17 +64,17 @@ class Controller:
         date -- Date to which the characteristics values are associated to
 
         """
-        for feature, values in characteristics.items():
-            if not data_store.get(feature):
-                data_store[feature] = {}
+        for characteristic, values in characteristics.items():
+            if not data_store.get(characteristic):
+                data_store[characteristic] = {}
 
             subcharacteristics = values.get('subcharacteristics')
 
-            for subfeature, value in subcharacteristics.items():
-                if not data_store.get(feature).get(subfeature):
-                    data_store.get(feature)[subfeature] = {}
+            for subcharacteristic, value in subcharacteristics.items():
+                if not data_store.get(characteristic).get(subcharacteristic):
+                    data_store.get(characteristic)[subcharacteristic] = {}
 
-                data_store.get(feature).get(subfeature)[date] = value        
+                data_store.get(characteristic).get(subcharacteristic)[date] = value        
 
     def parse_entry(self, base_path: str, file_path: str, data_store: dict, parse_type: str) -> None:
         """Parses a file entry to extract its date and store the values on a dict by dates
@@ -118,8 +118,8 @@ class Controller:
 
         parsed_metrics = MetricsParser(temp_path + '/metrics/' + file + '.xml')
         characteristics = parsed_metrics.parse_characteristics_metrics()
-        for feature, values in characteristics.items():
-            oquare_characteristics_values[feature] = values.get('value')
+        for characteristic, values in characteristics.items():
+            oquare_characteristics_values[characteristic] = values.get('value')
         
         self.graphPlotter.plot_oquare_characteristics(oquare_characteristics_values, file, temp_path)
         self.readmeGenerator.append_characteristics(file, temp_path)

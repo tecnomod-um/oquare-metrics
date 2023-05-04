@@ -62,10 +62,10 @@ class MetricsParser:
         """OQuaRE characteristics parse method
         
         Returns a dictionary which holds the values aswell as the subcharacteristics and their values
-        of each feature.
+        of each characteristic.
 
         The dictionary is structured as it follows
-        feature:
+        characteristic:
             value: float
             subcharacteristics
                 subcharacteristics: float
@@ -73,23 +73,23 @@ class MetricsParser:
         """
         oquare_model = self.root.findall('oquareModel/')
         oquare_model_dict = {}
-        for feature in oquare_model:
-            feature_name, feature_value = next(iter(feature.attrib.items()))
+        for characteristic in oquare_model:
+            characteristic_name, characteristic_value = next(iter(characteristic.attrib.items()))
 
-            oquare_feature = {}
-            oquare_feature['value'] = math.floor(float(feature_value) * 10 ** 2) / 10 ** 2  
+            oquare_characteristic = {}
+            oquare_characteristic['value'] = math.floor(float(characteristic_value) * 10 ** 2) / 10 ** 2  
             
             oquare_sub_characteristics = {}
             
             # Get subcharacteristics
-            subcharacteristics = self.root.findall('oquareModel/' + feature.tag + '/')
-            for subfeature in subcharacteristics:
-                oquare_sub_characteristics[subfeature.tag] = math.floor(float(subfeature.text) * 10 ** 2) / 10 ** 2  
+            subcharacteristics = self.root.findall('oquareModel/' + characteristic.tag + '/')
+            for subcharacteristic in subcharacteristics:
+                oquare_sub_characteristics[subcharacteristic.tag] = math.floor(float(subcharacteristic.text) * 10 ** 2) / 10 ** 2  
 
             # Put subcharacteristics under the main characteristics
-            oquare_feature['subcharacteristics'] = oquare_sub_characteristics
+            oquare_characteristic['subcharacteristics'] = oquare_sub_characteristics
 
             # Put each characteristics inside the oquare_model_dict
-            oquare_model_dict[feature_name] = oquare_feature
+            oquare_model_dict[characteristic_name] = oquare_characteristic
 
         return oquare_model_dict

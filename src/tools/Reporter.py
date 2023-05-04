@@ -3,7 +3,7 @@ class readmeGen:
     def append_characteristics(self, file_name: str, path: str):
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE characteristics values\n')
-        readme_file.write('Each feature has a value on a scale of 1 to 5, indicating how good the ontology is for each characteristics\n\n')
+        readme_file.write('Each characteristic has a value on a scale of 1 to 5, indicating how good the ontology is for each characteristics\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_characteristics_values.png"/>\n')
         readme_file.write('</p>\n\n')
@@ -22,11 +22,11 @@ class readmeGen:
     def append_subcharacteristics(self, file_name: str, path: str, characteristics: list):
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE subcharacteristics metrics\n')
-        readme_file.write('Each feature has a set of subcharacteristics with metrics on a scale of 1 to 5, which makes up the characteristics end value\n\n')
+        readme_file.write('Each characteristic has a set of subcharacteristics with metrics on a scale of 1 to 5, which makes up the characteristics end value\n\n')
         readme_file.write('<p align="center" width="100%">\n')
 
-        for feature in characteristics:
-            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + feature + '_subcharacteristics_metrics.png"/>\n')
+        for characteristic in characteristics:
+            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + characteristic + '_subcharacteristics_metrics.png"/>\n')
         
         readme_file.write('</p>\n\n')
         readme_file.close()
@@ -35,11 +35,11 @@ class readmeGen:
     def append_subcharacteristics_evolution(self, file_name: str, path: str, characteristics: list):
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE subcharacteristics metrics evolution\n')
-        readme_file.write('Evolution of each feature subcharacteristics values overtime on a scale of 1 to 5\n\n')
+        readme_file.write('Evolution of each characteristic subcharacteristics values overtime on a scale of 1 to 5\n\n')
         readme_file.write('<p align="center" width="100%">\n')
 
-        for feature in characteristics:
-            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + feature + '_subcharacteristics_evolution.png"/>\n')
+        for characteristic in characteristics:
+            readme_file.write('\t<img width="600px" style="object-fit: scale;" src="img/' + file_name + '_' + characteristic + '_subcharacteristics_evolution.png"/>\n')
         
         readme_file.write('</p>\n\n')
         readme_file.close()
@@ -47,7 +47,7 @@ class readmeGen:
     def append_characteristics_evolution(self, file_name: str, path: str, ):
         readme_file = open(path + '/README.md', 'a')
         readme_file.write('## OQuaRE characteristics evolution\n')
-        readme_file.write('Evolution of each feature overtime on a scale of 1 to 5\n\n')
+        readme_file.write('Evolution of each characteristic overtime on a scale of 1 to 5\n\n')
         readme_file.write('<p align="center" width="100%">\n')
         readme_file.write('\t<img src="img/' + file_name + '_characteristics_evolution.png"/>\n')
         readme_file.write('</p>\n\n')

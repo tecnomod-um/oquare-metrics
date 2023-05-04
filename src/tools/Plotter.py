@@ -47,7 +47,7 @@ class oquareGraphs:
         """Plotting method for characteristics
 
         Uses a spider graph which shows both the general quality of the ontology
-        at a quick glance, as well as the values of each feature.
+        at a quick glance, as well as the values of each characteristic.
         Scaled on range of 0 to 5 (values are on scale 1 to 5).
 
         Keyword arguments:
@@ -136,8 +136,8 @@ class oquareGraphs:
         output_path -- Path to where the figure will be saved to
         
         """
-        for feature in data.keys():
-            subcharacteristics: dict = data.get(feature).get('subcharacteristics')
+        for characteristic in data.keys():
+            subcharacteristics: dict = data.get(characteristic).get('subcharacteristics')
 
             names = list(subcharacteristics.keys())
             values = list(subcharacteristics.values())
@@ -159,8 +159,8 @@ class oquareGraphs:
                 for i in ypos:
                     plt.annotate('%s' % values[i], xy=(values[i] + 0.1, i), textcoords='data', fontsize=8)
                     
-                plt.title(feature + ' metrics')
-                plt.savefig(output_path + '/img/' + file + "_" + feature + "_subcharacteristics_metrics.png", format="png", bbox_inches='tight')
+                plt.title(characteristic + ' metrics')
+                plt.savefig(output_path + '/img/' + file + "_" + characteristic + "_subcharacteristics_metrics.png", format="png", bbox_inches='tight')
                 plt.clf()
     
     def plot_oquare_characteristics_evolution(self, data: dict, file: str,  output_path: str) -> None:
@@ -176,7 +176,7 @@ class oquareGraphs:
         line_labels = list(data.keys())
         with plt.style.context(matplotx.styles.ayu["light"]):
             
-            # For each feature, plot its evolution data.
+            # For each characteristic, plot its evolution data.
             for label in line_labels:
                 values = data.get(label).values()
                 dates = data.get(label).keys()
@@ -203,7 +203,7 @@ class oquareGraphs:
 
         """
 
-        for feature, subcharacteristics_data in data.items():
+        for characteristic, subcharacteristics_data in data.items():
             line_labels = list(subcharacteristics_data.keys())
             with plt.style.context(matplotx.styles.ayu["light"]):
                 
@@ -215,9 +215,9 @@ class oquareGraphs:
                 plt.ylim([0, 5.5])
                 plt.xticks(fontsize=8, rotation=-45, ha="left", rotation_mode="anchor")
                 plt.yticks(fontsize=10)
-                plt.title(feature + ' metrics evolution over time', fontsize=11)
+                plt.title(characteristic + ' metrics evolution over time', fontsize=11)
                 matplotx.line_labels()
-                plt.savefig(output_path + '/img/' + file + "_" + feature + '_subcharacteristics_evolution.png', format='png', bbox_inches='tight')
+                plt.savefig(output_path + '/img/' + file + "_" + characteristic + '_subcharacteristics_evolution.png', format='png', bbox_inches='tight')
             plt.clf() 
 
 
