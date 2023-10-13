@@ -7,6 +7,12 @@ OQuaRE is a framework developed by Astrid Duque Ramos which defines an ontology 
 
 This module makes use of said framework to bring its capabilities to ontology repositories hosted in GitHub, so that users may evaluate ontologies making use of an stadardized system.
 
+## Important note 13 of October 2023
+
+This repository has been transfered from the personal account of the developer to the tecnomod-um organization, which is part of University of Murcia. 
+Current repositories using this Action do NOT need to change the references to this module, as it redirects correctly.
+However it is HIGHLY ADVISED to update the reference from Emdien/oquare-metrics to tecnomod-um/oquare-metrics in the future to prevent confusion and possible errors.
+
 ## Features
 
 * Robust tool for ontology metrics, based on OQuaRE framework for ontology quality evaluation
