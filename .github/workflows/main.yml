@@ -16,7 +16,7 @@ jobs:
           python-version: '3.9'
           cache: 'pip'
       - name: Basic testing
-        uses: ./
+        uses: tecnomod-um/oquare-metrics
         with:
           ontology-files: ontologies/imports/obi.owl
           #force-parse: ontologies/imports/obi.owl
