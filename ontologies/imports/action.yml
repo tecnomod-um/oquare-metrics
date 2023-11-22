@@ -1,0 +1,131 @@
+name: 'OQuaRE metrics calculation module'
+description: 'Calculates the metrics of ontology files in the given folder based on the metrics set by the OQuaRE framework'
+inputs:
+  ontology-folders:
+    description: 'Folders which contains .owl files'
+    default: ''
+  ontology-files:
+    description: 'Individual ontology files to parse'
+    default: ''
+  contents-folder:
+    description: 'Folder which will contain results and archives'
+    default: 'OQuaRE'
+  reasoner:
+    description: 'Reasoner used by OQuaRE framework'
+    required: true
+    default: 'ELK'
+  ignore-files:
+    description: 'Files to ignore when calculating metrics'
+    default: ''
+  model-plot:
+    description: 'Indicates if you want oquare model value plots'
+    default: 'true'
+  characteristics-plot:
+    description: 'Indicates if you want characteristics values plots'
+    default: 'true'
+  subcharacteristics-plot:
+    description: 'Indicates if you want characteristics values plots'
+    default: 'true'
+  metrics-plot:
+    description: 'Indicates if you want fine grained metrics plotted'
+    default: 'true'
+  evolution-plot:
+    description: 'Indicates if you want categories evolution plot for each ontology across the latest 20 versions of the ontology'
+    default: 'true'
+  release:
+    description: 'Indicates that this is a release version of ontologies. Scans and extracts metrics from all ontologies'
+    default: 'false'
+  force-parse:
+    description: 'Parses ontologies regardless if they were modified or not'
+    default: ''
+  
+runs: 
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
+    - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
+      shell: bash
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v35
+      with:
+        files_separator: ' '
+        files_ignore_separator: ' '
+        files: |
+          ${{ join(inputs.ontology-folders, '/*.owl ') }} ${{ inputs.ontology-files }}
+        files_ignore: |
+          ${{ inputs.ignore-files }}
+
+    - name: Setup folders
+      run: |
+        mkdir -p ${{ inputs.contents-folder }} && mkdir -p ${{ inputs.contents-folder }}/results && mkdir -p ${{ inputs.contents-folder }}/archives \
+        && mkdir -p ${{ inputs.contents-folder }}/temp_results
+      shell: bash
+    
+    - name: Checks if its the first run (results empty folder)
+      if: steps.changed-files.outputs.any_modified == 'false' || inputs.release == 'true'
+      run: |
+        chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
+        $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
+        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
+        ${{ inputs.metrics-plot }} ${{ inputs.release }} ${{ inputs.evolution-plot }} 
+      shell: bash
+
+    - name: Call oquare library if modified ontologies
+      if: steps.changed-files.outputs.any_changed == 'true'
+      run: |
+        chmod u+x $GITHUB_ACTION_PATH/src/modified.sh 
+        $GITHUB_ACTION_PATH/src/modified.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
+        "${{ inputs.ontology-files }}" ${{ inputs.reasoner }} ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
+      shell: bash
+
+    - name: Force parse ontologies
+      if: inputs.force-parse != ''
+      run: |
+        chmod u+x $GITHUB_ACTION_PATH/src/force.sh
+        $GITHUB_ACTION_PATH/src/force.sh "${{ inputs.contents-folder }}" "${{ inputs.force-parse }}" ${{ inputs.reasoner }} \
+        ${{ inputs.model-plot }} ${{ inputs.characteristics-plot }} ${{ inputs.subcharacteristics-plot }} \
+        ${{ inputs.metrics-plot }} ${{ inputs.evolution-plot }} "${{ steps.changed-files.outputs.all_changed_files }}"
+      shell: bash
+      
+    - name: Archive previous results
+      if: steps.changed-files.outputs.any_changed == 'true' || inputs.release == 'true' || inputs.force-parse != ''  
+      run: |
+        if [ "$(ls -A ./${{ inputs.contents-folder }}/results)" ] && [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)" ] 
+        then
+          rsync -a ${{ inputs.contents-folder }}/results/ ${{ inputs.contents-folder }}/archives/
+          rm -rf ${{ inputs.contents-folder }}/results/*
+        fi 
+      shell: bash
+
+    - name: Cleanup tasks
+      run: |
+        if [ "$(ls -A ./${{ inputs.contents-folder }}/temp_results)" ]
+        then
+          mv -v ${{ inputs.contents-folder }}/temp_results/* ${{ inputs.contents-folder }}/results/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          if [ ${{ inputs.release }} == 'true' ]
+          then
+            git branch temp_branch
+            git checkout temp_branch
+            git add $contents_folder/
+            git commit -m "Ontology metrics calculated - OQuaRE"
+            git checkout master
+            git merge temp_branch
+            git push origin HEAD:refs/heads/master
+          else
+            git add ${{ inputs.contents-folder }}/
+            git commit -m "Ontology metrics calculated - OQuaRE"
+            git push
+          fi
+        fi
+      shell: bash
+
+
+      
