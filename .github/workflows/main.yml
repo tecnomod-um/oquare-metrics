@@ -20,3 +20,4 @@ jobs:
         with:
           ontology-folders: ontologies
           #force-parse: ontologies/imports/obi.owl
+          
