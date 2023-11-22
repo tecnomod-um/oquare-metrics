@@ -18,5 +18,5 @@ jobs:
       - name: Basic testing
         uses: tecnomod-um/oquare-metrics@v2.1
         with:
-          ontology-files: ontologies/imports/obi.owl
+          ontology-folders: ontologies
           #force-parse: ontologies/imports/obi.owl
