@@ -17,7 +17,8 @@ do
     if [ -z "$(printf '%s\n' "$modified_files" | grep -Fx "$file")" ]
     then
         dir=$(dirname "$file")
-        outputFile=$(basename "$file" .owl)
+        outputFile=$(basename "$file")
+        outputFile="${outputFile%.*}"
 
         # Remove folder if it exist. It will override results obtained on previous steps if the situation occurs.
 

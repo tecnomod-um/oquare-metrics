@@ -1,0 +1,218 @@
+<https://w3id.org/sao> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Ontology> .
+<https://w3id.org/sao> <http://creativecommons.org/ns#license> <https://creativecommons.org/licenses/by-nc-sa/4.0/> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/creator> <https://www.abdn.ac.uk/ncs/profiles/iman.naja> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/creator> <https://www.abdn.ac.uk/ncs/profiles/p.edwards> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/creator> <https://www.abdn.ac.uk/ncs/profiles/milan.markovic/> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/description> "An ontology to model accountability of generic systems."@en .
+<https://w3id.org/sao> <http://purl.org/dc/terms/issued> "2020-12-18"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/modified> "2021-12-30"^^<http://www.w3.org/2001/XMLSchema#date> .
+<https://w3id.org/sao> <http://purl.org/dc/terms/rights> "Copyright 2020 University of Aberdeen" .
+<https://w3id.org/sao> <http://purl.org/dc/terms/title> "The System Accountability Ontology"@en .
+<https://w3id.org/sao> <http://purl.org/vocab/vann/preferredNamespacePrefix> "sao" .
+<https://w3id.org/sao> <http://purl.org/vocab/vann/preferredNamespaceUri> "https://w3id.org/sao#" .
+<https://w3id.org/sao> <http://www.w3.org/2000/01/rdf-schema#comment> "-Version 1.0.1: minor edits and additions to the ontology metadata to reflect LOV requirements \n\t\t\t\t\t\t\t\t\t-Version 1: creation"@en .
+<https://w3id.org/sao> <http://www.w3.org/2000/01/rdf-schema#comment> "To contact the RAInS team, please send an email to therainsproject [at] gmail [dot] com"@en .
+<https://w3id.org/sao> <http://www.w3.org/2000/01/rdf-schema#label> "The System Accountability Ontology" .
+<https://w3id.org/sao> <http://www.w3.org/2002/07/owl#versionInfo> "1.0"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+# 
+# 
+# #################################################################
+# #
+# #    Annotation properties
+# #
+# #################################################################
+# 
+# 
+# http://creativecommons.org/ns#license
+<http://creativecommons.org/ns#license> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/creator
+<http://purl.org/dc/terms/creator> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/description
+<http://purl.org/dc/terms/description> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/issued
+<http://purl.org/dc/terms/issued> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/modified
+<http://purl.org/dc/terms/modified> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/rights
+<http://purl.org/dc/terms/rights> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/dc/terms/title
+<http://purl.org/dc/terms/title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/vocab/vann/preferredNamespacePrefix
+<http://purl.org/vocab/vann/preferredNamespacePrefix> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# http://purl.org/vocab/vann/preferredNamespaceUri
+<http://purl.org/vocab/vann/preferredNamespaceUri> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#AnnotationProperty> .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Object Properties
+# #
+# #################################################################
+# 
+# 
+# http://www.w3.org/ns/prov#hadMember
+<http://www.w3.org/ns/prov#hadMember> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+# 
+# https://w3id.org/ep-plan#correspondsToVariable
+<https://w3id.org/ep-plan#correspondsToVariable> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+# 
+# https://w3id.org/ep-plan#hasCorrespondingEntity
+<https://w3id.org/ep-plan#hasCorrespondingEntity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+# 
+# https://w3id.org/sao#hasAccountableAgent
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/sao#isAccountableFor> .
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/ep-plan#Entity> .
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#AccountableAgent> .
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "Inverse of is accountable for" .
+<https://w3id.org/sao#hasAccountableAgent> <http://www.w3.org/2000/01/rdf-schema#label> "has accountable agent" .
+# 
+# https://w3id.org/sao#hasRelatedAccountableResult
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/2002/07/owl#topObjectProperty> .
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/sao#relatesToAccountableObject> .
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#AccountableObject> .
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#AccountableResult> .
+<https://w3id.org/sao#hasRelatedAccountableResult> <http://www.w3.org/2000/01/rdf-schema#label> "has related accountable result" .
+# 
+# https://w3id.org/sao#hasSpecifiedAccountabiltyPlan
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/sao#specifiedForSystem> .
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#System> .
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#AccountabilityPlan> .
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/2000/01/rdf-schema#comment> "Inverse of specified for system." .
+<https://w3id.org/sao#hasSpecifiedAccountabiltyPlan> <http://www.w3.org/2000/01/rdf-schema#label> "has specified accountability plan" .
+# 
+# https://w3id.org/sao#impacts
+<https://w3id.org/sao#impacts> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#impacts> <http://www.w3.org/2002/07/owl#inverseOf> <https://w3id.org/sao#isImpactedBy> .
+<https://w3id.org/sao#impacts> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#AccountableObject> .
+<https://w3id.org/sao#impacts> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#System> .
+<https://w3id.org/sao#impacts> <http://www.w3.org/2000/01/rdf-schema#comment> "A relation which describes that an accountable object have some effect on the system's accountability." .
+<https://w3id.org/sao#impacts> <http://www.w3.org/2000/01/rdf-schema#label> "impacts" .
+# 
+# https://w3id.org/sao#isAccountableFor
+<https://w3id.org/sao#isAccountableFor> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#isAccountableFor> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#AccountableAgent> .
+<https://w3id.org/sao#isAccountableFor> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/ep-plan#Entity> .
+<https://w3id.org/sao#isAccountableFor> <http://www.w3.org/2000/01/rdf-schema#comment> "A relation that links accountable agents to entities they are accountable for." .
+<https://w3id.org/sao#isAccountableFor> <http://www.w3.org/2000/01/rdf-schema#label> "is accountable for" .
+# 
+# https://w3id.org/sao#isImpactedBy
+<https://w3id.org/sao#isImpactedBy> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#isImpactedBy> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#System> .
+<https://w3id.org/sao#isImpactedBy> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#AccountableObject> .
+<https://w3id.org/sao#isImpactedBy> <http://www.w3.org/2000/01/rdf-schema#comment> "Inverse of impacts." .
+<https://w3id.org/sao#isImpactedBy> <http://www.w3.org/2000/01/rdf-schema#label> "is impacted by" .
+# 
+# https://w3id.org/sao#relatesToAccountableObject
+<https://w3id.org/sao#relatesToAccountableObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#relatesToAccountableObject> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#AccountableResult> .
+<https://w3id.org/sao#relatesToAccountableObject> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#AccountableObject> .
+<https://w3id.org/sao#relatesToAccountableObject> <http://www.w3.org/2000/01/rdf-schema#comment> "A relation which describes the information described by an accountable result relates to an accountable object." .
+<https://w3id.org/sao#relatesToAccountableObject> <http://www.w3.org/2000/01/rdf-schema#label> "relates to accountable object" .
+# 
+# https://w3id.org/sao#specifiedForSystem
+<https://w3id.org/sao#specifiedForSystem> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .
+<https://w3id.org/sao#specifiedForSystem> <http://www.w3.org/2000/01/rdf-schema#domain> <https://w3id.org/sao#AccountabilityPlan> .
+<https://w3id.org/sao#specifiedForSystem> <http://www.w3.org/2000/01/rdf-schema#range> <https://w3id.org/sao#System> .
+<https://w3id.org/sao#specifiedForSystem> <http://www.w3.org/2000/01/rdf-schema#comment> "A relation that links the accountability plan to the system it was specified for." .
+<https://w3id.org/sao#specifiedForSystem> <http://www.w3.org/2000/01/rdf-schema#label> "specified for system" .
+# 
+# 
+# 
+# #################################################################
+# #
+# #    Classes
+# #
+# #################################################################
+# 
+# 
+# https://w3id.org/ep-plan#Agent
+<https://w3id.org/ep-plan#Agent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/ep-plan#Entity
+<https://w3id.org/ep-plan#Entity> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/ep-plan#EntityCollection
+<https://w3id.org/ep-plan#EntityCollection> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/ep-plan#MultiStep
+<https://w3id.org/ep-plan#MultiStep> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/ep-plan#MultiVariable
+<https://w3id.org/ep-plan#MultiVariable> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/ep-plan#Plan
+<https://w3id.org/ep-plan#Plan> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+# 
+# https://w3id.org/sao#AccountabilityPlan
+<https://w3id.org/sao#AccountabilityPlan> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#AccountabilityPlan> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#Plan> .
+<https://w3id.org/sao#AccountabilityPlan> <http://www.w3.org/2000/01/rdf-schema#comment> "A plan which describes a specification of the information that should be collected, so as to support accountability of systems." .
+<https://w3id.org/sao#AccountabilityPlan> <http://www.w3.org/2000/01/rdf-schema#label> "Accountability Plan" .
+# 
+# https://w3id.org/sao#AccountableAction
+<https://w3id.org/sao#AccountableAction> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#AccountableAction> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#MultiStep> .
+<https://w3id.org/sao#AccountableAction> <http://www.w3.org/2000/01/rdf-schema#comment> "A planned step which is deemed to be important for accountability purposes and produces AccountableResult." .
+<https://w3id.org/sao#AccountableAction> <http://www.w3.org/2000/01/rdf-schema#label> "Accountable Action" .
+# 
+# https://w3id.org/sao#AccountableAgent
+<https://w3id.org/sao#AccountableAgent> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#AccountableAgent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#Agent> .
+<https://w3id.org/sao#AccountableAgent> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/sao#InformationElement> .
+<https://w3id.org/sao#AccountableAgent> <http://www.w3.org/2000/01/rdf-schema#comment> "An agent (typically a human)  that can be held accountable for his/her actions." .
+<https://w3id.org/sao#AccountableAgent> <http://www.w3.org/2000/01/rdf-schema#label> "Accountable Agent" .
+# 
+# https://w3id.org/sao#AccountableObject
+<https://w3id.org/sao#AccountableObject> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#AccountableObject> <http://www.w3.org/2000/01/rdf-schema#comment> "An accountable object models an abstract representation of a thing that should be documented for accountability. This may reference the whole system, its logical part, or associated process.  For example, a larger system may be described as a group of sub-systems or a single system may be broken down into a number of layers/components (e.g., a decision logic layer)." .
+<https://w3id.org/sao#AccountableObject> <http://www.w3.org/2000/01/rdf-schema#label> "Accountable Object" .
+# 
+# https://w3id.org/sao#AccountableResult
+<https://w3id.org/sao#AccountableResult> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#AccountableResult> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#MultiVariable> .
+<https://w3id.org/sao#AccountableResult> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid1 .
+_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+_:genid1 <http://www.w3.org/2002/07/owl#onProperty> <https://w3id.org/ep-plan#hasCorrespondingEntity> .
+_:genid1 <http://www.w3.org/2002/07/owl#allValuesFrom> <https://w3id.org/sao#InformationRealization> .
+<https://w3id.org/sao#AccountableResult> <http://www.w3.org/2000/01/rdf-schema#comment> "An output variable which is produced by an Accountable Action, for example,  a decision made by a human or a specification produced by a team. The variable is part of the accountability plan and has a corresponding InformationRealization collection in the execution trace." .
+<https://w3id.org/sao#AccountableResult> <http://www.w3.org/2000/01/rdf-schema#label> "Accountable Result" .
+# 
+# https://w3id.org/sao#InformationElement
+<https://w3id.org/sao#InformationElement> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#InformationElement> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#Entity> .
+<https://w3id.org/sao#InformationElement> <http://www.w3.org/2000/01/rdf-schema#comment> "A member of the collection of type Information Realization. Information Realizations may have multiple Information Elements.  Information Element describes in more detail a specific type of information contained by the Information Realization collection." .
+<https://w3id.org/sao#InformationElement> <http://www.w3.org/2000/01/rdf-schema#label> "Information Element" .
+# 
+# https://w3id.org/sao#InformationRealization
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/ep-plan#EntityCollection> .
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid2 .
+_:genid2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+_:genid2 <http://www.w3.org/2002/07/owl#onProperty> <http://www.w3.org/ns/prov#hadMember> .
+_:genid2 <http://www.w3.org/2002/07/owl#allValuesFrom> <https://w3id.org/sao#InformationElement> .
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/2000/01/rdf-schema#subClassOf> _:genid3 .
+_:genid3 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Restriction> .
+_:genid3 <http://www.w3.org/2002/07/owl#onProperty> <https://w3id.org/ep-plan#correspondsToVariable> .
+_:genid3 <http://www.w3.org/2002/07/owl#allValuesFrom> <https://w3id.org/sao#AccountableResult> .
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/2000/01/rdf-schema#comment> "A collection of pieces of information (InformationElements) which corresponds to a variable of type  AccountableResult. The collection represents the actual piece of provenance information documenting a specific AccountableResult during a single plan execution." .
+<https://w3id.org/sao#InformationRealization> <http://www.w3.org/2000/01/rdf-schema#label> "Information Realization" .
+# 
+# https://w3id.org/sao#System
+<https://w3id.org/sao#System> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#Class> .
+<https://w3id.org/sao#System> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <https://w3id.org/sao#AccountableObject> .
+<https://w3id.org/sao#System> <http://www.w3.org/2000/01/rdf-schema#comment> "A system that the collected accountability information is about." .
+<https://w3id.org/sao#System> <http://www.w3.org/2000/01/rdf-schema#label> "System" .
+# 
+# Generated by the OWL API (version 5.1.14) https://github.com/owlcs/owlapi/
