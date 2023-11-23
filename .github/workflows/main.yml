@@ -19,3 +19,4 @@ jobs:
         uses: tecnomod-um/oquare-metrics@v2.2
         with:
           ontology-folders: ontologies ontologies/imports
+          contents-folder: results
