@@ -18,5 +18,4 @@ jobs:
       - name: Basic testing
         uses: ./
         with:
-          ontology-files: ontologies/imports/obi.owl
-          #force-parse: ontologies/imports/obi.owl
+          ontology-folders: ontologies ontologies/imports

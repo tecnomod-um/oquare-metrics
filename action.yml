@@ -2,7 +2,7 @@ name: 'OQuaRE metrics calculation module'
 description: 'Calculates the metrics of ontology files in the given folder based on the metrics set by the OQuaRE framework'
 inputs:
   ontology-folders:
-    description: 'Folders which contains .owl files'
+    description: 'Folders which contains ontology source files'
     default: ''
   ontology-files:
     description: 'Individual ontology files to parse'
@@ -48,14 +48,47 @@ runs:
     - run: pip install -r $GITHUB_ACTION_PATH/requirements.txt
       shell: bash
 
+    - name: Generate folder array
+      id: folder-array
+      run: |
+        folders=(${{ inputs.ontology-folders }})
+        extensions=("/*.owl" "/*.rdf" "/*.ttl" "/*.nt" "/*.n3" "/*.jsonld")
+        output=""
+
+
+        for folder in ${folders[@]}; do
+            for extension in ${extensions[@]}; do
+                output+=" ${folder}${extension}";
+            done
+        done
+
+        output="${output# }"
+
+        echo "folders=${output}" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Check folder status
+      id: folder-status
+      run: |
+        contents_folder="${{ inputs.contents-folder }}"
+
+        if [ -z "$(ls -A ./$contents_folder/results)" ]
+        then
+          echo "status=true" >> $GITHUB_OUTPUT 
+        else
+          echo "status=false" >> $GITHUB_OUTPUT
+        fi
+
+      shell: bash
+
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v35
+      uses: tj-actions/changed-files@v40
       with:
         files_separator: ' '
         files_ignore_separator: ' '
         files: |
-          ${{ join(inputs.ontology-folders, '/*.owl ') }} ${{ inputs.ontology-files }}
+          ${{ steps.folder-array.outputs.folders }} ${{ inputs.ontology-files }}
         files_ignore: |
           ${{ inputs.ignore-files }}
 
@@ -66,7 +99,7 @@ runs:
       shell: bash
     
     - name: Checks if its the first run (results empty folder)
-      if: steps.changed-files.outputs.any_modified == 'false' || inputs.release == 'true'
+      if: steps.folder-status.outputs.status == 'true' || inputs.release == 'true'
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/fullparse.sh 
         $GITHUB_ACTION_PATH/src/fullparse.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
@@ -75,7 +108,7 @@ runs:
       shell: bash
 
     - name: Call oquare library if modified ontologies
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' && steps.folder-status.outputs.status == 'false'
       run: |
         chmod u+x $GITHUB_ACTION_PATH/src/modified.sh 
         $GITHUB_ACTION_PATH/src/modified.sh "${{ inputs.contents-folder }}" "${{ inputs.ontology-folders }}" "${{ inputs.ignore-files }}" \
