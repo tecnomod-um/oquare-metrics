@@ -28,6 +28,7 @@ However it is HIGHLY ADVISED to update the reference from Emdien/oquare-metrics 
 > NOTE: :warning:
 > 
 > * **IMPORTANT:** Currently you must have both Java and Python installed in the runner machine. This can be done by either a Docker image which has both, or by calling actions/setup-java and actions/setup-python
+> * This action module creates new files and modifies the repository. Make sure to either allow actions to read and write in the repository, or to add a permissions entry with contents: write.
 > * The module has been tested to work under Java 8 Temurin Distribution as well as Python 3.9.4.
 > * By default the module will save the generated contents in a folder named ./OQuaRE
 
@@ -35,6 +36,10 @@ However it is HIGHLY ADVISED to update the reference from Emdien/oquare-metrics 
 name: CI
 
 on: [push]
+
+# If repository allows actions write by default, this is not needed.
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -54,7 +59,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v2.1
+        uses: tecnomod-um/oquare-metrics@v2.2
         with:
           ontology-folders: ontologies
 ```
@@ -83,7 +88,7 @@ jobs:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: Emdien/oquare-metrics@v2.1
+        uses: tecnomod-um/oquare-metrics@v2.2
         with:
           ontology-folders: ontologies
           release: true
@@ -112,20 +117,20 @@ jobs:
     # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production and src/ontologies/imports
     # And we want to store the metrics on src/ontologies/metrics
     - name: Ontology folder configuration
-    uses: Emdien/oquare-metrics@v2.1 
+    uses: tecnomod-um/oquare-metrics@v2.2
     with:
         ontology-folders: src/ontologies/production src/ontologies/imports
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
     - name: Ontology reasoner configuration
-    uses: Emdien/oquare-metrics@v2.1 
+    uses: tecnomod-um/oquare-metrics@v2.2
     with:
         reasoner: HERMIT
 
     # Only plot model, subfeatures and metrics but not features and their evolution
     - name: Ontology plots configurtion
-    uses: Emdien/oquare-metrics@v2.1 
+    uses: tecnomod-um/oquare-metrics@v2.2
     with:
         feature-plot: false
         evolution-plot: false
@@ -133,7 +138,7 @@ jobs:
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
     # Also parse ontology_file.owl which is stored on the root folder
     - name: Ontology file configuration
-    uses: Emdien/oquare-metrics@v0.0.16 
+    uses: tecnomod-um/oquare-metrics@v2.2
     with:
         ontology-folders: src/ontologies/imports
         ontology-files: ontology_file.owl
