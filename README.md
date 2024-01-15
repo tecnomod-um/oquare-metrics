@@ -24,12 +24,17 @@ However it is HIGHLY ADVISED to update the reference from Emdien/oquare-metrics 
 * Individual ontology file parsing instead of by folders
 * Out of the box functionality with very little configuration needed
 
+## 15th of January 2024 Update
+* Upgraded action dependencies to their latest version (checkout, setup-java v4, setup-python v5)
+* Upgraded OQuaRE library to a more recent version (bugfixes, java 17)
+* Upgraded action to use Java 17 instead of Java 8
+
 ## Usage
 > NOTE: :warning:
 > 
 > * **IMPORTANT:** Currently you must have both Java and Python installed in the runner machine. This can be done by either a Docker image which has both, or by calling actions/setup-java and actions/setup-python
 > * This action module creates new files and modifies the repository. Make sure to either allow actions to read and write in the repository, or to add a permissions entry with contents: write.
-> * The module has been tested to work under Java 8 Temurin Distribution as well as Python 3.9.4.
+> * The module has been tested to work under Java 8 and 17 (Temurin Distribution) as well as Python 3.9.4.
 > * By default the module will save the generated contents in a folder named ./OQuaRE
 
 ```yaml
@@ -46,20 +51,20 @@ jobs:
     runs-on: ubuntu-latest
     name: Evaluate ontologies
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # Configuration
       # Java setup
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
       # Python setup
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: tecnomod-um/oquare-metrics@v2.2
+        uses: tecnomod-um/oquare-metrics@v3.0
         with:
           ontology-folders: ontologies
 ```
@@ -75,20 +80,20 @@ jobs:
     runs-on: ubuntu-latest
     name: Evaluate ontologies - release mode
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       # Configuration
       # Java setup
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
       # Python setup
       - uses: actions/setup-python@v3
         with:
           python-version: '3.9'
           
       - name: OQuaRE module
-        uses: tecnomod-um/oquare-metrics@v2.2
+        uses: tecnomod-um/oquare-metrics@v3.0
         with:
           ontology-folders: ontologies
           release: true
@@ -117,20 +122,20 @@ jobs:
     # Assuming that the ontologies that we want to evaluate are stored on src/ontologies/production and src/ontologies/imports
     # And we want to store the metrics on src/ontologies/metrics
     - name: Ontology folder configuration
-    uses: tecnomod-um/oquare-metrics@v2.2
+    uses: tecnomod-um/oquare-metrics@v3.0
     with:
         ontology-folders: src/ontologies/production src/ontologies/imports
         contents-folder: src/ontologies/metrics
     
     # Setting up a different reasoner
     - name: Ontology reasoner configuration
-    uses: tecnomod-um/oquare-metrics@v2.2
+    uses: tecnomod-um/oquare-metrics@v3.0
     with:
         reasoner: HERMIT
 
     # Only plot model, subfeatures and metrics but not features and their evolution
     - name: Ontology plots configurtion
-    uses: tecnomod-um/oquare-metrics@v2.2
+    uses: tecnomod-um/oquare-metrics@v3.0
     with:
         feature-plot: false
         evolution-plot: false
@@ -138,7 +143,7 @@ jobs:
     # Ignore src/ontologies/imports/null_ontology.owl since its empty
     # Also parse ontology_file.owl which is stored on the root folder
     - name: Ontology file configuration
-    uses: tecnomod-um/oquare-metrics@v2.2
+    uses: tecnomod-um/oquare-metrics@v3.0
     with:
         ontology-folders: src/ontologies/imports
         ontology-files: ontology_file.owl
