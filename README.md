@@ -34,7 +34,7 @@ However it is HIGHLY ADVISED to update the reference from Emdien/oquare-metrics 
 > 
 > * **IMPORTANT:** Currently you must have both Java and Python installed in the runner machine. This can be done by either a Docker image which has both, or by calling actions/setup-java and actions/setup-python
 > * This action module creates new files and modifies the repository. Make sure to either allow actions to read and write in the repository, or to add a permissions entry with contents: write.
-> * The module has been tested to work under Java 8 and 17 (Temurin Distribution) as well as Python 3.9.4.
+> * The module has been tested to work under Java 17 (Temurin Distribution) as well as Python 3.9.4. OQuaRE has been compiled with Java 17.
 > * By default the module will save the generated contents in a folder named ./OQuaRE
 
 ```yaml
